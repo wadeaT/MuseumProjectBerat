@@ -1,0 +1,183 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.6.1"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 11904,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 1,
+			"count": 2333,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [ -1.5999999, -1.5999999, -1.5999999 ],
+			"max": [ 1.5999999, 1.5999999, 1.5999999 ]
+		},
+		{
+			"bufferView": 2,
+			"count": 2333,
+			"type": "VEC4",
+			"componentType": 5121,
+			"normalized": true
+		},
+		{
+			"bufferView": 3,
+			"count": 2333,
+			"type": "VEC3",
+			"componentType": 5120,
+			"normalized": true
+		},
+		{
+			"bufferView": 4,
+			"count": 2333,
+			"type": "VEC4",
+			"componentType": 5120,
+			"normalized": true
+		},
+		{
+			"bufferView": 5,
+			"count": 2333,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 6,
+			"count": 2333,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "cajniku_metal_S.bin",
+			"byteLength": 117128
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 23808,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 27996,
+			"byteOffset": 23808,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 9332,
+			"byteOffset": 51804,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 9332,
+			"byteOffset": 61136,
+			"byteStride": 4,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 9332,
+			"byteOffset": 70468,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 18664,
+			"byteOffset": 79800,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 18664,
+			"byteOffset": 98464,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "cajniku_metal_S_BaseColor.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "cajniku_metal_S",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicFactor": 0.65882355,
+				"roughnessFactor": 0
+			},
+			"extensions":
+			{
+				"KHR_materials_specular":
+				{
+					"specularFactor": 0.290196091
+				}
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "EditorSphere",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 1,
+						"COLOR_0": 2,
+						"NORMAL": 3,
+						"TANGENT": 4,
+						"TEXCOORD_0": 5,
+						"TEXCOORD_1": 6
+					},
+					"indices": 0,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"mesh": 0
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [ 0 ]
+		}
+	],
+	"textures": [
+		{
+			"name": "cajniku_metal_S_BaseColor",
+			"sampler": 0,
+			"source": 0
+		}
+	],
+	"extensionsUsed": [
+		"KHR_mesh_quantization",
+		"KHR_materials_specular"
+	],
+	"extensionsRequired": [
+		"KHR_mesh_quantization"
+	]
+}

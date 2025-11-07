@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1019537372159",
+    "project_id": "beratmuseum",
+    "storage_bucket": "beratmuseum.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1019537372159:android:1be5e75528fe088118adca",
+        "android_client_info": {
+          "package_name": "com.UnityTechnologies.com.unity.template.urpblank"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiFSfTLKV28NZlq7pCMUKexy4ECGy3Md8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
