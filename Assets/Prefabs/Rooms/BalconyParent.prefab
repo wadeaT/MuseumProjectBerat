@@ -3175,6 +3175,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 9026080754575a04098965f730a430fb, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0caf50170ccfd134a97e3cb527100627, type: 2}
     - target: {fileID: 919132149155446097, guid: 9026080754575a04098965f730a430fb, type: 3}
       propertyPath: m_Name
       value: Meshy_Model (11)
@@ -3405,6 +3409,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 9026080754575a04098965f730a430fb, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0caf50170ccfd134a97e3cb527100627, type: 2}
     - target: {fileID: 919132149155446097, guid: 9026080754575a04098965f730a430fb, type: 3}
       propertyPath: m_Name
       value: Meshy_Model (13)
@@ -3869,6 +3877,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90.013
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 405e701754ee75a46bff728cd1a10442, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 57da78201ddcb2346a9fd9b40278d17d, type: 2}
     - target: {fileID: 919132149155446097, guid: 405e701754ee75a46bff728cd1a10442, type: 3}
       propertyPath: m_Name
       value: Dritare_MZ1 (1)
@@ -3943,6 +3955,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 9026080754575a04098965f730a430fb, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0caf50170ccfd134a97e3cb527100627, type: 2}
     - target: {fileID: 919132149155446097, guid: 9026080754575a04098965f730a430fb, type: 3}
       propertyPath: m_Name
       value: Meshy_Model (14)
@@ -4181,6 +4197,10 @@ PrefabInstance:
       propertyPath: m_StaticShadowCaster
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 4aeb19b1407320b4bb3a023e09810c9c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 011dde5b4806d744aa7bacecab9be42a, type: 2}
     - target: {fileID: 919132149155446097, guid: 4aeb19b1407320b4bb3a023e09810c9c, type: 3}
       propertyPath: m_Name
       value: Meshy_Model (4)
@@ -5233,6 +5253,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 9026080754575a04098965f730a430fb, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0caf50170ccfd134a97e3cb527100627, type: 2}
     - target: {fileID: 919132149155446097, guid: 9026080754575a04098965f730a430fb, type: 3}
       propertyPath: m_Name
       value: Meshy_Model (7)
@@ -5857,6 +5881,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: fbbcae4cb321a23469fee77c92e0b1ff, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cd67ee2f8ad5f8c48875df062b1cbce6, type: 2}
     - target: {fileID: 919132149155446097, guid: fbbcae4cb321a23469fee77c92e0b1ff, type: 3}
       propertyPath: m_Name
       value: Meshy_Model (18)
@@ -6013,6 +6041,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 9026080754575a04098965f730a430fb, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0caf50170ccfd134a97e3cb527100627, type: 2}
     - target: {fileID: 919132149155446097, guid: 9026080754575a04098965f730a430fb, type: 3}
       propertyPath: m_Name
       value: Meshy_Model (9)
@@ -6469,6 +6501,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 9026080754575a04098965f730a430fb, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0caf50170ccfd134a97e3cb527100627, type: 2}
     - target: {fileID: 919132149155446097, guid: 9026080754575a04098965f730a430fb, type: 3}
       propertyPath: m_Name
       value: Meshy_Model (15)
@@ -6621,6 +6657,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 9026080754575a04098965f730a430fb, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0caf50170ccfd134a97e3cb527100627, type: 2}
     - target: {fileID: 919132149155446097, guid: 9026080754575a04098965f730a430fb, type: 3}
       propertyPath: m_Name
       value: Meshy_Model (8)
@@ -6773,6 +6813,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 3e0905b5f884b7648bee15f3e605a5e2, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: dc4371172663be14ab4c1180710110e2, type: 2}
     - target: {fileID: 919132149155446097, guid: 3e0905b5f884b7648bee15f3e605a5e2, type: 3}
       propertyPath: m_Name
       value: Meshy_Model (17)
@@ -7783,6 +7827,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 9026080754575a04098965f730a430fb, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0caf50170ccfd134a97e3cb527100627, type: 2}
     - target: {fileID: 919132149155446097, guid: 9026080754575a04098965f730a430fb, type: 3}
       propertyPath: m_Name
       value: Meshy_Model (6)
@@ -8239,6 +8287,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 9026080754575a04098965f730a430fb, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0caf50170ccfd134a97e3cb527100627, type: 2}
     - target: {fileID: 919132149155446097, guid: 9026080754575a04098965f730a430fb, type: 3}
       propertyPath: m_Name
       value: Meshy_Model (10)
@@ -8465,6 +8517,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 9026080754575a04098965f730a430fb, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0caf50170ccfd134a97e3cb527100627, type: 2}
     - target: {fileID: 919132149155446097, guid: 9026080754575a04098965f730a430fb, type: 3}
       propertyPath: m_Name
       value: Meshy_Model (16)
@@ -8925,6 +8981,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 9026080754575a04098965f730a430fb, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 0caf50170ccfd134a97e3cb527100627, type: 2}
     - target: {fileID: 919132149155446097, guid: 9026080754575a04098965f730a430fb, type: 3}
       propertyPath: m_Name
       value: Meshy_Model (12)
@@ -9939,6 +9999,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90.013
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 405e701754ee75a46bff728cd1a10442, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 2454ac7c8e6e90445b14c82880eff917, type: 2}
     - target: {fileID: 919132149155446097, guid: 405e701754ee75a46bff728cd1a10442, type: 3}
       propertyPath: m_Name
       value: Dritare_MZ1
@@ -10247,6 +10311,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 3483a042cc7355844b7a842d024a5dd4, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ef3f8684255bb7045b3168d865d6c33d, type: 2}
     - target: {fileID: 919132149155446097, guid: 3483a042cc7355844b7a842d024a5dd4, type: 3}
       propertyPath: m_Name
       value: Meshy_Model (5)
