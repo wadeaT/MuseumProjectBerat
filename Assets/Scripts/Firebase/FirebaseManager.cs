@@ -168,21 +168,22 @@ public class FirebaseManager : MonoBehaviour
 
         try
         {
-            var data = new Dictionary<string, object>
-            {
-                { "timeSpent", timeSpent },
-                { "updatedAt", FieldValue.ServerTimestamp }
-            };
-
-            var doc = Firestore.Collection("users").Document(userId)
+            var docRef = Firestore.Collection("users").Document(userId)
                 .Collection("roomStats").Document(roomId);
 
-            await doc.SetAsync(data, SetOptions.MergeAll);
-            Debug.Log($"✅ Room time saved ({roomId}: {timeSpent:F2}s)");
+            // 🔹 Add time to total, and increment visit count by 1
+            await docRef.SetAsync(new Dictionary<string, object>
+        {
+            { "timeSpent", FieldValue.Increment(timeSpent) },
+            { "visitCount", FieldValue.Increment(1) }
+        }, SetOptions.MergeAll);
+
+            Debug.Log($"✅ Room '{roomId}' updated → +{timeSpent:F2}s, +1 visit");
         }
         catch (System.Exception e)
         {
             Debug.LogError("❌ Failed to save room time: " + e.Message);
         }
     }
+
 }
