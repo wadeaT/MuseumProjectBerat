@@ -68,3 +68,5 @@ Assets/Firebase/Plugins/x86_64/FirebaseCppApp-*.so
 Assets/Firebase/Plugins/x86_64/FirebaseCppApp-*.bundle
 Assets/Firebase/Plugins/arm64/FirebaseCppApp-*.so
 Assets/Firebase/Plugins/arm64/FirebaseCppApp-*.bundle
+
+.plastic/
