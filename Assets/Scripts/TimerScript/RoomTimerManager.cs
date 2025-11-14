@@ -20,21 +20,38 @@ public class RoomTimerManager : MonoBehaviour
 
     private void Start()
     {
-        // For now, use a test user ID
-        userId = "test_wadia";
-
-        // Later, replace with:
-        // userId = FirebaseManager.Instance.Auth.CurrentUser.UserId;
+        // Wait until PlayerManager is initialized
+        if (PlayerManager.Instance != null)
+        {
+            userId = PlayerManager.Instance.userId;
+            Debug.Log("RoomTimerManager: Loaded userId = " + userId);
+        }
+        else
+        {
+            Debug.LogWarning("RoomTimerManager: PlayerManager not found in scene!");
+        }
     }
+
 
     public async void ReportRoomTime(string roomId, float timeSpent)
     {
+        // Pull live user ID from PlayerManager
+        string currentUserId = PlayerManager.Instance != null
+            ? PlayerManager.Instance.userId
+            : null;
+
+        if (string.IsNullOrEmpty(currentUserId))
+        {
+            Debug.LogWarning("RoomTimerManager: No logged-in user. Cannot save room time.");
+            return;
+        }
+
         if (FirebaseManager.Instance == null || !FirebaseManager.Instance.IsReady)
         {
             Debug.LogWarning("Firebase not ready yet.");
             return;
         }
 
-        await FirebaseManager.Instance.SaveRoomTimeAsync(userId, roomId, timeSpent);
+        await FirebaseManager.Instance.SaveRoomTimeAsync(currentUserId, roomId, timeSpent);
     }
 }

@@ -8197,7 +8197,7 @@ MonoBehaviour:
   skillsGroup: {fileID: 133575999}
   vrGroup: {fileID: 1701092980}
   startButton: {fileID: 1147728774}
-  firstMuseumScene: MuseumMain
+  firstMuseumScene: FullMuseum
 --- !u!4 &1259258459
 Transform:
   m_ObjectHideFlags: 0
