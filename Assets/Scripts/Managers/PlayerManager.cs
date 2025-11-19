@@ -12,6 +12,8 @@ public class PlayerManager : MonoBehaviour
     public string nationality;
     public List<string> badges = new List<string>();
     public Dictionary<string, float> roomTimes = new Dictionary<string, float>();
+    public int totalCardsCollected = 0;
+    public List<string> cardsFound = new List<string>();
 
     private void Awake()
     {
@@ -91,7 +93,11 @@ public class PlayerManager : MonoBehaviour
     //  BADGES
     // ------------------------------------------------------------------------
 
-    public async void AddBadge(string badgeId)
+    // ------------------------------------------------------------------------
+    //  BADGES
+    // ------------------------------------------------------------------------
+
+    public async void AddBadge(string badgeId, string badgeName, string description)
     {
         if (string.IsNullOrEmpty(userId))
         {
@@ -102,11 +108,55 @@ public class PlayerManager : MonoBehaviour
         if (!badges.Contains(badgeId))
         {
             badges.Add(badgeId);
-            await FirebaseManager.Instance.SaveBadgeAsync(userId, badgeId);
-            Debug.Log($"🏅 Badge added: {badgeId}");
+            await FirebaseManager.Instance.SaveBadgeAsync(userId, badgeId, badgeName, description);
+            Debug.Log($"🏅 Badge added: {badgeName}");
+        }
+        else
+        {
+            Debug.Log($"Badge '{badgeId}' already unlocked.");
         }
     }
 
+    /// <summary>
+    /// Load user's badges from Firebase when they log in
+    /// </summary>
+    public async Task LoadUserProgressAsync()
+    {
+        if (string.IsNullOrEmpty(userId))
+        {
+            Debug.LogWarning("User not logged in; cannot load progress.");
+            return;
+        }
+
+        // Load badges
+        badges = await FirebaseManager.Instance.LoadUserBadgesAsync(userId);
+
+        // Load cards
+        totalCardsCollected = await FirebaseManager.Instance.LoadUserCardsAsync(userId);
+
+        Debug.Log($" Loaded user progress: {badges.Count} badges, {totalCardsCollected} cards");
+    }
+    // ------------------------------------------------------------------------
+    //  CARDS
+    // ------------------------------------------------------------------------
+
+    public async void OnCardCollected(string cardId)
+    {
+        if (string.IsNullOrEmpty(userId))
+        {
+            Debug.LogWarning("User not logged in; card not saved.");
+            return;
+        }
+
+        if (!cardsFound.Contains(cardId))
+        {
+            cardsFound.Add(cardId);
+            totalCardsCollected++;
+
+            await FirebaseManager.Instance.SaveCardCollectedAsync(userId, cardId, totalCardsCollected);
+            Debug.Log($"📜 Card collected: {cardId} (Total: {totalCardsCollected})");
+        }
+    }
     // ------------------------------------------------------------------------
     //  ROOM TIMES
     // ------------------------------------------------------------------------
@@ -134,6 +184,8 @@ public class PlayerManager : MonoBehaviour
         nationality = null;
         badges.Clear();
         roomTimes.Clear();
+        cardsFound.Clear(); // ✅ NEW
+        totalCardsCollected = 0; // ✅ NEW
         Debug.Log("🧹 Player data cleared.");
     }
 }

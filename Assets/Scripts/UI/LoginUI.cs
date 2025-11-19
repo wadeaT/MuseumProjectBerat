@@ -30,14 +30,14 @@ public class LoginUI : MonoBehaviour
 
     [Header("Next Scene Settings")]
     public string firstMuseumScene = "Room1"; // Change to your actual first room scene name
- 
-    private void Start()
+
+    private async void Start()
     {
         // Start with login panel visible
         loginPanel.SetActive(true);
         questionsPanel.SetActive(false);
 
-        messageText.text = "";
+        messageText.text = "Initializing...";
 
         // Add button listeners
         loginButton.onClick.AddListener(OnLoginClicked);
@@ -45,6 +45,40 @@ public class LoginUI : MonoBehaviour
         startButton.onClick.AddListener(OnStartClicked);
 
         CheckToggleGroups();
+
+        // ✅ NEW: Wait for Firebase to be ready
+        await WaitForFirebase();
+
+        messageText.text = ""; // Clear the initializing message
+    }
+
+    /// <summary>
+    /// Wait until Firebase is fully initialized
+    /// </summary>
+    private async System.Threading.Tasks.Task WaitForFirebase()
+    {
+        int maxRetries = 50; // 5 seconds max
+        int retries = 0;
+
+        while (FirebaseManager.Instance == null || !FirebaseManager.Instance.IsReady)
+        {
+            await System.Threading.Tasks.Task.Delay(100); // Wait 100ms
+            retries++;
+
+            if (retries >= maxRetries)
+            {
+                Debug.LogError("❌ Firebase failed to initialize after 5 seconds!");
+                messageText.text = "❌ Connection error. Please restart the app.";
+                messageText.color = Color.red;
+
+                // Disable buttons if Firebase never initializes
+                loginButton.interactable = false;
+                registerButton.interactable = false;
+                return;
+            }
+        }
+
+        Debug.Log("✅ Firebase ready! Login UI enabled.");
     }
     private void CheckToggleGroups()
     {
@@ -83,6 +117,13 @@ public class LoginUI : MonoBehaviour
         if (success)
         {
             ShowMessage("✅ Login successful!", Color.green);
+
+            // ✅ NEW: Load user's badge and card progress
+            if (BadgeManager.instance != null)
+            {
+                await BadgeManager.instance.LoadProgressFromFirebase();
+            }
+
             await Task.Delay(800);
             ShowQuestionsPanel();
         }
