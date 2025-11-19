@@ -10,8 +10,25 @@ public class BadgeManager : MonoBehaviour
     private int totalCardsCollected = 0;
     private HashSet<string> unlockedBadges = new HashSet<string>();
 
+    //Track which cards have been found in each room
+    private Dictionary<string, HashSet<string>> cardsByRoom = new Dictionary<string, HashSet<string>>();
+
+    //Define how many cards each room should have
+    private Dictionary<string, int> expectedCardsPerRoom = new Dictionary<string, int>()
+{
+    { "balcony", 3 },
+    { "bedroom", 3 },
+    { "guest_room", 3 },
+    { "kitchen", 3 },  
+    { "workshop", 3 },
+    { "archive", 3 }
+};
+
     [Header("Debug")]
     public bool showDebugMessages = true;
+
+    [Header("Firebase Integration")]
+    public bool useFirebase = true; // Toggle for testing without Firebase
 
     void Awake()
     {
@@ -26,12 +43,21 @@ public class BadgeManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
-        LoadBadgeProgress();
     }
 
-    void Start()
+    async void Start()
     {
+        // Load progress from Firebase when game starts
+        if (useFirebase && PlayerManager.Instance != null && !string.IsNullOrEmpty(PlayerManager.Instance.userId))
+        {
+            await LoadProgressFromFirebase();
+        }
+        else
+        {
+            // Fallback to local PlayerPrefs
+            LoadBadgeProgress();
+        }
+
         if (showDebugMessages)
         {
             Debug.Log($"BadgeManager initialized. Total cards collected: {totalCardsCollected}");
@@ -40,12 +66,60 @@ public class BadgeManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Load user's progress from Firebase
+    /// </summary>
+    public async System.Threading.Tasks.Task LoadProgressFromFirebase()
+    {
+        if (PlayerManager.Instance == null || string.IsNullOrEmpty(PlayerManager.Instance.userId))
+        {
+            Debug.LogWarning("Cannot load from Firebase: User not logged in");
+            return;
+        }
+
+        // Load from PlayerManager (which loads from Firebase)
+        await PlayerManager.Instance.LoadUserProgressAsync();
+
+        // Sync local data
+        totalCardsCollected = PlayerManager.Instance.totalCardsCollected;
+
+        unlockedBadges.Clear();
+        foreach (string badgeId in PlayerManager.Instance.badges)
+        {
+            unlockedBadges.Add(badgeId);
+        }
+
+        Debug.Log($"✅ Loaded from Firebase: {totalCardsCollected} cards, {unlockedBadges.Count} badges");
+    }
+
+
     /// Call this when ANY card is collected
     /// </summary>
-    public void OnCardCollected(string cardID)
+    public void OnCardCollected(string cardID, string roomID) // ✅ Added roomID parameter
     {
         totalCardsCollected++;
-        SaveProgress();
+
+        // ✅ NEW: Track room-specific progress
+        if (!cardsByRoom.ContainsKey(roomID))
+        {
+            cardsByRoom[roomID] = new HashSet<string>();
+        }
+        cardsByRoom[roomID].Add(cardID);
+
+        // Log room progress for debugging
+        int cardsInRoom = cardsByRoom[roomID].Count;
+        int expectedCards = expectedCardsPerRoom.ContainsKey(roomID) ? expectedCardsPerRoom[roomID] : 0;
+        Debug.Log($"📍 Room '{roomID}' progress: {cardsInRoom}/{expectedCards} cards found");
+
+        // Save to Firebase
+        if (useFirebase && PlayerManager.Instance != null && !string.IsNullOrEmpty(PlayerManager.Instance.userId))
+        {
+            PlayerManager.Instance.OnCardCollected(cardID);
+        }
+        else
+        {
+            // Fallback to local storage
+            SaveProgress();
+        }
 
         if (showDebugMessages)
         {
@@ -61,6 +135,10 @@ public class BadgeManager : MonoBehaviour
     /// </summary>
     void CheckBadgeUnlocks()
     {
+        // ============================================================
+        // MILESTONE BADGES (based on total card count)
+        // ============================================================
+
         // Badge 1: First Discovery - collect any card
         if (totalCardsCollected >= 1 && !HasBadge("first_discovery"))
         {
@@ -72,24 +150,92 @@ public class BadgeManager : MonoBehaviour
         if (totalCardsCollected >= 3 && !HasBadge("curious_explorer"))
         {
             UnlockBadge("curious_explorer", "Curious Explorer",
-                "You've discovered 3 cards. Your curiosity is rewarded!");
+                "Three cards discovered! Your curiosity is leading you deeper into Berat's history.");
         }
 
-        // Badge 3: Dedicated Seeker - collect 5 cards
-        if (totalCardsCollected >= 5 && !HasBadge("dedicated_seeker"))
+        // Badge 3: Dedicated Seeker - collect 6 cards
+        if (totalCardsCollected >= 6 && !HasBadge("dedicated_seeker"))
         {
             UnlockBadge("dedicated_seeker", "Dedicated Seeker",
-                "Five cards found! You're truly exploring every corner.");
+                "Six cards found! You're uncovering the layers of Ottoman family life.");
         }
 
-        // Badge 4: Master Collector - collect 10 cards
-        if (totalCardsCollected >= 10 && !HasBadge("master_collector"))
+        // Badge 4: Persistent Scholar - collect 9 cards
+        if (totalCardsCollected >= 9 && !HasBadge("persistent_scholar"))
         {
-            UnlockBadge("master_collector", "Master Collector",
-                "Ten cards! You're a true museum detective.");
+            UnlockBadge("persistent_scholar", "Persistent Scholar",
+                "Nine cards! You're halfway through the museum's story.");
         }
 
-        // Add more badges as you create more rooms and cards!
+        // Badge 5: Heritage Guardian - collect 15 cards
+        if (totalCardsCollected >= 15 && !HasBadge("heritage_guardian"))
+        {
+            UnlockBadge("heritage_guardian", "Heritage Guardian",
+                "Fifteen cards! You're now a guardian of Berat's cultural memory.");
+        }
+
+        // Badge 6: Complete Collection - collect all 18 cards
+        if (totalCardsCollected >= 18 && !HasBadge("complete_collection"))
+        {
+            UnlockBadge("complete_collection", "Complete Collection",
+                "All 18 cards discovered! Every hidden story revealed.");
+        }
+
+        // ============================================================
+        // ROOM COMPLETION BADGES (based on completing specific rooms)
+        // ============================================================
+
+        // Balcony Complete (Çardak)
+        if (HasAllCardsInRoom("balcony") && !HasBadge("balcony_master"))
+        {
+            UnlockBadge("balcony_master", "Heart of the Home",
+                "You've discovered the secrets of the çardak—the social center where families gathered, wove, and welcomed guests.");
+        }
+
+        // Bedroom Complete
+        if (HasAllCardsInRoom("bedroom") && !HasBadge("bedroom_master"))
+        {
+            UnlockBadge("bedroom_master", "Family Sanctuary",
+                "You've explored the private space where families found warmth, rest, and passed down oral traditions through generations.");
+        }
+
+        // Guest Room Complete
+        if (HasAllCardsInRoom("guest_room") && !HasBadge("guest_room_master"))
+        {
+            UnlockBadge("guest_room_master", "Hospitality Master",
+                "You've understood the sacred art of Ottoman hospitality—where architecture, decoration, and ritual combined to honor guests.");
+        }
+
+        // Kitchen Complete
+        if (HasAllCardsInRoom("kitchen") && !HasBadge("kitchen_master"))
+        {
+            UnlockBadge("kitchen_master", "Culinary Heritage",
+                "You've discovered the tools and traditions of Ottoman cooking—where fire, copper, and patience transformed ingredients into cultural expressions.");
+        }
+
+        // Workshop Complete
+        if (HasAllCardsInRoom("workshop") && !HasBadge("workshop_master"))
+        {
+            UnlockBadge("workshop_master", "Weaver's Legacy",
+                "You've learned the art of traditional weaving—the craft that sustained families, preserved identity, and gave women economic power.");
+        }
+
+        // Archive Complete
+        if (HasAllCardsInRoom("archive") && !HasBadge("archive_master"))
+        {
+            UnlockBadge("archive_master", "Memory Keeper",
+                "You've witnessed the frozen moments of Albanian history—photographs that preserve customs, ceremonies, and communities now transformed by time.");
+        }
+
+        // ============================================================
+        // MASTER COMPLETION BADGE (all rooms finished)
+        // ============================================================
+
+        if (HasCompletedAllRooms() && !HasBadge("museum_master"))
+        {
+            UnlockBadge("museum_master", "Ottoman Life Scholar",
+                "🏆 You've explored every corner of the museum and experienced the complete story of family life in Ottoman-era Berat. You are now a keeper of this cultural heritage!");
+        }
     }
 
     /// <summary>
@@ -104,14 +250,24 @@ public class BadgeManager : MonoBehaviour
 
         unlockedBadges.Add(badgeID);
 
-        // Save immediately
-        PlayerPrefs.SetInt($"Badge_{badgeID}_Unlocked", 1);
-        PlayerPrefs.Save();
+        // Save to Firebase
+        if (useFirebase && PlayerManager.Instance != null && !string.IsNullOrEmpty(PlayerManager.Instance.userId))
+        {
+            PlayerManager.Instance.AddBadge(badgeID, badgeName, description);
+        }
+        else
+        {
+            // Fallback to local storage
+            PlayerPrefs.SetInt($"Badge_{badgeID}_Unlocked", 1);
+            PlayerPrefs.Save();
+        }
 
-        Debug.Log($"🎉 BADGE UNLOCKED: {badgeName}");
-        Debug.Log($"   {description}");
+        Debug.Log("╔════════════════════════════════════════╗");
+        Debug.Log($"║  🎉 BADGE UNLOCKED: {badgeName}");
+        Debug.Log($"║  {description}");
+        Debug.Log("╚════════════════════════════════════════╝");
 
-        // TODO: Show badge popup UI (we'll create this next)
+        // Show badge popup UI
         ShowBadgeNotification(badgeName, description);
     }
 
@@ -140,7 +296,7 @@ public class BadgeManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Save progress to PlayerPrefs (later: save to Firebase)
+    /// Save progress to PlayerPrefs (fallback when offline)
     /// </summary>
     void SaveProgress()
     {
@@ -149,7 +305,7 @@ public class BadgeManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Load progress from PlayerPrefs (later: load from Firebase)
+    /// Load progress from PlayerPrefs (fallback when offline)
     /// </summary>
     void LoadBadgeProgress()
     {
@@ -172,21 +328,37 @@ public class BadgeManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Show badge notification (placeholder for now)
+    /// Show badge notification UI
+    /// </summary>
+    /// <summary>
+    /// Show badge notification UI
     /// </summary>
     void ShowBadgeNotification(string badgeName, string description)
     {
         // Show UI notification
         if (BadgeNotificationUI.instance != null)
         {
-            // Extract emoji from badge name if it has one
+            // Assign thematic icons based on badge type
             string icon = "🎖️"; // Default
 
-            if (badgeName.Contains("🎖️")) icon = "🎖️";
-            else if (badgeName.Contains("🔍")) icon = "🔍";
-            else if (badgeName.Contains("⭐")) icon = "⭐";
-            else if (badgeName.Contains("👑")) icon = "👑";
-            else if (badgeName.Contains("🏛️")) icon = "🏛️";
+            // ===== MILESTONE BADGES =====
+            if (badgeName.Contains("First Discovery")) icon = "✨";
+            else if (badgeName.Contains("Curious Explorer")) icon = "🔍";
+            else if (badgeName.Contains("Dedicated Seeker")) icon = "⭐";
+            else if (badgeName.Contains("Persistent Scholar")) icon = "📚";
+            else if (badgeName.Contains("Heritage Guardian")) icon = "🏛️";
+            else if (badgeName.Contains("Complete Collection")) icon = "💎";
+
+            // ===== ROOM COMPLETION BADGES =====
+            else if (badgeName.Contains("Heart of the Home")) icon = "🏡";        // Balcony
+            else if (badgeName.Contains("Family Sanctuary")) icon = "🛏️";        // Bedroom
+            else if (badgeName.Contains("Hospitality Master")) icon = "🍵";      // Guest Room
+            else if (badgeName.Contains("Culinary Heritage")) icon = "🍲";       // Kitchen
+            else if (badgeName.Contains("Weaver's Legacy")) icon = "🧵";         // Workshop
+            else if (badgeName.Contains("Memory Keeper")) icon = "📸";           // Archive
+
+            // ===== MASTER BADGE =====
+            else if (badgeName.Contains("Ottoman Life Scholar")) icon = "👑";
 
             BadgeNotificationUI.instance.ShowBadge(badgeName, description, icon);
         }
@@ -203,14 +375,76 @@ public class BadgeManager : MonoBehaviour
     {
         unlockedBadges.Clear();
         totalCardsCollected = 0;
+        cardsByRoom.Clear(); // Clear room progress
 
-        PlayerPrefs.DeleteKey("TotalCardsCollected");
-        PlayerPrefs.DeleteKey("Badge_first_discovery_Unlocked");
-        PlayerPrefs.DeleteKey("Badge_curious_explorer_Unlocked");
-        PlayerPrefs.DeleteKey("Badge_dedicated_seeker_Unlocked");
-        PlayerPrefs.DeleteKey("Badge_master_collector_Unlocked");
+        // Clear Firebase data
+        if (PlayerManager.Instance != null)
+        {
+            PlayerManager.Instance.badges.Clear();
+            PlayerManager.Instance.totalCardsCollected = 0;
+            PlayerManager.Instance.cardsFound.Clear();
+        }
+
+        // Clear ALL PlayerPrefs (easiest way to reset everything)
+        PlayerPrefs.DeleteAll();
         PlayerPrefs.Save();
 
-        Debug.Log("🔄 All badges reset!");
+        Debug.Log("🔄 All badges, cards, and progress reset!");
+    }
+
+
+    // ============================================================================
+    // ROOM PROGRESS HELPERS
+    // ============================================================================
+
+    /// <summary>
+    /// Check if player has found all cards in a specific room
+    /// </summary>
+    public bool HasAllCardsInRoom(string roomID)
+    {
+        if (!expectedCardsPerRoom.ContainsKey(roomID))
+        {
+            Debug.LogWarning($"Room '{roomID}' not defined in expectedCardsPerRoom!");
+            return false;
+        }
+
+        int expectedCards = expectedCardsPerRoom[roomID];
+        int foundCards = cardsByRoom.ContainsKey(roomID) ? cardsByRoom[roomID].Count : 0;
+
+        return foundCards >= expectedCards;
+    }
+
+    /// <summary>
+    /// Get progress for a specific room (e.g., "2/4")
+    /// </summary>
+    public string GetRoomProgress(string roomID)
+    {
+        int expectedCards = expectedCardsPerRoom.ContainsKey(roomID) ? expectedCardsPerRoom[roomID] : 0;
+        int foundCards = cardsByRoom.ContainsKey(roomID) ? cardsByRoom[roomID].Count : 0;
+
+        return $"{foundCards}/{expectedCards}";
+    }
+
+    /// <summary>
+    /// Get how many cards have been found in a room
+    /// </summary>
+    public int GetCardsFoundInRoom(string roomID)
+    {
+        return cardsByRoom.ContainsKey(roomID) ? cardsByRoom[roomID].Count : 0;
+    }
+
+    /// <summary>
+    /// Check if player has completed ALL rooms
+    /// </summary>
+    public bool HasCompletedAllRooms()
+    {
+        foreach (var room in expectedCardsPerRoom.Keys)
+        {
+            if (!HasAllCardsInRoom(room))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class BadgeNotificationUI : MonoBehaviour
@@ -24,6 +25,24 @@ public class BadgeNotificationUI : MonoBehaviour
 
     private RectTransform panelRect;
     private bool isShowing = false;
+
+    // ✅ NEW: Queue for multiple badges
+    private Queue<BadgeData> badgeQueue = new Queue<BadgeData>();
+
+    // ✅ NEW: Store badge data
+    private class BadgeData
+    {
+        public string name;
+        public string description;
+        public string icon;
+
+        public BadgeData(string name, string description, string icon)
+        {
+            this.name = name;
+            this.description = description;
+            this.icon = icon;
+        }
+    }
 
     void Awake()
     {
@@ -54,19 +73,33 @@ public class BadgeNotificationUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Show a badge notification
+    /// Show a badge notification (now queues if one is already showing)
     /// </summary>
     public void ShowBadge(string badgeName, string description, string icon = "🎖️")
     {
-        if (isShowing)
-        {
-            // If already showing a badge, wait until this one finishes
-            // In a more complex system, you'd queue badges
-            Debug.Log("Badge notification already showing. Skipping...");
-            return;
-        }
+        // ✅ NEW: Add to queue instead of skipping
+        badgeQueue.Enqueue(new BadgeData(badgeName, description, icon));
 
-        StartCoroutine(ShowBadgeRoutine(badgeName, description, icon));
+        // If not currently showing, start processing queue
+        if (!isShowing)
+        {
+            StartCoroutine(ProcessBadgeQueue());
+        }
+    }
+
+    /// <summary>
+    /// ✅ NEW: Process badges one at a time from queue
+    /// </summary>
+    IEnumerator ProcessBadgeQueue()
+    {
+        while (badgeQueue.Count > 0)
+        {
+            BadgeData badge = badgeQueue.Dequeue();
+            yield return StartCoroutine(ShowBadgeRoutine(badge.name, badge.description, badge.icon));
+
+            // Small delay between badges
+            yield return new WaitForSeconds(0.3f);
+        }
     }
 
     IEnumerator ShowBadgeRoutine(string badgeName, string description, string icon)

@@ -141,24 +141,151 @@ public class FirebaseManager : MonoBehaviour
 
 
 
-    public async Task SaveBadgeAsync(string userId, string badgeId)
+    /// <summary>
+    /// Saves a badge with full details to Firestore
+    /// </summary>
+    public async Task SaveBadgeAsync(string userId, string badgeId, string badgeName, string description)
     {
-        if (!IsReady || Firestore == null) return;
+        if (!IsReady || Firestore == null)
+        {
+            Debug.LogError("❌ Firestore not ready.");
+            return;
+        }
 
         try
         {
-            var doc = Firestore.Collection("users").Document(userId)
-                .Collection("progress").Document("badges");
+            // Save to badges subcollection with full details
+            var badgeDoc = Firestore.Collection("users").Document(userId)
+                .Collection("badges").Document(badgeId);
 
-            await doc.UpdateAsync(new Dictionary<string, object>
-            {
-                { "badgeList", FieldValue.ArrayUnion(badgeId) }
-            });
-            Debug.Log($"✅ Badge '{badgeId}' saved for user {userId}");
+            var badgeData = new Dictionary<string, object>
+        {
+            { "badgeId", badgeId },
+            { "name", badgeName },
+            { "description", description },
+            { "unlocked", true },
+            { "timestamp", FieldValue.ServerTimestamp }
+        };
+
+            await badgeDoc.SetAsync(badgeData, SetOptions.MergeAll);
+
+            // Also update the progress document with total count
+            var progressDoc = Firestore.Collection("users").Document(userId)
+                .Collection("progress").Document("summary");
+
+            await progressDoc.SetAsync(new Dictionary<string, object>
+        {
+            { "totalBadges", FieldValue.Increment(1) },
+            { "lastBadgeUnlocked", badgeId },
+            { "lastBadgeTimestamp", FieldValue.ServerTimestamp }
+        }, SetOptions.MergeAll);
+
+            Debug.Log($"✅ Badge '{badgeName}' saved for user {userId}");
         }
         catch (System.Exception e)
         {
-            Debug.LogError("❌ Failed to save badge: " + e.Message);
+            Debug.LogError($"❌ Failed to save badge: {e.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Saves card collection progress
+    /// </summary>
+    public async Task SaveCardCollectedAsync(string userId, string cardId, int totalCardsCollected)
+    {
+        if (!IsReady || Firestore == null)
+        {
+            Debug.LogError("❌ Firestore not ready.");
+            return;
+        }
+
+        try
+        {
+            // Save individual card
+            var cardDoc = Firestore.Collection("users").Document(userId)
+                .Collection("cards").Document(cardId);
+
+            await cardDoc.SetAsync(new Dictionary<string, object>
+        {
+            { "cardId", cardId },
+            { "found", true },
+            { "timestamp", FieldValue.ServerTimestamp }
+        }, SetOptions.MergeAll);
+
+            // Update progress summary
+            var progressDoc = Firestore.Collection("users").Document(userId)
+                .Collection("progress").Document("summary");
+
+            await progressDoc.SetAsync(new Dictionary<string, object>
+        {
+            { "totalCardsCollected", totalCardsCollected },
+            { "lastCardFound", cardId },
+            { "lastCardTimestamp", FieldValue.ServerTimestamp }
+        }, SetOptions.MergeAll);
+
+            Debug.Log($"✅ Card '{cardId}' saved for user {userId}");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"❌ Failed to save card: {e.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Loads user's badge progress from Firestore
+    /// </summary>
+    public async Task<List<string>> LoadUserBadgesAsync(string userId)
+    {
+        if (!IsReady || Firestore == null)
+        {
+            Debug.LogError("❌ Firestore not ready.");
+            return new List<string>();
+        }
+
+        try
+        {
+            var badgesSnapshot = await Firestore.Collection("users").Document(userId)
+                .Collection("badges").GetSnapshotAsync();
+
+            var badgeList = new List<string>();
+            foreach (var doc in badgesSnapshot.Documents)
+            {
+                badgeList.Add(doc.Id); // Badge ID
+            }
+
+            Debug.Log($"✅ Loaded {badgeList.Count} badges for user {userId}");
+            return badgeList;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"❌ Failed to load badges: {e.Message}");
+            return new List<string>();
+        }
+    }
+
+    /// <summary>
+    /// Loads user's card collection progress
+    /// </summary>
+    public async Task<int> LoadUserCardsAsync(string userId)
+    {
+        if (!IsReady || Firestore == null)
+        {
+            Debug.LogError("❌ Firestore not ready.");
+            return 0;
+        }
+
+        try
+        {
+            var cardsSnapshot = await Firestore.Collection("users").Document(userId)
+                .Collection("cards").GetSnapshotAsync();
+
+            Debug.Log($"✅ Loaded {cardsSnapshot.Count} cards for user {userId}");
+            return cardsSnapshot.Count;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"❌ Failed to load cards: {e.Message}");
+            return 0;
         }
     }
 

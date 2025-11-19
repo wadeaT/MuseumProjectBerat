@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class HiddenCard : MonoBehaviour
 {
@@ -6,12 +6,15 @@ public class HiddenCard : MonoBehaviour
     [Tooltip("Unique ID for this card (e.g., 'balcony_card_01')")]
     public string cardID = "balcony_card_01";
 
+    [Tooltip("Which room is this card in? (e.g., 'balcony', 'living_room')")]
+    public string roomID = "balcony";
+
     [Tooltip("Title shown when discovered")]
     public string cardTitle = "The Heart of the Home";
 
     [Tooltip("Description/story for this card")]
     [TextArea(3, 6)]
-    public string cardDescription = "This balcony, called a '�ardak' in Albanian, was the social center of traditional Berat homes. Families gathered here for meals, women wove textiles, and honored guests were welcomed with coffee and raki. The wooden railings allowed residents to observe street life below while maintaining privacy�a clever feature of Ottoman-era architecture.";
+    public string cardDescription = "This balcony, called a 'çardak' in Albanian, was the social center of traditional Berat homes. Families gathered here for meals, women wove textiles, and honored guests were welcomed with coffee and raki. The wooden railings allowed residents to observe street life below while maintaining privacy—a clever feature of Ottoman-era architecture.";
 
     [Header("Discovery Settings")]
     [Tooltip("How close must the player be to notice this card? (in meters)")]
@@ -192,7 +195,7 @@ public class HiddenCard : MonoBehaviour
         Debug.Log($"Card Discovered: {cardTitle}");
         if (BadgeManager.instance != null)
         {
-            BadgeManager.instance.OnCardCollected(cardID);
+            BadgeManager.instance.OnCardCollected(cardID, roomID); // ✅ Now passing roomID
         }
 
         if (audioSource != null && discoverySound != null)
@@ -204,12 +207,11 @@ public class HiddenCard : MonoBehaviour
             audioSource.PlayOneShot(discoverySound);
         }
 
-        // Show UI (TEMPORARILY COMMENTED - we'll enable this after creating the UI)
-        // CardDiscoveryUI uiManager = FindFirstObjectByType<CardDiscoveryUI>();
-        // if (uiManager != null)
-        // {
-        //     uiManager.ShowCardDiscovery(cardTitle, cardDescription);
-        // }
+        // Show card discovery UI
+        if (CardDiscoveryUI.Instance != null)
+        {
+            CardDiscoveryUI.Instance.ShowCardDiscovery(cardTitle, cardDescription);
+        }
 
         if (cardRenderer != null)
         {
