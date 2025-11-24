@@ -312,5 +312,59 @@ public class FirebaseManager : MonoBehaviour
             Debug.LogError("❌ Failed to save room time: " + e.Message);
         }
     }
+    /// <summary>
+    /// Saves object interaction data to Firestore
+    /// </summary>
+    public async Task SaveObjectInteractionAsync(
+        string userId,
+        string objectName,
+        float duration,
+        int totalInteractions,
+        float averageTime)
+    {
+        if (!IsReady || Firestore == null)
+        {
+            Debug.LogError("❌ Firestore not ready.");
+            return;
+        }
+
+        try
+        {
+            // Create unique document ID with timestamp
+            string docId = $"{objectName}_{System.DateTime.UtcNow.Ticks}";
+
+            var interactionDoc = Firestore.Collection("users").Document(userId)
+                .Collection("objectInteractions").Document(docId);
+
+            var interactionData = new Dictionary<string, object>
+        {
+            { "objectName", objectName },
+            { "duration", duration },
+            { "totalInteractions", totalInteractions },
+            { "averageTime", averageTime },
+            { "timestamp", FieldValue.ServerTimestamp }
+        };
+
+            await interactionDoc.SetAsync(interactionData);
+
+            // Also update summary statistics
+            var statsDoc = Firestore.Collection("users").Document(userId)
+                .Collection("objectStats").Document(objectName);
+
+            await statsDoc.SetAsync(new Dictionary<string, object>
+        {
+            { "totalInteractions", totalInteractions },
+            { "totalTimeSpent", FieldValue.Increment(duration) },
+            { "averageTime", averageTime },
+            { "lastInteraction", FieldValue.ServerTimestamp }
+        }, SetOptions.MergeAll);
+
+            Debug.Log($"✅ Object interaction '{objectName}' saved for user {userId}");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"❌ Failed to save object interaction: {e.Message}");
+        }
+    }
 
 }
