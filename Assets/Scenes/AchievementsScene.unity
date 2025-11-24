@@ -500,8 +500,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 888736132}
   m_HandleRect: {fileID: 888736131}
   m_Direction: 2
-  m_Value: 0.37862247
-  m_Size: 0.32012522
+  m_Value: 0.14923264
+  m_Size: 0.26962718
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -839,7 +839,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22.2
+  m_fontSize: 21.05
   m_fontSizeBase: 11.6
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -975,7 +975,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 27.2
+  m_fontSize: 23.55
   m_fontSizeBase: 29.4
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1151,7 +1151,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000061035156, y: 126.737656}
+  m_AnchoredPosition: {x: -0.000061035156, y: 186.41324}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &581582314
@@ -1238,7 +1238,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20.2
+  m_fontSize: 18
   m_fontSizeBase: 13.4
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1784,7 +1784,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 27.2
+  m_fontSize: 23.55
   m_fontSizeBase: 29.4
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2230,7 +2230,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 51.1
+  m_fontSize: 41.2
   m_fontSizeBase: 60.4
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2492,7 +2492,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28.05
+  m_fontSize: 23.75
   m_fontSizeBase: 13.93
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2628,7 +2628,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 23.05
+  m_fontSize: 19.95
   m_fontSizeBase: 14.1
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2788,6 +2788,51 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1465796349
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1465796351}
+  - component: {fileID: 1465796350}
+  m_Layer: 0
+  m_Name: FlowController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1465796350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1465796349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32cb7991b0ff45141a4a040558012a91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AchievementsFlow
+  susScene: SUSScene
+--- !u!4 &1465796351
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1465796349}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 265.19458, y: 0, z: 31467.941}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1498017086
 GameObject:
   m_ObjectHideFlags: 0
@@ -3151,7 +3196,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1857968695}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1465796350}
+        m_TargetAssemblyTypeName: AchievementsFlow, Assembly-CSharp
+        m_MethodName: GoToSUS
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1857968695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3437,7 +3494,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24.3
+  m_fontSize: 21.05
   m_fontSizeBase: 13.8
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3572,7 +3629,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 713023121}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.38304132
+  m_Size: 0.32411143
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3624,3 +3681,4 @@ SceneRoots:
   - {fileID: 43727184}
   - {fileID: 645925083}
   - {fileID: 299402925}
+  - {fileID: 1465796351}
