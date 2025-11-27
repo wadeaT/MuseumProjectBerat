@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
 using TMPro;
 using System.Collections;
-
-// ✅ FIXED: Only import the UI system we're using
 using UnityEngine.UI;
+using UnityEngine.InputSystem; // ✅ NEW INPUT SYSTEM
 
 public class CardDiscoveryUI : MonoBehaviour
 {
@@ -13,8 +12,6 @@ public class CardDiscoveryUI : MonoBehaviour
     public GameObject discoveryPanel;
     public TextMeshProUGUI cardTitleText;
     public TextMeshProUGUI cardDescriptionText;
-
-    // ✅ FIXED: Explicitly use UnityEngine.UI.Button
     public UnityEngine.UI.Button continueButton;
 
     [Header("Animation Settings")]
@@ -22,7 +19,6 @@ public class CardDiscoveryUI : MonoBehaviour
     public float fadeOutDuration = 0.3f;
 
     [Header("Background Dimming")]
-    // ✅ FIXED: Explicitly use UnityEngine.UI.Image
     public UnityEngine.UI.Image backgroundDim;
     public Color dimColor = new Color(0, 0, 0, 0.7f);
 
@@ -92,8 +88,6 @@ public class CardDiscoveryUI : MonoBehaviour
     {
         isShowing = true;
         showStartTime = Time.unscaledTime;
-        // Pause game
-        //Time.timeScale = 0f;
 
         // Set text content
         if (cardTitleText != null)
@@ -150,9 +144,6 @@ public class CardDiscoveryUI : MonoBehaviour
         // Hide panel
         discoveryPanel.SetActive(false);
 
-        // Resume game
-        //Time.timeScale = 1f;
-
         isShowing = false;
     }
 
@@ -165,10 +156,9 @@ public class CardDiscoveryUI : MonoBehaviour
 
         while (elapsed < duration)
         {
-            elapsed += Time.unscaledDeltaTime; // Use unscaled time since game is paused
+            elapsed += Time.unscaledDeltaTime;
             float t = elapsed / duration;
 
-            // Smooth easing
             t = Mathf.SmoothStep(0f, 1f, t);
 
             panelCanvasGroup.alpha = Mathf.Lerp(startAlpha, endAlpha, t);
@@ -200,13 +190,14 @@ public class CardDiscoveryUI : MonoBehaviour
 
         backgroundDim.color = endColor;
     }
+
     void Update()
     {
-
-        // ✅ FIXED: Only allow closing after a short delay to prevent immediate closure
+        // ✅ FIXED: New Input System - allow closing with keyboard after a short delay
         if (isShowing && Time.unscaledTime > showStartTime + 0.5f)
         {
-            if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Space))
+            if (Keyboard.current != null &&
+                (Keyboard.current[Key.E].wasPressedThisFrame || Keyboard.current[Key.Space].wasPressedThisFrame))
             {
                 CloseDiscovery();
             }

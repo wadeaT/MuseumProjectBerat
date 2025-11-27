@@ -19,7 +19,7 @@ public class BadgeManager : MonoBehaviour
     { "balcony", 3 },
     { "bedroom", 3 },
     { "guest_room", 3 },
-    { "kitchen", 3 },  
+    { "kitchen", 3 },
     { "workshop", 3 },
     { "archive", 3 }
 };
@@ -267,8 +267,8 @@ public class BadgeManager : MonoBehaviour
         Debug.Log($"║  {description}");
         Debug.Log("╚════════════════════════════════════════╝");
 
-        // Show badge popup UI
-        ShowBadgeNotification(badgeName, description);
+        // Show badge popup UI with badgeID for icon lookup
+        ShowBadgeNotification(badgeID, badgeName, description);
     }
 
     /// <summary>
@@ -330,37 +330,12 @@ public class BadgeManager : MonoBehaviour
     /// <summary>
     /// Show badge notification UI
     /// </summary>
-    /// <summary>
-    /// Show badge notification UI
-    /// </summary>
-    void ShowBadgeNotification(string badgeName, string description)
+    void ShowBadgeNotification(string badgeID, string badgeName, string description)
     {
-        // Show UI notification
+        // Show UI notification with badgeID for icon lookup
         if (BadgeNotificationUI.instance != null)
         {
-            // Assign thematic icons based on badge type
-            string icon = "🎖️"; // Default
-
-            // ===== MILESTONE BADGES =====
-            if (badgeName.Contains("First Discovery")) icon = "✨";
-            else if (badgeName.Contains("Curious Explorer")) icon = "🔍";
-            else if (badgeName.Contains("Dedicated Seeker")) icon = "⭐";
-            else if (badgeName.Contains("Persistent Scholar")) icon = "📚";
-            else if (badgeName.Contains("Heritage Guardian")) icon = "🏛️";
-            else if (badgeName.Contains("Complete Collection")) icon = "💎";
-
-            // ===== ROOM COMPLETION BADGES =====
-            else if (badgeName.Contains("Heart of the Home")) icon = "🏡";        // Balcony
-            else if (badgeName.Contains("Family Sanctuary")) icon = "🛏️";        // Bedroom
-            else if (badgeName.Contains("Hospitality Master")) icon = "🍵";      // Guest Room
-            else if (badgeName.Contains("Culinary Heritage")) icon = "🍲";       // Kitchen
-            else if (badgeName.Contains("Weaver's Legacy")) icon = "🧵";         // Workshop
-            else if (badgeName.Contains("Memory Keeper")) icon = "📸";           // Archive
-
-            // ===== MASTER BADGE =====
-            else if (badgeName.Contains("Ottoman Life Scholar")) icon = "👑";
-
-            BadgeNotificationUI.instance.ShowBadge(badgeName, description, icon);
+            BadgeNotificationUI.instance.ShowBadge(badgeID, badgeName, description);
         }
         else
         {

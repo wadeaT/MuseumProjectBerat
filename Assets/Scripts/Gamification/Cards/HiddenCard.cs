@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem; // ✅ NEW INPUT SYSTEM
 
 public class HiddenCard : MonoBehaviour
 {
@@ -26,6 +27,13 @@ public class HiddenCard : MonoBehaviour
     [Tooltip("Interaction key (for non-VR testing)")]
     public KeyCode interactionKey = KeyCode.E;
 
+    [Tooltip("Enable mobile touch controls (tap to collect)")]
+    public bool useMobileControls = true;
+
+    [Tooltip("Auto-collect after looking for this many seconds (0 = disabled)")]
+    [Range(0f, 3f)]
+    public float autoCollectDelay = 0f;
+
     [Header("Visual Feedback")]
     [Tooltip("Particle effect or glow that shows when player is near")]
     public GameObject hintEffect;
@@ -47,6 +55,7 @@ public class HiddenCard : MonoBehaviour
     private Renderer cardRenderer;
     private AudioSource audioSource;
     private Material cardMaterial;
+    private float lookTimer = 0f; // For auto-collect feature
 
     void Start()
     {
@@ -136,13 +145,43 @@ public class HiddenCard : MonoBehaviour
 
                     ShowInteractionPrompt(true);
 
-                    if (Input.GetKeyDown(interactionKey))
+                    // ✅ NEW INPUT SYSTEM SUPPORT
+                    bool interactionTriggered = false;
+
+                    // Check for keyboard input (PC/Editor)
+                    if (Keyboard.current != null && Keyboard.current[Key.E].wasPressedThisFrame)
+                    {
+                        interactionTriggered = true;
+                    }
+
+                    // Check for mobile touch/mouse click (unified input)
+                    if (useMobileControls)
+                    {
+                        // Pointer works for both mouse and touch!
+                        if (Pointer.current != null && Pointer.current.press.wasPressedThisFrame)
+                        {
+                            interactionTriggered = true;
+                        }
+                    }
+
+                    // Auto-collect after looking for X seconds
+                    if (autoCollectDelay > 0)
+                    {
+                        lookTimer += Time.deltaTime;
+                        if (lookTimer >= autoCollectDelay)
+                        {
+                            interactionTriggered = true;
+                        }
+                    }
+
+                    if (interactionTriggered)
                     {
                         CollectCard();
                     }
                 }
                 else
                 {
+                    lookTimer = 0f; // Reset timer when not looking
                     if (cardMaterial != null)
                     {
                         cardMaterial.color = idleColor;

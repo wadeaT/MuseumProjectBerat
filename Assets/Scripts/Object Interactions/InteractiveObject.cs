@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem; // ✅ NEW INPUT SYSTEM
 
 public class InteractiveObject : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class InteractiveObject : MonoBehaviour
     [TextArea(4, 10)]
     public string objectDescription = "This artifact tells a story of Ottoman-era life in Berat. Fill in the description here.";
     [Tooltip("Optional image of this object")]
-    public Sprite objectImage; 
+    public Sprite objectImage;
 
     [Header("Interaction Settings")]
     [Tooltip("How close must the player be to interact? (in meters)")]
@@ -23,6 +24,13 @@ public class InteractiveObject : MonoBehaviour
 
     [Tooltip("Key to press to examine the object")]
     public KeyCode interactionKey = KeyCode.E;
+
+    [Tooltip("Enable mobile touch controls (tap to examine)")]
+    public bool useMobileControls = true;
+
+    [Tooltip("Auto-examine after looking for this many seconds (0 = disabled)")]
+    [Range(0f, 3f)]
+    public float autoExamineDelay = 0f;
 
     [Header("Visual Feedback")]
     [Tooltip("Color when player is too far away")]
@@ -59,6 +67,7 @@ public class InteractiveObject : MonoBehaviour
     private int totalInteractions = 0;
     private float totalTimeSpent = 0f;
     private bool currentlyExamining = false;
+    private float lookTimer = 0f; // For auto-examine feature
 
     void Start()
     {
@@ -145,14 +154,43 @@ public class InteractiveObject : MonoBehaviour
                     HighlightObject(true);
                     ShowInteractionPrompt(true);
 
-                    // Player can interact
-                    if (Input.GetKeyDown(interactionKey))
+                    // ✅ NEW INPUT SYSTEM SUPPORT
+                    bool interactionTriggered = false;
+
+                    // Check for keyboard input (PC/Editor)
+                    if (Keyboard.current != null && Keyboard.current[Key.E].wasPressedThisFrame)
+                    {
+                        interactionTriggered = true;
+                    }
+
+                    // Check for mobile touch/mouse click (unified input)
+                    if (useMobileControls)
+                    {
+                        // Pointer works for both mouse and touch!
+                        if (Pointer.current != null && Pointer.current.press.wasPressedThisFrame)
+                        {
+                            interactionTriggered = true;
+                        }
+                    }
+
+                    // Auto-examine after looking for X seconds
+                    if (autoExamineDelay > 0)
+                    {
+                        lookTimer += Time.deltaTime;
+                        if (lookTimer >= autoExamineDelay)
+                        {
+                            interactionTriggered = true;
+                        }
+                    }
+
+                    if (interactionTriggered)
                     {
                         ExamineObject();
                     }
                 }
                 else
                 {
+                    lookTimer = 0f; // Reset timer when not looking
                     HighlightObject(false);
                     ShowInteractionPrompt(false);
                 }
@@ -163,7 +201,26 @@ public class InteractiveObject : MonoBehaviour
                 HighlightObject(true);
                 ShowInteractionPrompt(true);
 
-                if (Input.GetKeyDown(interactionKey))
+                // ✅ NEW INPUT SYSTEM SUPPORT
+                bool interactionTriggered = false;
+
+                // Check for keyboard input (PC/Editor)
+                if (Keyboard.current != null && Keyboard.current[Key.E].wasPressedThisFrame)
+                {
+                    interactionTriggered = true;
+                }
+
+                // Check for mobile touch/mouse click (unified input)
+                if (useMobileControls)
+                {
+                    // Pointer works for both mouse and touch!
+                    if (Pointer.current != null && Pointer.current.press.wasPressedThisFrame)
+                    {
+                        interactionTriggered = true;
+                    }
+                }
+
+                if (interactionTriggered)
                 {
                     ExamineObject();
                 }

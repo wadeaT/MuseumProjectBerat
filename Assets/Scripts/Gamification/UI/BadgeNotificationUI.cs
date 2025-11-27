@@ -14,6 +14,19 @@ public class BadgeNotificationUI : MonoBehaviour
     public TextMeshProUGUI badgeNameText;
     public TextMeshProUGUI badgeDescriptionText;
 
+    // -------------------------------------------------------
+    // BADGE ICON SYSTEM
+    // -------------------------------------------------------
+    [System.Serializable]
+    public class BadgeIconEntry
+    {
+        public string badgeId;   // e.g., "balcony_master"
+        public Sprite icon;      // local sprite
+    }
+
+    [Header("Badge Icons (assign in Inspector)")]
+    public List<BadgeIconEntry> badgeIcons;
+
     [Header("Animation Settings")]
     public float slideInDuration = 0.5f;
     public float displayDuration = 3.5f;
@@ -32,15 +45,15 @@ public class BadgeNotificationUI : MonoBehaviour
     // ✅ NEW: Store badge data
     private class BadgeData
     {
+        public string badgeId;
         public string name;
         public string description;
-        public string icon;
 
-        public BadgeData(string name, string description, string icon)
+        public BadgeData(string badgeId, string name, string description)
         {
+            this.badgeId = badgeId;
             this.name = name;
             this.description = description;
-            this.icon = icon;
         }
     }
 
@@ -72,13 +85,27 @@ public class BadgeNotificationUI : MonoBehaviour
         }
     }
 
+    // -------------------------------------------------------
+    // BADGE ICON HELPER
+    // -------------------------------------------------------
+    private Sprite GetBadgeIcon(string badgeId)
+    {
+        foreach (var entry in badgeIcons)
+        {
+            if (entry.badgeId == badgeId)
+                return entry.icon;
+        }
+        return null; // fallback if missing
+    }
+
     /// <summary>
     /// Show a badge notification (now queues if one is already showing)
+    /// Updated to accept badgeId for icon lookup
     /// </summary>
-    public void ShowBadge(string badgeName, string description, string icon = "🎖️")
+    public void ShowBadge(string badgeId, string badgeName, string description)
     {
-        // ✅ NEW: Add to queue instead of skipping
-        badgeQueue.Enqueue(new BadgeData(badgeName, description, icon));
+        // ✅ NEW: Add to queue with badgeId
+        badgeQueue.Enqueue(new BadgeData(badgeId, badgeName, description));
 
         // If not currently showing, start processing queue
         if (!isShowing)
@@ -95,21 +122,34 @@ public class BadgeNotificationUI : MonoBehaviour
         while (badgeQueue.Count > 0)
         {
             BadgeData badge = badgeQueue.Dequeue();
-            yield return StartCoroutine(ShowBadgeRoutine(badge.name, badge.description, badge.icon));
+            yield return StartCoroutine(ShowBadgeRoutine(badge.badgeId, badge.name, badge.description));
 
             // Small delay between badges
             yield return new WaitForSeconds(0.3f);
         }
     }
 
-    IEnumerator ShowBadgeRoutine(string badgeName, string description, string icon)
+    IEnumerator ShowBadgeRoutine(string badgeId, string badgeName, string description)
     {
         isShowing = true;
 
-        // Set text
+        // ✅ NEW: Get the badge icon sprite based on badgeId
+        Sprite iconSprite = GetBadgeIcon(badgeId);
+
+        // Set icon image
         if (badgeIcon != null)
         {
-            badgeIcon.enabled = true;
+            if (iconSprite != null)
+            {
+                badgeIcon.sprite = iconSprite;
+                badgeIcon.enabled = true;
+            }
+            else
+            {
+                // Fallback: keep current sprite or disable
+                Debug.LogWarning($"No icon found for badge: {badgeId}");
+                badgeIcon.enabled = false;
+            }
         }
 
         // Set header text (top small text)

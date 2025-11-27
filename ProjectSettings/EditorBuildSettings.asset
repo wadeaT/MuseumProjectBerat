@@ -9,14 +9,20 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/Scenes/TestScene_1.unity
-    guid: 3368b75ac83808543a96a7e50ef5a29d
-  - enabled: 0
+    path: Assets/Scenes/LoginScene.unity
+    guid: c26bf3dc54275ae49b111ab2752d4647
+  - enabled: 1
+    path: Assets/Scenes/FullMuseum.unity
+    guid: 7a348a901cf57ef41b3d47992f3e5028
+  - enabled: 1
+    path: Assets/Scenes/AchievementsScene.unity
+    guid: 2ff1bea36eb01ba4b9dfe40b7ac4469a
+  - enabled: 1
     path: Assets/Scenes/SUSQuestionnaire.unity
     guid: 684dec19b0fd3974a926c847828edfdc
   - enabled: 0
-    path: Assets/Scenes/LoginScene.unity
-    guid: c26bf3dc54275ae49b111ab2752d4647
+    path: Assets/Scenes/TestScene_1.unity
+    guid: 3368b75ac83808543a96a7e50ef5a29d
   - enabled: 0
     path: Assets/Scenes/MuseumMain.unity
     guid: ddb250b5716e9524d855e72cc84ff67f
@@ -29,9 +35,6 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Room 3 v1.unity
     guid: be7633dbbdfac3348a75819f5029e5ff
-  - enabled: 0
-    path: Assets/Scenes/FullMuseum.unity
-    guid: 7a348a901cf57ef41b3d47992f3e5028
   - enabled: 0
     path: Assets/Scenes/Room 4 v1.unity
     guid: 4db97872a0a117f459b0c2d69a38b9e2
