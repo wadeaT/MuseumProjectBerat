@@ -124,8 +124,19 @@ public class LoginUI : MonoBehaviour
                 await BadgeManager.instance.LoadProgressFromFirebase();
             }
 
-            await Task.Delay(800);
-            ShowQuestionsPanel();
+            await Task.Delay(400);
+            string userId = PlayerManager.Instance.userId;
+            bool hasDemographics = await FirebaseManager.Instance.UserHasDemographicsAsync(userId);
+            if (hasDemographics)
+            {
+                Debug.Log("[LoginUI] Existing user with demographics → go to museum.");
+                SceneManager.LoadScene(firstMuseumScene);
+            }
+            else
+            {
+                Debug.Log("[LoginUI] No demographics yet → show questions panel.");
+                ShowQuestionsPanel();
+            }
         }
         else
         {
