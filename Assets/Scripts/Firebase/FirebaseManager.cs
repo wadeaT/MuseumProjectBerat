@@ -366,5 +366,30 @@ public class FirebaseManager : MonoBehaviour
             Debug.LogError($" Failed to save object interaction: {e.Message}");
         }
     }
+    public async Task<bool> UserHasDemographicsAsync(string userId)
+    {
+        if (!IsReady || Firestore == null)
+        {
+            Debug.LogError("❌ Firestore not ready in UserHasDemographicsAsync.");
+            return false;
+        }
 
+        try
+        {
+            var docRef = Firestore.Collection("users").Document(userId)
+                .Collection("demographics").Document("info");
+
+            var snapshot = await docRef.GetSnapshotAsync();
+            bool exists = snapshot.Exists;
+
+            Debug.Log($"[FirebaseManager] User {userId} has demographics: {exists}");
+            return exists;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"❌ Error checking demographics for user {userId}: {e.Message}");
+            // On error, be safe and treat as "no demographics"
+            return false;
+        }
+    }
 }
