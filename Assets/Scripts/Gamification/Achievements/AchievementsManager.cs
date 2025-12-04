@@ -50,8 +50,14 @@ public class AchievementsManager : MonoBehaviour
 
     private IEnumerator LoadAchievementsFlow()
     {
-        // TEMPORARY: Hardcoded user for testing
-        userId = "B8w1cF06L3fJVBP7GaPuMpL9nFx1";
+        // Get user ID from PlayerManager
+        if (PlayerManager.Instance == null || string.IsNullOrEmpty(PlayerManager.Instance.userId))
+        {
+            Debug.LogError("❌ PlayerManager not initialized or user not logged in!");
+            yield break;
+        }
+
+        userId = PlayerManager.Instance.userId;
 
         db = FirebaseFirestore.DefaultInstance;
 

@@ -36,7 +36,7 @@ public class FirebaseManager : MonoBehaviour
         var status = await FirebaseApp.CheckAndFixDependenciesAsync();
         if (status != DependencyStatus.Available)
         {
-            Debug.LogError($" Firebase dependencies missing: {status}");
+            Debug.LogError($"❌ [FirebaseManager] Firebase dependencies missing: {status}");
             return;
         }
 
@@ -45,7 +45,7 @@ public class FirebaseManager : MonoBehaviour
         Firestore = FirebaseFirestore.DefaultInstance;
 
         IsReady = true;
-        Debug.Log(" Firebase initialized successfully!");
+        Debug.Log("✅ [FirebaseManager] Firebase initialized successfully!");
     }
 
     // ------------------------------------------------------------------------
@@ -56,19 +56,19 @@ public class FirebaseManager : MonoBehaviour
     {
         if (!IsReady)
         {
-            Debug.LogWarning("Firebase not ready yet.");
+            Debug.LogWarning("⚠️ Firebase not ready yet.");
             return null;
         }
 
         try
         {
             var result = await Auth.CreateUserWithEmailAndPasswordAsync(email, password);
-            Debug.Log($" Registered new user: {result.User.UserId}");
+            Debug.Log($"✅ [FirebaseManager] Registered new user: {result.User.UserId}");
             return result.User.UserId;
         }
         catch (System.Exception e)
         {
-            Debug.LogError(" Register failed: " + e.Message);
+            Debug.LogError($"❌ [FirebaseManager] Register failed: {e.Message}");
             return null;
         }
     }
@@ -77,19 +77,19 @@ public class FirebaseManager : MonoBehaviour
     {
         if (!IsReady)
         {
-            Debug.LogWarning("Firebase not ready yet.");
+            Debug.LogWarning("⚠️ Firebase not ready yet.");
             return null;
         }
 
         try
         {
             var result = await Auth.SignInWithEmailAndPasswordAsync(email, password);
-            Debug.Log($" Logged in: {result.User.UserId}");
+            Debug.Log($"✅ [FirebaseManager] Logged in: {result.User.UserId}");
             return result.User.UserId;
         }
         catch (System.Exception e)
         {
-            Debug.LogError(" Login failed: " + e.Message);
+            Debug.LogError($"❌ [FirebaseManager] Login failed: {e.Message}");
             return null;
         }
     }
@@ -108,7 +108,7 @@ public class FirebaseManager : MonoBehaviour
     {
         if (!IsReady || Firestore == null)
         {
-            Debug.LogError(" Firestore not ready or null.");
+            Debug.LogError("❌ [FirebaseManager] Firestore not ready or null.");
             return;
         }
 
@@ -131,11 +131,11 @@ public class FirebaseManager : MonoBehaviour
 
             Debug.Log("[FirebaseManager] Calling SetAsync...");
             await doc.SetAsync(data, SetOptions.MergeAll);
-            Debug.Log(" Demographics saved successfully in Firestore!");
+            Debug.Log("✅ [FirebaseManager] Demographics saved successfully in Firestore!");
         }
         catch (System.Exception e)
         {
-            Debug.LogError($" Failed to save demographics: {e.Message}\n{e.StackTrace}");
+            Debug.LogError($"❌ [FirebaseManager] Failed to save demographics: {e.Message}\n{e.StackTrace}");
         }
     }
 
@@ -148,7 +148,7 @@ public class FirebaseManager : MonoBehaviour
     {
         if (!IsReady || Firestore == null)
         {
-            Debug.LogError(" Firestore not ready.");
+            Debug.LogError("❌ [FirebaseManager] Firestore not ready.");
             return;
         }
 
@@ -180,11 +180,11 @@ public class FirebaseManager : MonoBehaviour
             { "lastBadgeTimestamp", FieldValue.ServerTimestamp }
         }, SetOptions.MergeAll);
 
-            Debug.Log($" Badge '{badgeName}' saved for user {userId}");
+            Debug.Log($"✅ [FirebaseManager] Badge '{badgeName}' saved for user {userId}");
         }
         catch (System.Exception e)
         {
-            Debug.LogError($" Failed to save badge: {e.Message}");
+            Debug.LogError($"❌ [FirebaseManager] Failed to save badge: {e.Message}");
         }
     }
 
@@ -195,7 +195,7 @@ public class FirebaseManager : MonoBehaviour
     {
         if (!IsReady || Firestore == null)
         {
-            Debug.LogError(" Firestore not ready.");
+            Debug.LogError("❌ [FirebaseManager] Firestore not ready.");
             return;
         }
 
@@ -223,11 +223,11 @@ public class FirebaseManager : MonoBehaviour
             { "lastCardTimestamp", FieldValue.ServerTimestamp }
         }, SetOptions.MergeAll);
 
-            Debug.Log($" Card '{cardId}' saved for user {userId}");
+            Debug.Log($"✅ [FirebaseManager] Card '{cardId}' saved for user {userId}");
         }
         catch (System.Exception e)
         {
-            Debug.LogError($" Failed to save card: {e.Message}");
+            Debug.LogError($"❌ [FirebaseManager] Failed to save card: {e.Message}");
         }
     }
 
@@ -238,7 +238,7 @@ public class FirebaseManager : MonoBehaviour
     {
         if (!IsReady || Firestore == null)
         {
-            Debug.LogError(" Firestore not ready.");
+            Debug.LogError("❌ [FirebaseManager] Firestore not ready.");
             return new List<string>();
         }
 
@@ -253,12 +253,12 @@ public class FirebaseManager : MonoBehaviour
                 badgeList.Add(doc.Id); // Badge ID
             }
 
-            Debug.Log($" Loaded {badgeList.Count} badges for user {userId}");
+            Debug.Log($"✅ [FirebaseManager] Loaded {badgeList.Count} badges for user {userId}");
             return badgeList;
         }
         catch (System.Exception e)
         {
-            Debug.LogError($" Failed to load badges: {e.Message}");
+            Debug.LogError($"❌ [FirebaseManager] Failed to load badges: {e.Message}");
             return new List<string>();
         }
     }
@@ -270,7 +270,7 @@ public class FirebaseManager : MonoBehaviour
     {
         if (!IsReady || Firestore == null)
         {
-            Debug.LogError(" Firestore not ready.");
+            Debug.LogError("❌ [FirebaseManager] Firestore not ready.");
             return 0;
         }
 
@@ -279,12 +279,12 @@ public class FirebaseManager : MonoBehaviour
             var cardsSnapshot = await Firestore.Collection("users").Document(userId)
                 .Collection("cards").GetSnapshotAsync();
 
-            Debug.Log($" Loaded {cardsSnapshot.Count} cards for user {userId}");
+            Debug.Log($"✅ [FirebaseManager] Loaded {cardsSnapshot.Count} cards for user {userId}");
             return cardsSnapshot.Count;
         }
         catch (System.Exception e)
         {
-            Debug.LogError($" Failed to load cards: {e.Message}");
+            Debug.LogError($"❌ [FirebaseManager] Failed to load cards: {e.Message}");
             return 0;
         }
     }
@@ -298,20 +298,53 @@ public class FirebaseManager : MonoBehaviour
             var docRef = Firestore.Collection("users").Document(userId)
                 .Collection("roomStats").Document(roomId);
 
-            // 🔹 Add time to total, and increment visit count by 1
+            // Add time to total, and increment visit count by 1
             await docRef.SetAsync(new Dictionary<string, object>
         {
             { "timeSpent", FieldValue.Increment(timeSpent) },
             { "visitCount", FieldValue.Increment(1) }
         }, SetOptions.MergeAll);
 
-            Debug.Log($" Room '{roomId}' updated → +{timeSpent:F2}s, +1 visit");
+            Debug.Log($"✅ [FirebaseManager] Room '{roomId}' updated → +{timeSpent:F2}s, +1 visit");
         }
         catch (System.Exception e)
         {
-            Debug.LogError(" Failed to save room time: " + e.Message);
+            Debug.LogError($"❌ [FirebaseManager] Failed to save room time: {e.Message}");
         }
     }
+    /// <summary>
+    /// Save total user score to Firestore
+    /// </summary>
+    public async Task SaveUserScoreAsync(string userId, int totalScore)
+    {
+        if (!IsReady || Firestore == null)
+        {
+            Debug.LogError("❌ Firestore not ready in SaveUserScoreAsync.");
+            return;
+        }
+
+        try
+        {
+            // We store score in the same "progress/summary" document
+            var progressDoc = Firestore.Collection("users").Document(userId)
+                .Collection("progress").Document("summary");
+
+            var data = new Dictionary<string, object>
+            {
+                { "totalScore", totalScore },
+                { "lastScoreUpdate", FieldValue.ServerTimestamp }
+            };
+
+            await progressDoc.SetAsync(data, SetOptions.MergeAll);
+
+            Debug.Log($"✅ Score {totalScore} saved for user {userId}");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"❌ Failed to save user score: {e.Message}");
+        }
+    }
+
     /// <summary>
     /// Saves object interaction data to Firestore
     /// </summary>
@@ -324,7 +357,7 @@ public class FirebaseManager : MonoBehaviour
     {
         if (!IsReady || Firestore == null)
         {
-            Debug.LogError(" Firestore not ready.");
+            Debug.LogError("❌ [FirebaseManager] Firestore not ready.");
             return;
         }
 
@@ -359,11 +392,11 @@ public class FirebaseManager : MonoBehaviour
             { "lastInteraction", FieldValue.ServerTimestamp }
         }, SetOptions.MergeAll);
 
-            Debug.Log($" Object interaction '{objectName}' saved for user {userId}");
+            Debug.Log($"✅ [FirebaseManager] Object interaction '{objectName}' saved for user {userId}");
         }
         catch (System.Exception e)
         {
-            Debug.LogError($" Failed to save object interaction: {e.Message}");
+            Debug.LogError($"❌ [FirebaseManager] Failed to save object interaction: {e.Message}");
         }
     }
     public async Task<bool> UserHasDemographicsAsync(string userId)

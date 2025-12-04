@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections;
 using TMPro;
-using System.Collections;
+using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class ObjectInfoUI : MonoBehaviour
@@ -205,7 +206,7 @@ public class ObjectInfoUI : MonoBehaviour
         if (isShowing && Time.time > showStartTime + 0.5f)
         {
             // Press ESC or E to close
-            if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.E))
+            if ((Keyboard.current != null && (Keyboard.current[Key.Escape].wasPressedThisFrame || Keyboard.current[Key.E].wasPressedThisFrame)))
             {
                 CloseInfo();
             }

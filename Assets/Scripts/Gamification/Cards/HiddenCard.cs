@@ -241,10 +241,6 @@ public class HiddenCard : MonoBehaviour
         {
             audioSource.PlayOneShot(discoverySound);
         }
-        if (audioSource != null && discoverySound != null)
-        {
-            audioSource.PlayOneShot(discoverySound);
-        }
 
         // Show card discovery UI
         if (CardDiscoveryUI.Instance != null)

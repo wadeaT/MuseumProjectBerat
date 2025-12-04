@@ -60,8 +60,8 @@ public class BadgeManager : MonoBehaviour
 
         if (showDebugMessages)
         {
-            Debug.Log($"BadgeManager initialized. Total cards collected: {totalCardsCollected}");
-            Debug.Log($"Unlocked badges: {unlockedBadges.Count}");
+            Debug.Log($"✅ BadgeManager initialized. Total cards collected: {totalCardsCollected}");
+            Debug.Log($"📊 Unlocked badges: {unlockedBadges.Count}");
         }
     }
 
@@ -94,16 +94,28 @@ public class BadgeManager : MonoBehaviour
 
     /// Call this when ANY card is collected
     /// </summary>
+    /// Call this when ANY card is collected
+    /// </summary>
     public void OnCardCollected(string cardID, string roomID) // ✅ Added roomID parameter
     {
         totalCardsCollected++;
 
-        // ✅ NEW: Track room-specific progress
+        // Track room-specific progress
         if (!cardsByRoom.ContainsKey(roomID))
         {
             cardsByRoom[roomID] = new HashSet<string>();
         }
+
+        // Check if this is the first card in this room
+        bool isFirstInRoom = cardsByRoom[roomID].Count == 0;
+
         cardsByRoom[roomID].Add(cardID);
+
+        // ✅ NEW: Award points for card collection
+        if (ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.OnCardCollected(cardID, roomID, isFirstInRoom);
+        }
 
         // Log room progress for debugging
         int cardsInRoom = cardsByRoom[roomID].Count;
