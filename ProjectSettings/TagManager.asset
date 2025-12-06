@@ -5,15 +5,16 @@ TagManager:
   serializedVersion: 3
   tags:
   - DefaultToggle
+  - CinemachineTarget
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Card
   - Water
   - UI
-  - 
-  - 
+  - InteractiveObject
+  - Timer
   - 
   - 
   - 

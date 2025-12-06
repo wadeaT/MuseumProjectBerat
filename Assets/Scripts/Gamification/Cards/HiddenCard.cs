@@ -117,14 +117,42 @@ public class HiddenCard : MonoBehaviour
 
         // Check if already discovered
         CheckIfAlreadyDiscovered();
-    }
 
+        StartCoroutine(ForceColliderRefresh());
+    }
+    System.Collections.IEnumerator ForceColliderRefresh()
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        // Force collider to re-register with physics system
+        Collider col = GetComponent<Collider>();
+        if (col != null)
+        {
+            col.enabled = false;
+            yield return null; // Wait one frame
+            col.enabled = true;
+            Debug.Log($"[{cardID}] Collider refreshed!");
+        }
+    }
     void Update()
     {
         if (isDiscovered || playerTransform == null)
             return;
 
         float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+
+        // ✅ FIXED: Using NEW Input System for SPACE key debug
+        if (Keyboard.current != null && Keyboard.current[Key.Space].wasPressedThisFrame)
+        {
+            Debug.Log($"=== CARD DEBUG: {cardID} ===");
+            Debug.Log($"Distance to player: {distanceToPlayer:F2} (max: {detectionRadius})");
+            Debug.Log($"In range: {distanceToPlayer <= detectionRadius}");
+            Debug.Log($"Requires direct look: {requiresDirectLook}");
+            Debug.Log($"Player looking at card: {IsPlayerLookingAtCard()}");
+            Debug.Log($"Card is discovered: {isDiscovered}");
+            Debug.Log($"Renderer enabled: {cardRenderer != null && cardRenderer.enabled}");
+            Debug.Log($"===========================");
+        }
 
         if (distanceToPlayer <= detectionRadius)
         {
@@ -137,6 +165,9 @@ public class HiddenCard : MonoBehaviour
             {
                 if (IsPlayerLookingAtCard())
                 {
+                    // Debug log
+                    Debug.Log($"[{cardID}] Player looking! Ready to collect.");
+
                     if (cardMaterial != null)
                     {
                         cardMaterial.color = activeColor;
@@ -145,43 +176,42 @@ public class HiddenCard : MonoBehaviour
 
                     ShowInteractionPrompt(true);
 
-                    // ✅ NEW INPUT SYSTEM SUPPORT
                     bool interactionTriggered = false;
 
-                    // Check for keyboard input (PC/Editor)
                     if (Keyboard.current != null && Keyboard.current[Key.E].wasPressedThisFrame)
                     {
                         interactionTriggered = true;
+                        Debug.Log($"[{cardID}] E key pressed!");
                     }
 
-                    // Check for mobile touch/mouse click (unified input)
                     if (useMobileControls)
                     {
-                        // Pointer works for both mouse and touch!
                         if (Pointer.current != null && Pointer.current.press.wasPressedThisFrame)
                         {
                             interactionTriggered = true;
+                            Debug.Log($"[{cardID}] Touch/click detected!");
                         }
                     }
 
-                    // Auto-collect after looking for X seconds
                     if (autoCollectDelay > 0)
                     {
                         lookTimer += Time.deltaTime;
                         if (lookTimer >= autoCollectDelay)
                         {
                             interactionTriggered = true;
+                            Debug.Log($"[{cardID}] Auto-collect triggered!");
                         }
                     }
 
                     if (interactionTriggered)
                     {
+                        Debug.Log($"[{cardID}] ✅ COLLECTING CARD!");
                         CollectCard();
                     }
                 }
                 else
                 {
-                    lookTimer = 0f; // Reset timer when not looking
+                    lookTimer = 0f;
                     if (cardMaterial != null)
                     {
                         cardMaterial.color = idleColor;
@@ -194,12 +224,19 @@ public class HiddenCard : MonoBehaviour
             {
                 if (distanceToPlayer <= detectionRadius * 0.5f)
                 {
+                    Debug.Log($"[{cardID}] ✅ COLLECTING CARD (no look required)!");
                     CollectCard();
                 }
             }
         }
         else
         {
+            // Debug for distance
+            if (Keyboard.current != null && Keyboard.current[Key.Space].wasPressedThisFrame)
+            {
+                Debug.Log($"[{cardID}] Too far! Distance: {distanceToPlayer:F2}");
+            }
+
             if (hintEffect != null)
             {
                 hintEffect.SetActive(false);
@@ -207,6 +244,7 @@ public class HiddenCard : MonoBehaviour
             ShowInteractionPrompt(false);
         }
     }
+
 
     bool IsPlayerLookingAtCard()
     {
@@ -292,4 +330,5 @@ public class HiddenCard : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, detectionRadius * 0.5f);
     }
+
 }
