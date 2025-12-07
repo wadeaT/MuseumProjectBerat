@@ -304,7 +304,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 102682682}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1465796350}
+        m_TargetAssemblyTypeName: AchievementsFlow, Assembly-CSharp
+        m_MethodName: GoBack
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &102682682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -500,8 +512,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 888736132}
   m_HandleRect: {fileID: 888736131}
   m_Direction: 2
-  m_Value: -0.0000017611131
-  m_Size: 0.24684733
+  m_Value: 0.00000014066796
+  m_Size: 0.27335855
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -553,6 +565,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 224732042}
+  - component: {fileID: 224732043}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -579,6 +592,32 @@ RectTransform:
   m_AnchoredPosition: {x: -0.000061035156, y: -0.0000022908512}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
+--- !u!114 &224732043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 224732041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
+  m_Padding:
+    m_Left: 10
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &270798335
 GameObject:
   m_ObjectHideFlags: 0
@@ -850,7 +889,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18
+  m_fontSize: 21.5
   m_fontSizeBase: 11.6
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -986,7 +1025,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22.05
+  m_fontSize: 24.1
   m_fontSizeBase: 29.4
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1139,6 +1178,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 481603576}
+  - component: {fileID: 481603577}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -1162,9 +1202,35 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000061035156, y: 225.27182}
+  m_AnchoredPosition: {x: -0.000061035156, y: 216.94757}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
+--- !u!114 &481603577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 481603575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &581582314
 GameObject:
   m_ObjectHideFlags: 0
@@ -1502,6 +1568,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 292cb2db54746ca41ad1f6a0a65eb1e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementsManager
+  useTestUserId: 0
+  testUserId: 
   badgeUIPrefab: {fileID: 1645284005321574963, guid: e334f3ae60f635e49bdbea73976c000b, type: 3}
   cardUIPrefab: {fileID: 540234498559698590, guid: c4f1adde91d1271488acea97d75c7d2e, type: 3}
   badgesContent: {fileID: 481603576}
@@ -1795,7 +1863,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22.05
+  m_fontSize: 24.1
   m_fontSizeBase: 29.4
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2241,7 +2309,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 37.15
+  m_fontSize: 42.6
   m_fontSizeBase: 60.4
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2503,7 +2571,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22
+  m_fontSize: 24.4
   m_fontSizeBase: 13.93
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2639,7 +2707,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18.7
+  m_fontSize: 20.4
   m_fontSizeBase: 14.1
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2828,7 +2896,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32cb7991b0ff45141a4a040558012a91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AchievementsFlow
+  backScene: FullMuseum
   susScene: SUSScene
+  finishScene: LoginScene
 --- !u!4 &1465796351
 Transform:
   m_ObjectHideFlags: 0
@@ -3210,7 +3280,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1465796350}
         m_TargetAssemblyTypeName: AchievementsFlow, Assembly-CSharp
-        m_MethodName: GoToSUS
+        m_MethodName: Finish
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3505,7 +3575,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 19.7
+  m_fontSize: 21.5
   m_fontSizeBase: 13.8
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3639,8 +3709,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 713023122}
   m_HandleRect: {fileID: 713023121}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.30015087
+  m_Value: 1.0000001
+  m_Size: 0.33253002
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

@@ -8,6 +8,11 @@ using UnityEngine.UI;
 
 public class AchievementsManager : MonoBehaviour
 {
+
+    [Header("TEST MODE")]
+    public bool useTestUserId = true;
+    public string testUserId;
+
     [Header("Prefabs")]
     public GameObject badgeUIPrefab;
     public GameObject cardUIPrefab;
@@ -50,22 +55,34 @@ public class AchievementsManager : MonoBehaviour
 
     private IEnumerator LoadAchievementsFlow()
     {
-        // Get user ID from PlayerManager
-        if (PlayerManager.Instance == null || string.IsNullOrEmpty(PlayerManager.Instance.userId))
-        {
-            Debug.LogError("❌ PlayerManager not initialized or user not logged in!");
-            yield break;
-        }
-
-        userId = PlayerManager.Instance.userId;
 
         db = FirebaseFirestore.DefaultInstance;
+        if (useTestUserId)
+        {
+            if (string.IsNullOrEmpty(testUserId))
+            {
+                Debug.LogError("useTestUserId is ON but testUserId is empty!");
+                yield break;
+            }
 
+            userId = testUserId;
+        }
+        else
+        {
+            // Get user ID from PlayerManager
+            if (PlayerManager.Instance == null || string.IsNullOrEmpty(PlayerManager.Instance.userId))
+            {
+                Debug.LogError(" PlayerManager not initialized or user not logged in!");
+                yield break;
+            }
+
+            userId = PlayerManager.Instance.userId;
+            db = FirebaseFirestore.DefaultInstance;
+        }
         LoadBadges();
         LoadCards();
         LoadSummary();
         LoadRoomStats();
-
         yield break;
     }
 

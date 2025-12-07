@@ -154,7 +154,7 @@ public class HiddenCard : MonoBehaviour
             Debug.Log($"===========================");
         }
 
-        if (distanceToPlayer <= detectionRadius)
+        if /*(distanceToPlayer <= detectionRadius)*/ (true)
         {
             if (hintEffect != null)
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem; // ✅ NEW INPUT SYSTEM
 
@@ -54,6 +55,7 @@ public class InteractiveObject : MonoBehaviour
     [Tooltip("Track how long players examine this object")]
     public bool trackInteractionTime = true;
 
+    public LayerMask interactableMask;
 
     // Internal variables
     private Transform playerTransform;
@@ -137,15 +139,36 @@ public class InteractiveObject : MonoBehaviour
         }
     }
 
+    void Awake()
+    {
+        if (interactableMask.value == 0)
+            interactableMask = LayerMask.GetMask("Interactable");
+    }
+
+
     void Update()
     {
         if (playerTransform == null) return;
 
+        bool looking = IsPlayerLookingAtObject();
+        if (looking)
+        {
+            Debug.Log($"🎯 LOOKING AT: {name}", this);
+        }
+
+
+
+        if (playerCamera != null)
+        {
+            Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            Debug.DrawRay(ray.origin, ray.direction * (interactionRadius + 1f), Color.yellow);
+        }
+
         float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
 
         // Check if player is in range
-        if (distanceToPlayer <= interactionRadius)
-        {
+        //if (distanceToPlayer <= interactionRadius)
+        //{
             // Check if looking at object (if required)
             if (requiresDirectLook)
             {
@@ -225,19 +248,19 @@ public class InteractiveObject : MonoBehaviour
                     ExamineObject();
                 }
             }
-        }
-        else
-        {
-            // Player too far away
-            HighlightObject(false);
-            ShowInteractionPrompt(false);
-        }
+       // }
+       // else
+       // {
+       //     // Player too far away
+        //    HighlightObject(false);
+        //    ShowInteractionPrompt(false);
+       // }
     }
 
     /// <summary>
     /// Check if player is looking at this object
     /// </summary>
-    bool IsPlayerLookingAtObject()
+    /*bool IsPlayerLookingAtObject()
     {
         if (playerCamera == null) return false;
 
@@ -253,7 +276,116 @@ public class InteractiveObject : MonoBehaviour
         }
 
         return false;
+    }*/
+
+    /*bool IsPlayerLookingAtObject()
+    {
+        if (playerCamera == null) return false;
+
+        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        RaycastHit hit;
+
+        // ✅ ADD THIS DEBUG LINE - ignore triggers!
+        if (Physics.Raycast(ray, out hit, interactionRadius + 1f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+        {
+            // ✅ ADD THIS - See what you're actually hitting
+            Debug.Log($"👀 Camera raycast hit: {hit.collider.gameObject.name} (Expected: {gameObject.name})");
+            Debug.DrawLine(ray.origin, hit.point, Color.red, 2.0f);
+
+            if (hit.collider.gameObject == gameObject)
+            {
+                return true;
+            }
+        }
+        else
+        {
+            // ✅ ADD THIS - Nothing hit at all
+            Debug.Log($"👀 Raycast hit NOTHING within {interactionRadius + 1f}m");
+        }
+
+        return false;
+    }*/
+
+    /*bool IsPlayerLookingAtObject()
+    {
+        if (playerCamera == null) return false;
+
+        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        float dist = interactionRadius + 1f;
+
+        var hits = Physics.RaycastAll(ray, dist, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore)
+                          .OrderBy(h => h.distance)
+                          .ToArray();
+
+        if (hits.Length == 0)
+        {
+            Debug.Log($"👀 Raycast hit NOTHING within {dist}m", this);
+            return false;
+        }
+
+        // Log all hits in order
+        for (int i = 0; i < hits.Length; i++)
+        {
+            var go = hits[i].collider.gameObject;
+            Debug.Log(
+                $"👀 #{i + 1} hit: {go.name} | dist={hits[i].distance:F2} (Expected: {gameObject.name})",
+                go
+            );
+        }
+
+        // Return true only if THIS object is the first valid hit
+        return hits[0].collider.gameObject == gameObject;
+    }*/
+    /*bool IsPlayerLookingAtObject()
+    {
+        if (playerCamera == null) return false;
+
+        if (interactableMask.value == 0)
+            interactableMask = LayerMask.GetMask("Interactable");
+
+        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        float dist = interactionRadius + 1f;
+
+        if (Physics.Raycast(ray, out var hit, dist, interactableMask, QueryTriggerInteraction.Ignore))
+        {
+            Debug.Log($"✅ Interactable hit: {hit.collider.name}", hit.collider.gameObject);
+
+            var io = hit.collider.GetComponentInParent<InteractiveObject>();
+            return io == this;
+        }
+
+        return false;
+    }*/
+    bool IsPlayerLookingAtObject()
+    {
+        if (playerCamera == null) return false;
+
+        if (interactableMask.value == 0)
+            interactableMask = LayerMask.GetMask("Interactable");
+
+        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        float dist = interactionRadius + 1f;
+
+        if (Physics.Raycast(ray, out var hit, dist, interactableMask, QueryTriggerInteraction.Ignore))
+        {
+            // Find the InteractiveObject that the ray actually hit
+            var io = hit.collider.GetComponentInParent<InteractiveObject>();
+
+            if (io == null) return false;
+            // ✅ Only log if THIS object is the one being looked at
+            if (io == this)
+            {
+                Debug.Log($"🎯 LOOKING AT: {name} via {hit.collider.name}", hit.collider.gameObject);
+                return true;
+            }
+
+            return false;
+        }
+
+        return false;
     }
+
+
 
     /// <summary>
     /// Highlight or unhighlight the object
@@ -405,12 +537,12 @@ public class InteractiveObject : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("⚠️ No user logged in - interaction not saved to Firebase");
+                Debug.LogWarning("⚠ No user logged in - interaction not saved to Firebase");
             }
         }
         else
         {
-            Debug.LogWarning("⚠️ FirebaseManager not ready - interaction only logged locally");
+            Debug.LogWarning("⚠ FirebaseManager not ready - interaction only logged locally");
         }
     }
     /// <summary>
