@@ -15,7 +15,7 @@ public class HiddenCard : MonoBehaviour
 
     [Tooltip("Description/story for this card")]
     [TextArea(3, 6)]
-    public string cardDescription = "This balcony, called a 'çardak' in Albanian, was the social center of traditional Berat homes. Families gathered here for meals, women wove textiles, and honored guests were welcomed with coffee and raki. The wooden railings allowed residents to observe street life below while maintaining privacy—a clever feature of Ottoman-era architecture.";
+    public string cardDescription = "This balcony, called a 'çardak' in Albanian, was the social center of traditional Berat homes.";
 
     [Header("Discovery Settings")]
     [Tooltip("How close must the player be to notice this card? (in meters)")]
@@ -27,8 +27,7 @@ public class HiddenCard : MonoBehaviour
     [Tooltip("Interaction key (for non-VR testing)")]
     public KeyCode interactionKey = KeyCode.E;
 
-    [Tooltip("Enable mobile touch controls (tap to collect)")]
-    public bool useMobileControls = true;
+    // ✅ REMOVED: useMobileControls - now handled by InteractionManager button
 
     [Tooltip("Auto-collect after looking for this many seconds (0 = disabled)")]
     [Range(0f, 3f)]
@@ -70,7 +69,6 @@ public class HiddenCard : MonoBehaviour
 
             if (playerCamera == null)
             {
-                // If Camera.main doesn't work, search for camera in player's children
                 playerCamera = player.GetComponentInChildren<Camera>();
             }
 
@@ -120,6 +118,7 @@ public class HiddenCard : MonoBehaviour
 
         StartCoroutine(ForceColliderRefresh());
     }
+
     System.Collections.IEnumerator ForceColliderRefresh()
     {
         yield return new WaitForSeconds(0.1f);
@@ -134,6 +133,7 @@ public class HiddenCard : MonoBehaviour
             Debug.Log($"[{cardID}] Collider refreshed!");
         }
     }
+
     void Update()
     {
         if (isDiscovered || playerTransform == null)
@@ -141,110 +141,58 @@ public class HiddenCard : MonoBehaviour
 
         float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
 
-        // ✅ FIXED: Using NEW Input System for SPACE key debug
-        if (Keyboard.current != null && Keyboard.current[Key.Space].wasPressedThisFrame)
+        // Show hint effect when in range
+        if (hintEffect != null)
         {
-            Debug.Log($"=== CARD DEBUG: {cardID} ===");
-            Debug.Log($"Distance to player: {distanceToPlayer:F2} (max: {detectionRadius})");
-            Debug.Log($"In range: {distanceToPlayer <= detectionRadius}");
-            Debug.Log($"Requires direct look: {requiresDirectLook}");
-            Debug.Log($"Player looking at card: {IsPlayerLookingAtCard()}");
-            Debug.Log($"Card is discovered: {isDiscovered}");
-            Debug.Log($"Renderer enabled: {cardRenderer != null && cardRenderer.enabled}");
-            Debug.Log($"===========================");
+            hintEffect.SetActive(distanceToPlayer <= detectionRadius);
         }
 
-        if /*(distanceToPlayer <= detectionRadius)*/ (true)
+        if (requiresDirectLook)
         {
-            if (hintEffect != null)
+            if (IsPlayerLookingAtCard())
             {
-                hintEffect.SetActive(true);
-            }
-
-            if (requiresDirectLook)
-            {
-                if (IsPlayerLookingAtCard())
+                // Player is looking at this card
+                if (cardMaterial != null)
                 {
-                    // Debug log
-                    Debug.Log($"[{cardID}] Player looking! Ready to collect.");
+                    cardMaterial.color = activeColor;
+                    cardMaterial.SetColor("_EmissionColor", activeColor);
+                }
 
-                    if (cardMaterial != null)
+                ShowInteractionPrompt(true);
+
+                // Auto-collect after looking for X seconds
+                if (autoCollectDelay > 0)
+                {
+                    lookTimer += Time.deltaTime;
+                    if (lookTimer >= autoCollectDelay)
                     {
-                        cardMaterial.color = activeColor;
-                        cardMaterial.SetColor("_EmissionColor", activeColor);
-                    }
-
-                    ShowInteractionPrompt(true);
-
-                    bool interactionTriggered = false;
-
-                    if (Keyboard.current != null && Keyboard.current[Key.E].wasPressedThisFrame)
-                    {
-                        interactionTriggered = true;
-                        Debug.Log($"[{cardID}] E key pressed!");
-                    }
-
-                    if (useMobileControls)
-                    {
-                        if (Pointer.current != null && Pointer.current.press.wasPressedThisFrame)
-                        {
-                            interactionTriggered = true;
-                            Debug.Log($"[{cardID}] Touch/click detected!");
-                        }
-                    }
-
-                    if (autoCollectDelay > 0)
-                    {
-                        lookTimer += Time.deltaTime;
-                        if (lookTimer >= autoCollectDelay)
-                        {
-                            interactionTriggered = true;
-                            Debug.Log($"[{cardID}] Auto-collect triggered!");
-                        }
-                    }
-
-                    if (interactionTriggered)
-                    {
-                        Debug.Log($"[{cardID}] ✅ COLLECTING CARD!");
                         CollectCard();
+                        lookTimer = 0f;
                     }
                 }
-                else
-                {
-                    lookTimer = 0f;
-                    if (cardMaterial != null)
-                    {
-                        cardMaterial.color = idleColor;
-                        cardMaterial.SetColor("_EmissionColor", idleColor * 0.5f);
-                    }
-                    ShowInteractionPrompt(false);
-                }
+
+                // ✅ Touch/mobile detection REMOVED - now handled by InteractionManager button
             }
             else
             {
-                if (distanceToPlayer <= detectionRadius * 0.5f)
+                lookTimer = 0f;
+                if (cardMaterial != null)
                 {
-                    Debug.Log($"[{cardID}] ✅ COLLECTING CARD (no look required)!");
-                    CollectCard();
+                    cardMaterial.color = idleColor;
+                    cardMaterial.SetColor("_EmissionColor", idleColor * 0.5f);
                 }
+                ShowInteractionPrompt(false);
             }
         }
         else
         {
-            // Debug for distance
-            if (Keyboard.current != null && Keyboard.current[Key.Space].wasPressedThisFrame)
+            // Auto-collect if very close (no look required)
+            if (distanceToPlayer <= detectionRadius * 0.5f)
             {
-                Debug.Log($"[{cardID}] Too far! Distance: {distanceToPlayer:F2}");
+                CollectCard();
             }
-
-            if (hintEffect != null)
-            {
-                hintEffect.SetActive(false);
-            }
-            ShowInteractionPrompt(false);
         }
     }
-
 
     bool IsPlayerLookingAtCard()
     {
@@ -265,14 +213,34 @@ public class HiddenCard : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// ✅ PUBLIC METHOD - Called by InteractionManager when button is pressed
+    /// </summary>
+    public void TriggerCollection()
+    {
+        if (!isDiscovered)
+        {
+            CollectCard();
+        }
+    }
+
+    /// <summary>
+    /// ✅ PUBLIC METHOD - Check if card is already discovered
+    /// </summary>
+    public bool IsDiscovered()
+    {
+        return isDiscovered;
+    }
+
     void CollectCard()
     {
         isDiscovered = true;
 
         Debug.Log($"Card Discovered: {cardTitle}");
+
         if (BadgeManager.instance != null)
         {
-            BadgeManager.instance.OnCardCollected(cardID, roomID); // ✅ Now passing roomID
+            BadgeManager.instance.OnCardCollected(cardID, roomID);
         }
 
         if (audioSource != null && discoverySound != null)
@@ -319,7 +287,7 @@ public class HiddenCard : MonoBehaviour
 
     void ShowInteractionPrompt(bool show)
     {
-        // We'll implement this with UI later
+        // Placeholder for UI prompt
     }
 
     void OnDrawGizmosSelected()
@@ -330,5 +298,4 @@ public class HiddenCard : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, detectionRadius * 0.5f);
     }
-
 }

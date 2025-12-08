@@ -8,6 +8,10 @@ using UnityEngine.UI;
 
 public class AchievementsManager : MonoBehaviour
 {
+    [Header("Score UI")]
+    public TMP_Text totalScoreText;
+    public TMP_Text scoreBreakdownText;
+
 
     [Header("TEST MODE")]
     public bool useTestUserId = true;
@@ -82,6 +86,7 @@ public class AchievementsManager : MonoBehaviour
         LoadBadges();
         LoadCards();
         LoadSummary();
+        LoadScore();
         LoadRoomStats();
         yield break;
     }
@@ -195,6 +200,45 @@ public class AchievementsManager : MonoBehaviour
           });
     }
 
+    private void LoadScore()
+    {
+        db.Collection("users").Document(userId)
+            .Collection("progress").Document("summary")
+            .GetSnapshotAsync()
+            .ContinueWithOnMainThread(task =>
+            {
+                if (!task.IsCompletedSuccessfully) return;
+
+                var doc = task.Result;
+
+                // Get score
+                int totalScore = 0;
+                if (doc.ContainsField("totalScore"))
+                {
+                    totalScore = (int)doc.GetValue<long>("totalScore");
+                }
+
+                // Get cards for breakdown
+                long cardsCollected = 0;
+                if (doc.ContainsField("totalCardsCollected"))
+                {
+                    cardsCollected = doc.GetValue<long>("totalCardsCollected");
+                }
+
+                // Update UI
+                if (totalScoreText != null)
+                {
+                    totalScoreText.text = totalScore.ToString("N0");
+                }
+
+                if (scoreBreakdownText != null)
+                {
+                    int cardPoints = (int)(cardsCollected * 100);
+                    int badgePoints = totalScore - cardPoints;
+                    scoreBreakdownText.text = $"Cards: +{cardPoints:N0} | Badges: +{badgePoints:N0}";
+                }
+            });
+    }
 
     // -------------------------------------------------------
     // LOAD ROOM STATS

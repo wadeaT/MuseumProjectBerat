@@ -262,6 +262,11 @@ public class BadgeManager : MonoBehaviour
 
         unlockedBadges.Add(badgeID);
 
+        if (ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.OnBadgeUnlocked(totalCardsCollected);
+        }
+
         // Save to Firebase
         if (useFirebase && PlayerManager.Instance != null && !string.IsNullOrEmpty(PlayerManager.Instance.userId))
         {

@@ -26,8 +26,7 @@ public class InteractiveObject : MonoBehaviour
     [Tooltip("Key to press to examine the object")]
     public KeyCode interactionKey = KeyCode.E;
 
-    [Tooltip("Enable mobile touch controls (tap to examine)")]
-    public bool useMobileControls = true;
+    // ✅ REMOVED: useMobileControls - now handled by InteractionManager button
 
     [Tooltip("Auto-examine after looking for this many seconds (0 = disabled)")]
     [Range(0f, 3f)]
@@ -150,212 +149,58 @@ public class InteractiveObject : MonoBehaviour
     {
         if (playerTransform == null) return;
 
-        bool looking = IsPlayerLookingAtObject();
-        if (looking)
-        {
-            Debug.Log($"🎯 LOOKING AT: {name}", this);
-        }
-
-
-
         if (playerCamera != null)
         {
             Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             Debug.DrawRay(ray.origin, ray.direction * (interactionRadius + 1f), Color.yellow);
         }
 
-        float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
-
-        // Check if player is in range
-        //if (distanceToPlayer <= interactionRadius)
-        //{
-            // Check if looking at object (if required)
-            if (requiresDirectLook)
+        // Check if looking at object (if required)
+        if (requiresDirectLook)
+        {
+            if (IsPlayerLookingAtObject())
             {
-                if (IsPlayerLookingAtObject())
-                {
-                    HighlightObject(true);
-                    ShowInteractionPrompt(true);
-
-                    // ✅ NEW INPUT SYSTEM SUPPORT
-                    bool interactionTriggered = false;
-
-                    // Check for keyboard input (PC/Editor)
-                    if (Keyboard.current != null && Keyboard.current[Key.E].wasPressedThisFrame)
-                    {
-                        interactionTriggered = true;
-                    }
-
-                    // Check for mobile touch/mouse click (unified input)
-                    if (useMobileControls)
-                    {
-                        // Pointer works for both mouse and touch!
-                        if (Pointer.current != null && Pointer.current.press.wasPressedThisFrame)
-                        {
-                            interactionTriggered = true;
-                        }
-                    }
-
-                    // Auto-examine after looking for X seconds
-                    if (autoExamineDelay > 0)
-                    {
-                        lookTimer += Time.deltaTime;
-                        if (lookTimer >= autoExamineDelay)
-                        {
-                            interactionTriggered = true;
-                        }
-                    }
-
-                    if (interactionTriggered)
-                    {
-                        ExamineObject();
-                    }
-                }
-                else
-                {
-                    lookTimer = 0f; // Reset timer when not looking
-                    HighlightObject(false);
-                    ShowInteractionPrompt(false);
-                }
-            }
-            else
-            {
-                // Auto-highlight if in range (no look requirement)
                 HighlightObject(true);
                 ShowInteractionPrompt(true);
 
-                // ✅ NEW INPUT SYSTEM SUPPORT
-                bool interactionTriggered = false;
-
-                // Check for keyboard input (PC/Editor)
-                if (Keyboard.current != null && Keyboard.current[Key.E].wasPressedThisFrame)
+                // Auto-examine after looking for X seconds
+                if (autoExamineDelay > 0)
                 {
-                    interactionTriggered = true;
-                }
-
-                // Check for mobile touch/mouse click (unified input)
-                if (useMobileControls)
-                {
-                    // Pointer works for both mouse and touch!
-                    if (Pointer.current != null && Pointer.current.press.wasPressedThisFrame)
+                    lookTimer += Time.deltaTime;
+                    if (lookTimer >= autoExamineDelay)
                     {
-                        interactionTriggered = true;
+                        ExamineObject();
+                        lookTimer = 0f;
                     }
                 }
 
-                if (interactionTriggered)
-                {
-                    ExamineObject();
-                }
+                // ✅ E key still works for PC/Editor testing
+                // Touch/mobile is handled by InteractionManager button
             }
-       // }
-       // else
-       // {
-       //     // Player too far away
-        //    HighlightObject(false);
-        //    ShowInteractionPrompt(false);
-       // }
-    }
-
-    /// <summary>
-    /// Check if player is looking at this object
-    /// </summary>
-    /*bool IsPlayerLookingAtObject()
-    {
-        if (playerCamera == null) return false;
-
-        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, interactionRadius + 1f))
-        {
-            if (hit.collider.gameObject == gameObject)
+            else
             {
-                return true;
-            }
-        }
-
-        return false;
-    }*/
-
-    /*bool IsPlayerLookingAtObject()
-    {
-        if (playerCamera == null) return false;
-
-        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        RaycastHit hit;
-
-        // ✅ ADD THIS DEBUG LINE - ignore triggers!
-        if (Physics.Raycast(ray, out hit, interactionRadius + 1f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
-        {
-            // ✅ ADD THIS - See what you're actually hitting
-            Debug.Log($"👀 Camera raycast hit: {hit.collider.gameObject.name} (Expected: {gameObject.name})");
-            Debug.DrawLine(ray.origin, hit.point, Color.red, 2.0f);
-
-            if (hit.collider.gameObject == gameObject)
-            {
-                return true;
+                lookTimer = 0f; // Reset timer when not looking
+                HighlightObject(false);
+                ShowInteractionPrompt(false);
             }
         }
         else
         {
-            // ✅ ADD THIS - Nothing hit at all
-            Debug.Log($"👀 Raycast hit NOTHING within {interactionRadius + 1f}m");
+            // Auto-highlight if in range (no look requirement)
+            float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+            if (distanceToPlayer <= interactionRadius)
+            {
+                HighlightObject(true);
+                ShowInteractionPrompt(true);
+            }
+            else
+            {
+                HighlightObject(false);
+                ShowInteractionPrompt(false);
+            }
         }
+    }
 
-        return false;
-    }*/
-
-    /*bool IsPlayerLookingAtObject()
-    {
-        if (playerCamera == null) return false;
-
-        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        float dist = interactionRadius + 1f;
-
-        var hits = Physics.RaycastAll(ray, dist, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore)
-                          .OrderBy(h => h.distance)
-                          .ToArray();
-
-        if (hits.Length == 0)
-        {
-            Debug.Log($"👀 Raycast hit NOTHING within {dist}m", this);
-            return false;
-        }
-
-        // Log all hits in order
-        for (int i = 0; i < hits.Length; i++)
-        {
-            var go = hits[i].collider.gameObject;
-            Debug.Log(
-                $"👀 #{i + 1} hit: {go.name} | dist={hits[i].distance:F2} (Expected: {gameObject.name})",
-                go
-            );
-        }
-
-        // Return true only if THIS object is the first valid hit
-        return hits[0].collider.gameObject == gameObject;
-    }*/
-    /*bool IsPlayerLookingAtObject()
-    {
-        if (playerCamera == null) return false;
-
-        if (interactableMask.value == 0)
-            interactableMask = LayerMask.GetMask("Interactable");
-
-        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        float dist = interactionRadius + 1f;
-
-        if (Physics.Raycast(ray, out var hit, dist, interactableMask, QueryTriggerInteraction.Ignore))
-        {
-            Debug.Log($"✅ Interactable hit: {hit.collider.name}", hit.collider.gameObject);
-
-            var io = hit.collider.GetComponentInParent<InteractiveObject>();
-            return io == this;
-        }
-
-        return false;
-    }*/
     bool IsPlayerLookingAtObject()
     {
         if (playerCamera == null) return false;
@@ -372,10 +217,9 @@ public class InteractiveObject : MonoBehaviour
             var io = hit.collider.GetComponentInParent<InteractiveObject>();
 
             if (io == null) return false;
-            // ✅ Only log if THIS object is the one being looked at
+
             if (io == this)
             {
-                Debug.Log($"🎯 LOOKING AT: {name} via {hit.collider.name}", hit.collider.gameObject);
                 return true;
             }
 
@@ -384,8 +228,6 @@ public class InteractiveObject : MonoBehaviour
 
         return false;
     }
-
-
 
     /// <summary>
     /// Highlight or unhighlight the object
@@ -420,6 +262,14 @@ public class InteractiveObject : MonoBehaviour
     }
 
     /// <summary>
+    /// ✅ PUBLIC METHOD - Called by InteractionManager when button is pressed
+    /// </summary>
+    public void TriggerExamination()
+    {
+        ExamineObject();
+    }
+
+    /// <summary>
     /// Called when player examines the object
     /// </summary>
     void ExamineObject()
@@ -436,7 +286,7 @@ public class InteractiveObject : MonoBehaviour
         if (trackInteractionTime && !currentlyExamining)
         {
             StartInteractionTracking();
-            StartCoroutine(WaitForPanelClose()); // ← ADD THIS LINE!
+            StartCoroutine(WaitForPanelClose());
         }
 
         // Show info panel
@@ -506,7 +356,6 @@ public class InteractiveObject : MonoBehaviour
     /// <summary>
     /// Save interaction data to Firebase
     /// </summary>
-
     async void SaveInteractionToFirebase(float duration)
     {
         // Log to console
@@ -545,6 +394,7 @@ public class InteractiveObject : MonoBehaviour
             Debug.LogWarning("⚠ FirebaseManager not ready - interaction only logged locally");
         }
     }
+
     /// <summary>
     /// Wait for panel to close, then stop tracking
     /// </summary>
