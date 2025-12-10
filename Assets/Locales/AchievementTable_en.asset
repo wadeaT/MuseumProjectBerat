@@ -1,0 +1,205 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: AchievementTable_en
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: ef5e546036e4d0d469c54859aaf4089c, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 50656555008
+    m_Localized: YOUR ACHIEVEMENTS
+    m_Metadata:
+      m_Items: []
+  - m_Id: 134400028672
+    m_Localized: Back
+    m_Metadata:
+      m_Items: []
+  - m_Id: 788480765952
+    m_Localized: Finish
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261907971682304
+    m_Localized: First Discovery
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261955539283968
+    m_Localized: You found your first hidden card! The museum's secrets await.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262008064552960
+    m_Localized: Curious Explorer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262097503891456
+    m_Localized: Three cards discovered! Your curiosity is leading you deeper into
+      Berat's history.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262137454637056
+    m_Localized: Dedicated Seeker
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262193285017600
+    m_Localized: Six cards found! You're uncovering the layers of Ottoman family
+      life.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262253821407232
+    m_Localized: Persistent Scholar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262298415247360
+    m_Localized: Nine cards! You're halfway through the museum's story.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262662841544704
+    m_Localized: Heritage Guardian
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262770454802432
+    m_Localized: Fifteen cards! You're now a guardian of Berat's cultural memory.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262832358535168
+    m_Localized: Complete Collection
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262866315620352
+    m_Localized: All 18 cards discovered! Every hidden story revealed.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262925669216256
+    m_Localized: Heart of the Home
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262970569240576
+    m_Localized: "You've discovered the secrets of the \xE7ardak\u2014the social
+      center where families gathered, wove, and welcomed guests."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263033920008192
+    m_Localized: Family Sanctuary
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263171644174336
+    m_Localized: You've explored the private space where families found warmth, rest,
+      and passed down oral traditions through generations.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263227696852992
+    m_Localized: Hospitality Master
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263287583125504
+    m_Localized: "You've understood the sacred art of Ottoman hospitality\u2014where
+      architecture, decoration, and ritual combined to honor guests."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263331614928896
+    m_Localized: Culinary Heritage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263396798607360
+    m_Localized: "You've discovered the tools and traditions of Ottoman cooking\u2014where
+      fire, copper, and patience transformed ingredients into cultural expressions."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263425823191040
+    m_Localized: Weaver's Legacy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263472128307200
+    m_Localized: "You've learned the art of traditional weaving\u2014the craft that
+      sustained families, preserved identity, and gave women economic power."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263592156704768
+    m_Localized: Memory Keeper
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263646649102336
+    m_Localized: "You've witnessed the frozen moments of Albanian history\u2014photographs
+      that preserve customs, ceremonies, and communities now transformed by time."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263677921832960
+    m_Localized: Ottoman Life Scholar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263721676812288
+    m_Localized: "\U0001F3C6 You've explored every corner of the museum and experienced
+      the complete story of family life in Ottoman-era Berat. You are now a keeper
+      of this cultural heritage!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269289099472896
+    m_Localized: 'Total cards collected: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269341901565952
+    m_Localized: 'Total badges unlocked: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269383915909120
+    m_Localized: 'Last card found: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269411162107904
+    m_Localized: 'Last badge unlocked: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269449380605952
+    m_Localized: 'Cards: +{0} | Badges: +{1}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269509342375936
+    m_Localized: "Collected \u2713"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269542326382592
+    m_Localized: "Not Found \u2717"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269610240552960
+    m_Localized: '{0}: {1}s, visits: {2}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269652380725248
+    m_Localized: Balcony
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269705971347456
+    m_Localized: Bedroom
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269752792363008
+    m_Localized: Guest Room
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269844182052864
+    m_Localized: Kitchen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269877358997504
+    m_Localized: Workshop
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269918870024192
+    m_Localized: Archive
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

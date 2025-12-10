@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
+using UnityEngine.Localization.Tables;
 using Firebase.Firestore;
 using Firebase.Extensions;
 using TMPro;
@@ -11,7 +14,6 @@ public class AchievementsManager : MonoBehaviour
     [Header("Score UI")]
     public TMP_Text totalScoreText;
     public TMP_Text scoreBreakdownText;
-
 
     [Header("TEST MODE")]
     public bool useTestUserId = true;
@@ -38,15 +40,19 @@ public class AchievementsManager : MonoBehaviour
     [System.Serializable]
     public class BadgeIconEntry
     {
-        public string badgeId;   // e.g., “balcony_master”
+        public string badgeId;   // e.g., "balcony_master"
         public Sprite icon;      // local sprite
     }
 
     [Header("Badge Icons (assign in Inspector)")]
     public List<BadgeIconEntry> badgeIcons;
 
+    [Header("Localization")]
+    public string localizationTableName = "FullMuseum"; // Must match your String Table name
+
     private FirebaseFirestore db;
     private string userId;
+    private StringTable localizedTable;
 
     // -------------------------------------------------------
     // UNITY FLOW
@@ -59,8 +65,25 @@ public class AchievementsManager : MonoBehaviour
 
     private IEnumerator LoadAchievementsFlow()
     {
+        // Wait for localization to initialize
+        yield return LocalizationSettings.InitializationOperation;
+
+        // Load the string table
+        var tableOperation = LocalizationSettings.StringDatabase.GetTableAsync(localizationTableName);
+        yield return tableOperation;
+        localizedTable = tableOperation.Result;
+
+        if (localizedTable == null)
+        {
+            Debug.LogError($"Failed to load localization table '{localizationTableName}'!");
+        }
+        else
+        {
+            Debug.Log($"✅ Loaded localization table '{localizationTableName}' with {localizedTable.Count} entries");
+        }
 
         db = FirebaseFirestore.DefaultInstance;
+
         if (useTestUserId)
         {
             if (string.IsNullOrEmpty(testUserId))
@@ -68,27 +91,60 @@ public class AchievementsManager : MonoBehaviour
                 Debug.LogError("useTestUserId is ON but testUserId is empty!");
                 yield break;
             }
-
             userId = testUserId;
         }
         else
         {
-            // Get user ID from PlayerManager
             if (PlayerManager.Instance == null || string.IsNullOrEmpty(PlayerManager.Instance.userId))
             {
-                Debug.LogError(" PlayerManager not initialized or user not logged in!");
+                Debug.LogError("PlayerManager not initialized or user not logged in!");
                 yield break;
             }
-
             userId = PlayerManager.Instance.userId;
-            db = FirebaseFirestore.DefaultInstance;
         }
+
         LoadBadges();
         LoadCards();
         LoadSummary();
         LoadScore();
         LoadRoomStats();
-        yield break;
+    }
+
+    // -------------------------------------------------------
+    // LOCALIZATION HELPERS
+    // -------------------------------------------------------
+
+    /// <summary>
+    /// Get localized string from the table
+    /// </summary>
+    private string GetLocalizedString(string key)
+    {
+        if (localizedTable != null)
+        {
+            var entry = localizedTable.GetEntry(key);
+            if (entry != null)
+            {
+                return entry.GetLocalizedString();
+            }
+        }
+        Debug.LogWarning($"Localization key '{key}' not found!");
+        return key; // Fallback to key
+    }
+
+    /// <summary>
+    /// Get localized string with formatting (e.g., "Total cards: {0}")
+    /// </summary>
+    private string GetLocalizedFormat(string key, params object[] args)
+    {
+        string format = GetLocalizedString(key);
+        try
+        {
+            return string.Format(format, args);
+        }
+        catch
+        {
+            return format; // Return unformatted if format fails
+        }
     }
 
     // -------------------------------------------------------
@@ -105,7 +161,7 @@ public class AchievementsManager : MonoBehaviour
     }
 
     // -------------------------------------------------------
-    // LOAD BADGES
+    // LOAD BADGES (with localization)
     // -------------------------------------------------------
     private void LoadBadges()
     {
@@ -121,9 +177,11 @@ public class AchievementsManager : MonoBehaviour
                     bool unlocked = doc.GetValue<bool>("unlocked");
                     if (!unlocked) continue;
 
-                    string badgeId = doc.Id;  // or doc.GetValue<string>("badgeId")
-                    string name = doc.GetValue<string>("name");
-                    string description = doc.GetValue<string>("description");
+                    string badgeId = doc.Id;
+
+                    // Get LOCALIZED name and description instead of Firebase values
+                    string name = GetLocalizedString($"{badgeId}_name");
+                    string description = GetLocalizedString($"{badgeId}_desc");
 
                     // Spawn UI item
                     GameObject item = Instantiate(badgeUIPrefab, badgesContent);
@@ -141,14 +199,14 @@ public class AchievementsManager : MonoBehaviour
                     }
                     else
                     {
-                        iconImage.enabled = false; // hide if no icon
+                        iconImage.enabled = false;
                     }
                 }
             });
     }
 
     // -------------------------------------------------------
-    // LOAD CARDS
+    // LOAD CARDS (with localization)
     // -------------------------------------------------------
     private void LoadCards()
     {
@@ -166,15 +224,24 @@ public class AchievementsManager : MonoBehaviour
 
                   GameObject item = Instantiate(cardUIPrefab, cardsContent);
 
-                  item.transform.Find("Title").GetComponent<TMP_Text>().text = cardId;
-                  item.transform.Find("Status").GetComponent<TMP_Text>().text =
-                      found ? "Collected ✓" : "Not Found ✗";
+                  // Try to get localized card name, fallback to cardId
+                  string cardName = GetLocalizedString($"{cardId}_name");
+                  if (cardName == $"{cardId}_name") cardName = cardId; // Use ID if no translation
+
+                  item.transform.Find("Title").GetComponent<TMP_Text>().text = cardName;
+
+                  // Localized status text
+                  string status = found
+                      ? GetLocalizedString("card_status_collected")    // "Collected ✓"
+                      : GetLocalizedString("card_status_not_found");   // "Not Found ✗"
+
+                  item.transform.Find("Status").GetComponent<TMP_Text>().text = status;
               }
           });
     }
 
     // -------------------------------------------------------
-    // LOAD SUMMARY
+    // LOAD SUMMARY (with localization)
     // -------------------------------------------------------
     private void LoadSummary()
     {
@@ -192,14 +259,25 @@ public class AchievementsManager : MonoBehaviour
               string lastCard = doc.GetValue<string>("lastCardFound");
               string lastBadge = doc.GetValue<string>("lastBadgeUnlocked");
 
-              totalCardsText.text = "Total cards collected: " + totalCards;
-              totalBadgesText.text = "Total badges unlocked: " + totalBadges;
+              // Localized UI text with values
+              totalCardsText.text = GetLocalizedFormat("ui_total_cards", totalCards);
+              totalBadgesText.text = GetLocalizedFormat("ui_total_badges", totalBadges);
 
-              lastCardFoundText.text = "Last card found: " + lastCard;
-              lastBadgeUnlockedText.text = "Last badge unlocked: " + lastBadge;
+              // Try to get localized names for last card/badge
+              string localizedLastCard = GetLocalizedString($"{lastCard}_name");
+              if (localizedLastCard == $"{lastCard}_name") localizedLastCard = lastCard;
+
+              string localizedLastBadge = GetLocalizedString($"{lastBadge}_name");
+              if (localizedLastBadge == $"{lastBadge}_name") localizedLastBadge = lastBadge;
+
+              lastCardFoundText.text = GetLocalizedFormat("ui_last_card_found", localizedLastCard);
+              lastBadgeUnlockedText.text = GetLocalizedFormat("ui_last_badge_unlocked", localizedLastBadge);
           });
     }
 
+    // -------------------------------------------------------
+    // LOAD SCORE (with localization)
+    // -------------------------------------------------------
     private void LoadScore()
     {
         db.Collection("users").Document(userId)
@@ -211,21 +289,18 @@ public class AchievementsManager : MonoBehaviour
 
                 var doc = task.Result;
 
-                // Get score
                 int totalScore = 0;
                 if (doc.ContainsField("totalScore"))
                 {
                     totalScore = (int)doc.GetValue<long>("totalScore");
                 }
 
-                // Get cards for breakdown
                 long cardsCollected = 0;
                 if (doc.ContainsField("totalCardsCollected"))
                 {
                     cardsCollected = doc.GetValue<long>("totalCardsCollected");
                 }
 
-                // Update UI
                 if (totalScoreText != null)
                 {
                     totalScoreText.text = totalScore.ToString("N0");
@@ -235,13 +310,17 @@ public class AchievementsManager : MonoBehaviour
                 {
                     int cardPoints = (int)(cardsCollected * 100);
                     int badgePoints = totalScore - cardPoints;
-                    scoreBreakdownText.text = $"Cards: +{cardPoints:N0} | Badges: +{badgePoints:N0}";
+
+                    // Localized breakdown: "Cards: +{0} | Badges: +{1}"
+                    scoreBreakdownText.text = GetLocalizedFormat("ui_score_breakdown",
+                        cardPoints.ToString("N0"),
+                        badgePoints.ToString("N0"));
                 }
             });
     }
 
     // -------------------------------------------------------
-    // LOAD ROOM STATS
+    // LOAD ROOM STATS (with localization)
     // -------------------------------------------------------
     private void LoadRoomStats()
     {
@@ -256,17 +335,23 @@ public class AchievementsManager : MonoBehaviour
 
               foreach (var doc in task.Result.Documents)
               {
-                  string room = doc.Id;
+                  string roomId = doc.Id;
 
-                  double timeSpent =
-                      doc.ContainsField("timeSpent") ?
-                      doc.GetValue<double>("timeSpent") : 0;
+                  double timeSpent = doc.ContainsField("timeSpent")
+                      ? doc.GetValue<double>("timeSpent") : 0;
 
-                  long visitCount =
-                      doc.ContainsField("visitCount") ?
-                      doc.GetValue<long>("visitCount") : 0;
+                  long visitCount = doc.ContainsField("visitCount")
+                      ? doc.GetValue<long>("visitCount") : 0;
 
-                  summary += $"{room}: {timeSpent:F1}s, visits: {visitCount}\n";
+                  // Try to get localized room name
+                  string roomName = GetLocalizedString($"room_{roomId}_name");
+                  if (roomName == $"room_{roomId}_name") roomName = roomId;
+
+                  // Localized format: "{0}: {1}s, visits: {2}"
+                  summary += GetLocalizedFormat("ui_room_stats_line",
+                      roomName,
+                      timeSpent.ToString("F1"),
+                      visitCount) + "\n";
               }
 
               roomStatsSummaryText.text = summary;

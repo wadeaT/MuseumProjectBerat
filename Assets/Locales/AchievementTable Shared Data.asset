@@ -1,0 +1,200 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: AchievementTable Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: AchievementTable
+  m_TableCollectionNameGuidString: ef5e546036e4d0d469c54859aaf4089c
+  m_Entries:
+  - m_Id: 50656555008
+    m_Key: Ach.Header
+    m_Metadata:
+      m_Items: []
+  - m_Id: 134400028672
+    m_Key: Ach.BackButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 788480765952
+    m_Key: Ach.FinishButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261907971682304
+    m_Key: first_discovery_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261955539283968
+    m_Key: first_discovery_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262008064552960
+    m_Key: curious_explorer_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262097503891456
+    m_Key: curious_explorer_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262137454637056
+    m_Key: dedicated_seeker_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262193285017600
+    m_Key: dedicated_seeker_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262253821407232
+    m_Key: persistent_scholar_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262298415247360
+    m_Key: persistent_scholar_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262662841544704
+    m_Key: heritage_guardian_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262770454802432
+    m_Key: heritage_guardian_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262832358535168
+    m_Key: complete_collection_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262866315620352
+    m_Key: complete_collection_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262925669216256
+    m_Key: balcony_master_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262970569240576
+    m_Key: balcony_master_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263033920008192
+    m_Key: bedroom_master_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263171644174336
+    m_Key: bedroom_master_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263227696852992
+    m_Key: guest_room_master_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263287583125504
+    m_Key: guest_room_master_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263331614928896
+    m_Key: kitchen_master_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263396798607360
+    m_Key: kitchen_master_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263425823191040
+    m_Key: workshop_master_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263472128307200
+    m_Key: workshop_master_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263592156704768
+    m_Key: archive_master_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263646649102336
+    m_Key: archive_master_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263677921832960
+    m_Key: museum_master_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263721676812288
+    m_Key: museum_master_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269289099472896
+    m_Key: ui_total_cards
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269341901565952
+    m_Key: ui_total_badges
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269383915909120
+    m_Key: ui_last_card_found
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269411162107904
+    m_Key: ui_last_badge_unlocked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269449380605952
+    m_Key: ui_score_breakdown
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269509342375936
+    m_Key: card_status_collected
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269542326382592
+    m_Key: card_status_not_found
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269610240552960
+    m_Key: ui_room_stats_line
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269652380725248
+    m_Key: room_balcony_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269705971347456
+    m_Key: room_bedroom_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269752792363008
+    m_Key: room_guest_room_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269844182052864
+    m_Key: room_kitchen_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269877358997504
+    m_Key: room_workshop_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 269918870024192
+    m_Key: room_archive_name
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 2154252458276684033
+  references:
+    version: 2
+    RefIds:
+    - rid: 2154252458276684033
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1765318281725

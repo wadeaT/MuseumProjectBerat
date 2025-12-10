@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Localization-String-Tables-Albanian (Albania) (sq-AL)
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Localization-String-Tables-Albanian (Albania) (sq-AL)
+  m_GUID: 41860c6e3e345bd4e83c47aa8bd3a224
+  m_SerializeEntries:
+  - m_GUID: 507f0fabaa85d864da22f19784cb5946
+    m_Address: FullMuseum_sq-AL
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-sq-AL
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 548bb803a4f4e4049a0ed14742322893
+    m_Address: LoginLabels_sq-AL
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-sq-AL
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ac6120776c8f6a648b71b974149bcc03
+    m_Address: AchievementsTable_sq-AL
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-sq-AL
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d86832a9a5929ac4993a187d9d029362
+    m_Address: AchievementTable_sq-AL
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-sq-AL
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 1
+  m_Settings: {fileID: 11400000, guid: 49380cb318efcad4ebf118c4c03349de, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 3fa09852cd9ba494cb9d3bba1cbe3e19, type: 2}
+    - {fileID: 11400000, guid: aacc86eb2779d2a4f9a538835b41ceeb, type: 2}

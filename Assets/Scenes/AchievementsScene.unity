@@ -306,10 +306,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
+  m_fontSize: 35.8
   m_fontSizeBase: 24
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -963,7 +963,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 33
+  m_fontSize: 39.85
   m_fontSizeBase: 11.6
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1026,6 +1026,7 @@ GameObject:
   - component: {fileID: 393286452}
   - component: {fileID: 393286454}
   - component: {fileID: 393286453}
+  - component: {fileID: 393286455}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1151,6 +1152,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 393286451}
   m_CullTransparentMesh: 1
+--- !u!114 &393286455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 393286451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Components.LocalizeStringEvent
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:ef5e546036e4d0d469c54859aaf4089c
+    m_TableEntryReference:
+      m_KeyId: 788480765952
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 393286453}
+        m_TargetAssemblyTypeName: TMPro.TextMeshProUGUI, Unity.TextMeshPro
+        m_MethodName: SetText
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &445525298
 GameObject:
   m_ObjectHideFlags: 0
@@ -1277,7 +1318,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.0005814912, y: -0.000032782555}
+  m_AnchoredPosition: {x: -0.0000104904175, y: -0.000032782555}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &481603578
@@ -1404,7 +1445,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 35.9
+  m_fontSize: 42.9
   m_fontSizeBase: 13.4
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1671,7 +1712,7 @@ MonoBehaviour:
   lastBadgeUnlockedText: {fileID: 369524246}
   roomStatsSummaryText: {fileID: 1292660642}
   badgeIcons:
-  - badgeId: Culinary Heritage
+  - badgeId: kitchen_master
     icon: {fileID: 21300000, guid: ea6ab98cd9c65aa45af1b4e799bda3fb, type: 3}
   - badgeId: curious_explorer
     icon: {fileID: 21300000, guid: ed5edd987a35912468f78d9d8a377435, type: 3}
@@ -1681,22 +1722,23 @@ MonoBehaviour:
     icon: {fileID: 21300000, guid: a84077bc95f8e8a499c80b51d3221398, type: 3}
   - badgeId: first_discovery
     icon: {fileID: 21300000, guid: 3eb8026b8b4c35948af8133d47b78613, type: 3}
-  - badgeId: Heart Of The Home
+  - badgeId: balcony_master
     icon: {fileID: 21300000, guid: 17341042e589487448ddce17128acda3, type: 3}
   - badgeId: heritage_guardian
     icon: {fileID: 21300000, guid: 192e5a17ab3cb954981cc80b8b0d16b6, type: 3}
-  - badgeId: Hospitality Master
+  - badgeId: guest_room_master
     icon: {fileID: 21300000, guid: 5cac04e61cce11741b3c41b6f7278680, type: 3}
   - badgeId: archive_master
     icon: {fileID: 21300000, guid: f449a36c6a45e4b4c9c4b69dd14963fd, type: 3}
-  - badgeId: Complete Collection
+  - badgeId: complete_collection
     icon: {fileID: 21300000, guid: 741ac081c369a7449a89ed63cf57d912, type: 3}
-  - badgeId: Ottoman Life Scholar
+  - badgeId: museum_master
     icon: {fileID: 21300000, guid: 65eb549d3aaec2a40a18a24a61cafd97, type: 3}
   - badgeId: persistent_scholar
     icon: {fileID: 21300000, guid: 1783b0b6d622e234aae164f9e770a8bd, type: 3}
   - badgeId: workshop_master
     icon: {fileID: 21300000, guid: b0c2c4c6e5a79bd4683132a7ade69c78, type: 3}
+  localizationTableName: AchievementTable
 --- !u!4 &645925083
 Transform:
   m_ObjectHideFlags: 0
@@ -1913,10 +1955,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18
+  m_fontSize: 30.75
   m_fontSizeBase: 18
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -1968,6 +2010,7 @@ GameObject:
   - component: {fileID: 731115896}
   - component: {fileID: 731115898}
   - component: {fileID: 731115897}
+  - component: {fileID: 731115899}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -2093,6 +2136,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 731115895}
   m_CullTransparentMesh: 1
+--- !u!114 &731115899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731115895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Components.LocalizeStringEvent
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:ef5e546036e4d0d469c54859aaf4089c
+    m_TableEntryReference:
+      m_KeyId: 134400028672
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 731115897}
+        m_TargetAssemblyTypeName: TMPro.TextMeshProUGUI, Unity.TextMeshPro
+        m_MethodName: SetText
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &758011858
 GameObject:
   m_ObjectHideFlags: 0
@@ -2288,6 +2371,7 @@ GameObject:
   - component: {fileID: 1212922415}
   - component: {fileID: 1212922417}
   - component: {fileID: 1212922416}
+  - component: {fileID: 1212922418}
   m_Layer: 5
   m_Name: Header
   m_TagString: Untagged
@@ -2413,6 +2497,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1212922414}
   m_CullTransparentMesh: 1
+--- !u!114 &1212922418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1212922414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Components.LocalizeStringEvent
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:ef5e546036e4d0d469c54859aaf4089c
+    m_TableEntryReference:
+      m_KeyId: 50656555008
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1212922416}
+        m_TargetAssemblyTypeName: TMPro.TextMeshProUGUI, Unity.TextMeshPro
+        m_MethodName: SetText
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &1250291873
 GameObject:
   m_ObjectHideFlags: 0
@@ -2623,7 +2747,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50.35
+  m_fontSize: 60.75
   m_fontSizeBase: 13.93
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3304,8 +3428,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 10}
-  m_SizeDelta: {x: 200, y: 80}
+  m_AnchoredPosition: {x: -14.802795, y: -0.7192}
+  m_SizeDelta: {x: 229.6055, y: 58.5615}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2045096422
 CanvasRenderer:
@@ -3362,10 +3486,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 52.4
   m_fontSizeBase: 72
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0

@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: AchievementsTable_en
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 26e5e27dbe340e0488717fb565c235a2, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 257712566272
+    m_Localized: 'Total cards collected: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 390915272704
+    m_Localized: 'Total badges unlocked: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 540534484992
+    m_Localized: 'Last card found: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 574894223360
+    m_Localized: 'Last badge unlocked: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 620599554048
+    m_Localized: 'Cards: +{0} | Badges: +{1}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683174375424
+    m_Localized: "Collected \u2713"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 740250464256
+    m_Localized: "Not Found \u2717"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 792721207296
+    m_Localized: '{0}: {1}s, visits: {2}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 853844799488
+    m_Localized: Balcony
+    m_Metadata:
+      m_Items: []
+  - m_Id: 890297495552
+    m_Localized: Bedroom
+    m_Metadata:
+      m_Items: []
+  - m_Id: 930562813952
+    m_Localized: Guest Room
+    m_Metadata:
+      m_Items: []
+  - m_Id: 979048968192
+    m_Localized: Kitchen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1023374372864
+    m_Localized: Workshop
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1073341116416
+    m_Localized: Archive
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

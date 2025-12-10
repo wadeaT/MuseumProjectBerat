@@ -42,7 +42,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Room 5 v1.unity
     guid: 32444e04f50c0b346a0b6cfc9fc7adfc
   m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: e3067bd940ca14b49a15352f0f1624c0, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    com.unity.localization.settings: {fileID: 11400000, guid: 377f2ff3ce6a62e40a5700d9b60b3f8c, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: b149866c89f7d1a45a0219dcd6840274, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: d4a615ed000c86642a03e8d23cafe20f, type: 2}
   m_UseUCBPForAssetBundles: 0

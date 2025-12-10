@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: AchievementsTable Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: AchievementsTable
+  m_TableCollectionNameGuidString: 26e5e27dbe340e0488717fb565c235a2
+  m_Entries:
+  - m_Id: 257712566272
+    m_Key: ui_total_cards
+    m_Metadata:
+      m_Items: []
+  - m_Id: 390915272704
+    m_Key: ui_total_badges
+    m_Metadata:
+      m_Items: []
+  - m_Id: 540534484992
+    m_Key: ui_last_card_found
+    m_Metadata:
+      m_Items: []
+  - m_Id: 574894223360
+    m_Key: ui_last_badge_unlocked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 620599554048
+    m_Key: ui_score_breakdown
+    m_Metadata:
+      m_Items: []
+  - m_Id: 683174375424
+    m_Key: card_status_collected
+    m_Metadata:
+      m_Items: []
+  - m_Id: 740250464256
+    m_Key: card_status_not_found
+    m_Metadata:
+      m_Items: []
+  - m_Id: 792721207296
+    m_Key: ui_room_stats_line
+    m_Metadata:
+      m_Items: []
+  - m_Id: 853844799488
+    m_Key: room_balcony_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 890297495552
+    m_Key: room_bedroom_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 930562813952
+    m_Key: room_guest_room_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 979048968192
+    m_Key: room_kitchen_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1023374372864
+    m_Key: room_workshop_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1073341116416
+    m_Key: room_archive_name
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 2154252478594941034
+  references:
+    version: 2
+    RefIds:
+    - rid: 2154252478594941034
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1765379976403

@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Linq;
 using Firebase.Firestore;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 
 public class LoginUI : MonoBehaviour
 {
@@ -31,11 +33,15 @@ public class LoginUI : MonoBehaviour
     [Header("Next Scene Settings")]
     public string firstMuseumScene = "Room1"; // Change to your actual first room scene name
 
+    [Header("LoginDropdown")]
+    public GameObject LanguageDropDownParent;
+
     private async void Start()
     {
         // Start with login panel visible
         loginPanel.SetActive(true);
         questionsPanel.SetActive(false);
+        LanguageDropDownParent.SetActive(true);
 
         messageText.text = "Initializing...";
 
@@ -67,8 +73,8 @@ public class LoginUI : MonoBehaviour
 
             if (retries >= maxRetries)
             {
-                Debug.LogError("❌ Firebase failed to initialize after 5 seconds!");
-                messageText.text = "❌ Connection error. Please restart the app.";
+                Debug.LogError(" Firebase failed to initialize after 5 seconds!");
+                messageText.text = " Connection error. Please restart the app.";
                 messageText.color = Color.red;
 
                 // Disable buttons if Firebase never initializes
@@ -78,7 +84,7 @@ public class LoginUI : MonoBehaviour
             }
         }
 
-        Debug.Log("✅ Firebase ready! Login UI enabled.");
+        Debug.Log(" Firebase ready! Login UI enabled.");
     }
     private void CheckToggleGroups()
     {
@@ -106,19 +112,19 @@ public class LoginUI : MonoBehaviour
 
         if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
         {
-            ShowMessage("Please enter both email and password.", Color.yellow);
+            await ShowLocalizedMessage("Please enter both email and password.", Color.yellow);
             return;
         }
 
-        ShowMessage("Logging in...", Color.white);
+        await ShowLocalizedMessage("Logging in...", Color.white);
 
         bool success = await PlayerManager.Instance.LoginUser(email, password);
 
         if (success)
         {
-            ShowMessage("✅ Login successful!", Color.green);
+            await ShowLocalizedMessage(" Login successful!", Color.green);
 
-            // ✅ NEW: Load user's badge and card progress
+            //NEW: Load user's badge and card progress
             if (BadgeManager.instance != null)
             {
                 await BadgeManager.instance.LoadProgressFromFirebase();
@@ -140,7 +146,7 @@ public class LoginUI : MonoBehaviour
         }
         else
         {
-            ShowMessage("❌ Login failed. Check your email or password.", Color.red);
+            await ShowLocalizedMessage(" Login failed. Check your email or password.", Color.red);
         }
     }
 
@@ -151,23 +157,23 @@ public class LoginUI : MonoBehaviour
 
         if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
         {
-            ShowMessage("Please fill in both fields.", Color.yellow);
+            await ShowLocalizedMessage("Please fill in both fields.", Color.yellow);
             return;
         }
 
-        ShowMessage("Creating account...", Color.white);
+        await ShowLocalizedMessage("Creating account...", Color.white);
 
         bool success = await PlayerManager.Instance.RegisterUser(email, password);
 
         if (success)
         {
-            ShowMessage("✅ Account created successfully!", Color.green);
+            await ShowLocalizedMessage(" Account created successfully!", Color.green);
             await Task.Delay(800);
             ShowQuestionsPanel();
         }
         else
         {
-            ShowMessage("❌ Registration failed. Try again.", Color.red);
+            await ShowLocalizedMessage(" Registration failed. Try again.", Color.red);
         }
     }
 
@@ -191,27 +197,27 @@ public class LoginUI : MonoBehaviour
         if (string.IsNullOrEmpty(age) || string.IsNullOrEmpty(gender) ||
             string.IsNullOrEmpty(nationality) || string.IsNullOrEmpty(skills) || string.IsNullOrEmpty(vr))
         {
-            ShowMessage("Please answer all questions before continuing.", Color.yellow);
+            await ShowLocalizedMessage("Please answer all questions before continuing.", Color.yellow);
             Debug.Log("[LoginUI] Exit NullAnswers");
             return;
         }
 
         // ✅ 3. Show progress message
-        ShowMessage("Saving your answers...", Color.white);
+        await ShowLocalizedMessage("Saving your answers...", Color.white);
         Debug.Log("[LoginUI] Starting demographic save...");
 
         // ✅ 4. Validate Firebase and PlayerManager
         if (FirebaseManager.Instance == null)
         {
             Debug.LogError("[LoginUI] FirebaseManager.Instance is null!");
-            ShowMessage("❌ Firebase not initialized.", Color.red);
+            await ShowLocalizedMessage("❌ Firebase not initialized.", Color.red);
             return;
         }
 
         if (PlayerManager.Instance == null || string.IsNullOrEmpty(PlayerManager.Instance.userId))
         {
             Debug.LogError("[LoginUI] PlayerManager or userId is null!");
-            ShowMessage("❌ User not logged in.", Color.red);
+            await ShowLocalizedMessage("❌ User not logged in.", Color.red);
             return;
         }
 
@@ -231,7 +237,7 @@ public class LoginUI : MonoBehaviour
             );
 
             Debug.Log("[LoginUI] Firestore save completed successfully!");
-            ShowMessage("✅ Data saved! Loading museum...", Color.green);
+            await ShowLocalizedMessage("✅ Data saved! Loading museum...", Color.green);
 
             // ✅ 6. Delay a bit then load next scene
             await Task.Delay(1200);
@@ -240,7 +246,7 @@ public class LoginUI : MonoBehaviour
         catch (System.Exception ex)
         {
             Debug.LogError("[LoginUI] ❌ Error saving demographics: " + ex.Message);
-            ShowMessage("❌ Failed to save data. Check your internet connection.", Color.red);
+            await ShowLocalizedMessage("❌ Failed to save data. Check your internet connection.", Color.red);
         }
     }
 
@@ -288,15 +294,28 @@ public class LoginUI : MonoBehaviour
     private void ShowQuestionsPanel()
     {
         loginPanel.SetActive(false);
+        LanguageDropDownParent.SetActive(false);
         questionsPanel.SetActive(true);
         messageText.text = "";
     }
 
-    private void ShowMessage(string text, Color color)
+    private async Task ShowLocalizedMessage(string tableKey, Color color)
     {
-        if (messageText != null)
+        if (messageText == null || string.IsNullOrEmpty(tableKey))
+            return;
+
+        try
         {
-            messageText.text = text;
+            var operation = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("StatusMessages", tableKey);
+            string localizedText = await operation.Task;
+
+            messageText.text = localizedText;
+            messageText.color = color;
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogWarning($"Failed to get localized string for key '{tableKey}': {ex.Message}");
+            messageText.text = "...";
             messageText.color = color;
         }
     }

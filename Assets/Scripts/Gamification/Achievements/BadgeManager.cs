@@ -1,4 +1,7 @@
 ﻿using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
+using UnityEngine.Localization.Tables;
 using System.Collections.Generic;
 
 public class BadgeManager : MonoBehaviour
@@ -10,19 +13,22 @@ public class BadgeManager : MonoBehaviour
     private int totalCardsCollected = 0;
     private HashSet<string> unlockedBadges = new HashSet<string>();
 
-    //Track which cards have been found in each room
+    // Track which cards have been found in each room
     private Dictionary<string, HashSet<string>> cardsByRoom = new Dictionary<string, HashSet<string>>();
 
-    //Define how many cards each room should have
+    // Define how many cards each room should have
     private Dictionary<string, int> expectedCardsPerRoom = new Dictionary<string, int>()
-{
-    { "balcony", 3 },
-    { "bedroom", 3 },
-    { "guest_room", 3 },
-    { "kitchen", 3 },
-    { "workshop", 3 },
-    { "archive", 3 }
-};
+    {
+        { "balcony", 3 },
+        { "bedroom", 3 },
+        { "guest_room", 3 },
+        { "kitchen", 3 },
+        { "workshop", 3 },
+        { "archive", 3 }
+    };
+
+    [Header("Localization")]
+    public string badgeTableName = "FullMuseum"; // Name of your String Table for badges
 
     [Header("Debug")]
     public bool showDebugMessages = true;
@@ -65,6 +71,50 @@ public class BadgeManager : MonoBehaviour
         }
     }
 
+    // ============================================================================
+    // LOCALIZATION HELPERS
+    // ============================================================================
+
+    /// <summary>
+    /// Get localized string from the Badges table
+    /// </summary>
+    private string GetLocalizedString(string key)
+    {
+        var stringTable = LocalizationSettings.StringDatabase.GetTable(badgeTableName);
+        if (stringTable != null)
+        {
+            var entry = stringTable.GetEntry(key);
+            if (entry != null)
+            {
+                return entry.GetLocalizedString();
+            }
+        }
+
+        // Fallback: return the key itself if not found
+        Debug.LogWarning($"Localization key '{key}' not found in table '{badgeTableName}'");
+        return key;
+    }
+
+    /// <summary>
+    /// Get localized badge name
+    /// </summary>
+    private string GetBadgeName(string badgeID)
+    {
+        return GetLocalizedString($"{badgeID}_name");
+    }
+
+    /// <summary>
+    /// Get localized badge description
+    /// </summary>
+    private string GetBadgeDescription(string badgeID)
+    {
+        return GetLocalizedString($"{badgeID}_desc");
+    }
+
+    // ============================================================================
+    // FIREBASE INTEGRATION
+    // ============================================================================
+
     /// <summary>
     /// Load user's progress from Firebase
     /// </summary>
@@ -91,12 +141,14 @@ public class BadgeManager : MonoBehaviour
         Debug.Log($"✅ Loaded from Firebase: {totalCardsCollected} cards, {unlockedBadges.Count} badges");
     }
 
+    // ============================================================================
+    // CARD COLLECTION
+    // ============================================================================
 
+    /// <summary>
     /// Call this when ANY card is collected
     /// </summary>
-    /// Call this when ANY card is collected
-    /// </summary>
-    public void OnCardCollected(string cardID, string roomID) // ✅ Added roomID parameter
+    public void OnCardCollected(string cardID, string roomID)
     {
         totalCardsCollected++;
 
@@ -111,7 +163,7 @@ public class BadgeManager : MonoBehaviour
 
         cardsByRoom[roomID].Add(cardID);
 
-        // ✅ NEW: Award points for card collection
+        // Award points for card collection
         if (ScoreManager.Instance != null)
         {
             ScoreManager.Instance.OnCardCollected(cardID, roomID, isFirstInRoom);
@@ -142,6 +194,10 @@ public class BadgeManager : MonoBehaviour
         CheckBadgeUnlocks();
     }
 
+    // ============================================================================
+    // BADGE UNLOCK CHECKS
+    // ============================================================================
+
     /// <summary>
     /// Check if player earned any badges
     /// </summary>
@@ -154,43 +210,37 @@ public class BadgeManager : MonoBehaviour
         // Badge 1: First Discovery - collect any card
         if (totalCardsCollected >= 1 && !HasBadge("first_discovery"))
         {
-            UnlockBadge("first_discovery", "First Discovery",
-                "You found your first hidden card! The museum's secrets await.");
+            UnlockBadge("first_discovery");
         }
 
         // Badge 2: Curious Explorer - collect 3 cards
         if (totalCardsCollected >= 3 && !HasBadge("curious_explorer"))
         {
-            UnlockBadge("curious_explorer", "Curious Explorer",
-                "Three cards discovered! Your curiosity is leading you deeper into Berat's history.");
+            UnlockBadge("curious_explorer");
         }
 
         // Badge 3: Dedicated Seeker - collect 6 cards
         if (totalCardsCollected >= 6 && !HasBadge("dedicated_seeker"))
         {
-            UnlockBadge("dedicated_seeker", "Dedicated Seeker",
-                "Six cards found! You're uncovering the layers of Ottoman family life.");
+            UnlockBadge("dedicated_seeker");
         }
 
         // Badge 4: Persistent Scholar - collect 9 cards
         if (totalCardsCollected >= 9 && !HasBadge("persistent_scholar"))
         {
-            UnlockBadge("persistent_scholar", "Persistent Scholar",
-                "Nine cards! You're halfway through the museum's story.");
+            UnlockBadge("persistent_scholar");
         }
 
         // Badge 5: Heritage Guardian - collect 15 cards
         if (totalCardsCollected >= 15 && !HasBadge("heritage_guardian"))
         {
-            UnlockBadge("heritage_guardian", "Heritage Guardian",
-                "Fifteen cards! You're now a guardian of Berat's cultural memory.");
+            UnlockBadge("heritage_guardian");
         }
 
         // Badge 6: Complete Collection - collect all 18 cards
         if (totalCardsCollected >= 18 && !HasBadge("complete_collection"))
         {
-            UnlockBadge("complete_collection", "Complete Collection",
-                "All 18 cards discovered! Every hidden story revealed.");
+            UnlockBadge("complete_collection");
         }
 
         // ============================================================
@@ -200,43 +250,37 @@ public class BadgeManager : MonoBehaviour
         // Balcony Complete (Çardak)
         if (HasAllCardsInRoom("balcony") && !HasBadge("balcony_master"))
         {
-            UnlockBadge("balcony_master", "Heart of the Home",
-                "You've discovered the secrets of the çardak—the social center where families gathered, wove, and welcomed guests.");
+            UnlockBadge("balcony_master");
         }
 
         // Bedroom Complete
         if (HasAllCardsInRoom("bedroom") && !HasBadge("bedroom_master"))
         {
-            UnlockBadge("bedroom_master", "Family Sanctuary",
-                "You've explored the private space where families found warmth, rest, and passed down oral traditions through generations.");
+            UnlockBadge("bedroom_master");
         }
 
         // Guest Room Complete
         if (HasAllCardsInRoom("guest_room") && !HasBadge("guest_room_master"))
         {
-            UnlockBadge("guest_room_master", "Hospitality Master",
-                "You've understood the sacred art of Ottoman hospitality—where architecture, decoration, and ritual combined to honor guests.");
+            UnlockBadge("guest_room_master");
         }
 
         // Kitchen Complete
         if (HasAllCardsInRoom("kitchen") && !HasBadge("kitchen_master"))
         {
-            UnlockBadge("kitchen_master", "Culinary Heritage",
-                "You've discovered the tools and traditions of Ottoman cooking—where fire, copper, and patience transformed ingredients into cultural expressions.");
+            UnlockBadge("kitchen_master");
         }
 
         // Workshop Complete
         if (HasAllCardsInRoom("workshop") && !HasBadge("workshop_master"))
         {
-            UnlockBadge("workshop_master", "Weaver's Legacy",
-                "You've learned the art of traditional weaving—the craft that sustained families, preserved identity, and gave women economic power.");
+            UnlockBadge("workshop_master");
         }
 
         // Archive Complete
         if (HasAllCardsInRoom("archive") && !HasBadge("archive_master"))
         {
-            UnlockBadge("archive_master", "Memory Keeper",
-                "You've witnessed the frozen moments of Albanian history—photographs that preserve customs, ceremonies, and communities now transformed by time.");
+            UnlockBadge("archive_master");
         }
 
         // ============================================================
@@ -245,15 +289,18 @@ public class BadgeManager : MonoBehaviour
 
         if (HasCompletedAllRooms() && !HasBadge("museum_master"))
         {
-            UnlockBadge("museum_master", "Ottoman Life Scholar",
-                "🏆 You've explored every corner of the museum and experienced the complete story of family life in Ottoman-era Berat. You are now a keeper of this cultural heritage!");
+            UnlockBadge("museum_master");
         }
     }
 
+    // ============================================================================
+    // BADGE UNLOCKING
+    // ============================================================================
+
     /// <summary>
-    /// Unlock a specific badge
+    /// Unlock a specific badge (localized version)
     /// </summary>
-    void UnlockBadge(string badgeID, string badgeName, string description)
+    void UnlockBadge(string badgeID)
     {
         if (unlockedBadges.Contains(badgeID))
         {
@@ -261,6 +308,10 @@ public class BadgeManager : MonoBehaviour
         }
 
         unlockedBadges.Add(badgeID);
+
+        // Get localized name and description
+        string badgeName = GetBadgeName(badgeID);
+        string description = GetBadgeDescription(badgeID);
 
         if (ScoreManager.Instance != null)
         {
@@ -312,6 +363,10 @@ public class BadgeManager : MonoBehaviour
         return new List<string>(unlockedBadges);
     }
 
+    // ============================================================================
+    // LOCAL STORAGE (FALLBACK)
+    // ============================================================================
+
     /// <summary>
     /// Save progress to PlayerPrefs (fallback when offline)
     /// </summary>
@@ -333,7 +388,21 @@ public class BadgeManager : MonoBehaviour
         unlockedBadges.Clear();
 
         // Check each possible badge
-        string[] allBadgeIDs = { "first_discovery", "curious_explorer", "dedicated_seeker", "master_collector" };
+        string[] allBadgeIDs = {
+            "first_discovery",
+            "curious_explorer",
+            "dedicated_seeker",
+            "persistent_scholar",
+            "heritage_guardian",
+            "complete_collection",
+            "balcony_master",
+            "bedroom_master",
+            "guest_room_master",
+            "kitchen_master",
+            "workshop_master",
+            "archive_master",
+            "museum_master"
+        };
 
         foreach (string badgeID in allBadgeIDs)
         {
@@ -383,7 +452,6 @@ public class BadgeManager : MonoBehaviour
 
         Debug.Log("🔄 All badges, cards, and progress reset!");
     }
-
 
     // ============================================================================
     // ROOM PROGRESS HELPERS

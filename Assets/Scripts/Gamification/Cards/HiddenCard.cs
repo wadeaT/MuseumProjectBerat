@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
-using UnityEngine.InputSystem; // ✅ NEW INPUT SYSTEM
+using UnityEngine.InputSystem;
+using UnityEngine.Localization; // ✅ ADD THIS
+using UnityEngine.Localization.Settings; // ✅ ADD THIS
 
 public class HiddenCard : MonoBehaviour
 {
@@ -10,12 +12,12 @@ public class HiddenCard : MonoBehaviour
     [Tooltip("Which room is this card in? (e.g., 'balcony', 'living_room')")]
     public string roomID = "balcony";
 
-    [Tooltip("Title shown when discovered")]
-    public string cardTitle = "The Heart of the Home";
+    [Header("Localized Text")]
+    [Tooltip("Localized title for this card")]
+    public LocalizedString cardTitle; // ✅ CHANGED from string to LocalizedString
 
-    [Tooltip("Description/story for this card")]
-    [TextArea(3, 6)]
-    public string cardDescription = "This balcony, called a 'çardak' in Albanian, was the social center of traditional Berat homes.";
+    [Tooltip("Localized description/story for this card")]
+    public LocalizedString cardDescription; // ✅ CHANGED from string to LocalizedString
 
     [Header("Discovery Settings")]
     [Tooltip("How close must the player be to notice this card? (in meters)")]
@@ -27,8 +29,6 @@ public class HiddenCard : MonoBehaviour
     [Tooltip("Interaction key (for non-VR testing)")]
     public KeyCode interactionKey = KeyCode.E;
 
-    // ✅ REMOVED: useMobileControls - now handled by InteractionManager button
-
     [Tooltip("Auto-collect after looking for this many seconds (0 = disabled)")]
     [Range(0f, 3f)]
     public float autoCollectDelay = 0f;
@@ -38,10 +38,10 @@ public class HiddenCard : MonoBehaviour
     public GameObject hintEffect;
 
     [Tooltip("Color when idle")]
-    public Color idleColor = new Color(1f, 0.6f, 0.2f); // Warm orange
+    public Color idleColor = new Color(1f, 0.6f, 0.2f);
 
     [Tooltip("Color when player can collect")]
-    public Color activeColor = new Color(1f, 0.8f, 0f); // Bright gold
+    public Color activeColor = new Color(1f, 0.8f, 0f);
 
     [Header("Audio")]
     [Tooltip("Sound when card is discovered (optional)")]
@@ -54,7 +54,7 @@ public class HiddenCard : MonoBehaviour
     private Renderer cardRenderer;
     private AudioSource audioSource;
     private Material cardMaterial;
-    private float lookTimer = 0f; // For auto-collect feature
+    private float lookTimer = 0f;
 
     void Start()
     {
@@ -63,8 +63,6 @@ public class HiddenCard : MonoBehaviour
         if (player != null)
         {
             playerTransform = player.transform;
-
-            // Try to find the camera - check main camera first, then search in children
             playerCamera = Camera.main;
 
             if (playerCamera == null)
@@ -75,10 +73,6 @@ public class HiddenCard : MonoBehaviour
             if (playerCamera == null)
             {
                 Debug.LogError("HiddenCard: No camera found! Card interaction won't work.");
-            }
-            else
-            {
-                Debug.Log($"HiddenCard: Camera found - {playerCamera.name}");
             }
         }
         else
@@ -94,7 +88,6 @@ public class HiddenCard : MonoBehaviour
             cardRenderer.material = cardMaterial;
             cardMaterial.color = idleColor;
 
-            // Make it glow
             cardMaterial.EnableKeyword("_EMISSION");
             cardMaterial.SetColor("_EmissionColor", idleColor * 0.5f);
         }
@@ -123,12 +116,11 @@ public class HiddenCard : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
 
-        // Force collider to re-register with physics system
         Collider col = GetComponent<Collider>();
         if (col != null)
         {
             col.enabled = false;
-            yield return null; // Wait one frame
+            yield return null;
             col.enabled = true;
             Debug.Log($"[{cardID}] Collider refreshed!");
         }
@@ -141,7 +133,6 @@ public class HiddenCard : MonoBehaviour
 
         float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
 
-        // Show hint effect when in range
         if (hintEffect != null)
         {
             hintEffect.SetActive(distanceToPlayer <= detectionRadius);
@@ -151,7 +142,6 @@ public class HiddenCard : MonoBehaviour
         {
             if (IsPlayerLookingAtCard())
             {
-                // Player is looking at this card
                 if (cardMaterial != null)
                 {
                     cardMaterial.color = activeColor;
@@ -160,7 +150,6 @@ public class HiddenCard : MonoBehaviour
 
                 ShowInteractionPrompt(true);
 
-                // Auto-collect after looking for X seconds
                 if (autoCollectDelay > 0)
                 {
                     lookTimer += Time.deltaTime;
@@ -170,8 +159,6 @@ public class HiddenCard : MonoBehaviour
                         lookTimer = 0f;
                     }
                 }
-
-                // ✅ Touch/mobile detection REMOVED - now handled by InteractionManager button
             }
             else
             {
@@ -186,7 +173,6 @@ public class HiddenCard : MonoBehaviour
         }
         else
         {
-            // Auto-collect if very close (no look required)
             if (distanceToPlayer <= detectionRadius * 0.5f)
             {
                 CollectCard();
@@ -213,9 +199,6 @@ public class HiddenCard : MonoBehaviour
         return false;
     }
 
-    /// <summary>
-    /// ✅ PUBLIC METHOD - Called by InteractionManager when button is pressed
-    /// </summary>
     public void TriggerCollection()
     {
         if (!isDiscovered)
@@ -224,9 +207,6 @@ public class HiddenCard : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// ✅ PUBLIC METHOD - Check if card is already discovered
-    /// </summary>
     public bool IsDiscovered()
     {
         return isDiscovered;
@@ -236,7 +216,26 @@ public class HiddenCard : MonoBehaviour
     {
         isDiscovered = true;
 
-        Debug.Log($"Card Discovered: {cardTitle}");
+        // ✅ Get localized strings asynchronously
+        var titleOperation = cardTitle.GetLocalizedStringAsync();
+        var descOperation = cardDescription.GetLocalizedStringAsync();
+
+        titleOperation.Completed += (op) =>
+        {
+            string localizedTitle = op.Result;
+            Debug.Log($"Card Discovered: {localizedTitle}");
+
+            descOperation.Completed += (descOp) =>
+            {
+                string localizedDesc = descOp.Result;
+
+                // Show card discovery UI with localized text
+                if (CardDiscoveryUI.Instance != null)
+                {
+                    CardDiscoveryUI.Instance.ShowCardDiscovery(localizedTitle, localizedDesc);
+                }
+            };
+        };
 
         if (BadgeManager.instance != null)
         {
@@ -246,12 +245,6 @@ public class HiddenCard : MonoBehaviour
         if (audioSource != null && discoverySound != null)
         {
             audioSource.PlayOneShot(discoverySound);
-        }
-
-        // Show card discovery UI
-        if (CardDiscoveryUI.Instance != null)
-        {
-            CardDiscoveryUI.Instance.ShowCardDiscovery(cardTitle, cardDescription);
         }
 
         if (cardRenderer != null)

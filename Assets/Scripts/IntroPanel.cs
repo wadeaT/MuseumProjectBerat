@@ -2,6 +2,9 @@
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using UnityEngine.InputSystem;
+using UnityEngine.Localization; // ✅ ADD THIS
+using UnityEngine.Localization.Settings; // ✅ ADD THIS
 
 public class IntroPanel : MonoBehaviour
 {
@@ -22,22 +25,16 @@ public class IntroPanel : MonoBehaviour
     public float fadeInDuration = 0.5f;
     public float fadeOutDuration = 0.3f;
 
-    [Header("Content")]
-    [TextArea(3, 6)]
-    public string welcomeTitle = "Welcome to the Berat Museum!";
+    [Header("Localized Content")]
+    [Tooltip("Localized welcome title")]
+    public LocalizedString welcomeTitle; // ✅ CHANGED from string to LocalizedString
 
-    [TextArea(5, 10)]
-    public string welcomeInstructions =
-        "<b>Your Mission:</b>\n" +
-        "Explore the museum and discover hidden cards that tell the story of Ottoman-era Albanian life.\n\n" +
-        "<b>Controls:</b>\n" +
-        "• Left side of screen - Move\n" +
-        "• Right side of screen - Look around\n" +
-        "• TAP button - Interact with objects\n\n" +
-        "<b>Collect all 18 cards to unlock all badges!</b>";
+    [Tooltip("Localized welcome instructions")]
+    public LocalizedString welcomeInstructions; // ✅ CHANGED from string to LocalizedString
 
     private CanvasGroup canvasGroup;
     private bool isShowing = false;
+    private InputAction closeAction;
 
     void Awake()
     {
@@ -56,19 +53,105 @@ public class IntroPanel : MonoBehaviour
         {
             closeButton.onClick.AddListener(CloseIntro);
         }
+
+        // Setup new input system actions
+        SetupInputActions();
+
+        // ✅ Subscribe to locale change events
+        LocalizationSettings.SelectedLocaleChanged += OnLocaleChanged;
+    }
+
+    void SetupInputActions()
+    {
+        // Create composite action for Escape, Space, and Enter keys
+        closeAction = new InputAction(
+            name: "CloseIntro",
+            binding: "<Keyboard>/escape"
+        );
+
+        // Add additional bindings for Space and Enter
+        closeAction.AddBinding("<Keyboard>/space");
+        closeAction.AddBinding("<Keyboard>/enter");
+
+        // Subscribe to the action
+        closeAction.performed += OnCloseInput;
+    }
+
+    void OnEnable()
+    {
+        closeAction?.Enable();
+    }
+
+    void OnDisable()
+    {
+        closeAction?.Disable();
+    }
+
+    void OnDestroy()
+    {
+        // Clean up
+        if (closeAction != null)
+        {
+            closeAction.performed -= OnCloseInput;
+            closeAction.Dispose();
+        }
+
+        // ✅ Unsubscribe from locale change events
+        LocalizationSettings.SelectedLocaleChanged -= OnLocaleChanged;
     }
 
     void Start()
     {
-        // Set content
-        if (titleText != null)
-            titleText.text = welcomeTitle;
-
-        if (instructionsText != null)
-            instructionsText.text = welcomeInstructions;
+        // ✅ Load localized content
+        UpdateLocalizedContent();
 
         // Show intro on start
         ShowIntro();
+    }
+
+    // ✅ NEW METHOD: Update all localized text
+    void UpdateLocalizedContent()
+    {
+        // Get localized title
+        if (welcomeTitle != null && !welcomeTitle.IsEmpty)
+        {
+            var titleOp = welcomeTitle.GetLocalizedStringAsync();
+            titleOp.Completed += (op) =>
+            {
+                if (titleText != null)
+                {
+                    titleText.text = op.Result;
+                }
+            };
+        }
+
+        // Get localized instructions
+        if (welcomeInstructions != null && !welcomeInstructions.IsEmpty)
+        {
+            var instructionsOp = welcomeInstructions.GetLocalizedStringAsync();
+            instructionsOp.Completed += (op) =>
+            {
+                if (instructionsText != null)
+                {
+                    instructionsText.text = op.Result;
+                }
+            };
+        }
+    }
+
+    // ✅ NEW METHOD: Handle language changes
+    private void OnLocaleChanged(UnityEngine.Localization.Locale locale)
+    {
+        // Update text when language changes
+        UpdateLocalizedContent();
+    }
+
+    private void OnCloseInput(InputAction.CallbackContext context)
+    {
+        if (isShowing)
+        {
+            CloseIntro();
+        }
     }
 
     public void ShowIntro()
@@ -151,18 +234,5 @@ public class IntroPanel : MonoBehaviour
         }
 
         isShowing = false;
-    }
-
-    // Optional: Close with any key/tap
-    void Update()
-    {
-        if (isShowing)
-        {
-            // Close on Escape key
-            if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
-            {
-                CloseIntro();
-            }
-        }
     }
 }

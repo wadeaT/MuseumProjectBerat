@@ -1,18 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem; // ✅ NEW INPUT SYSTEM
+using UnityEngine.InputSystem;
+using UnityEngine.Localization;
+
+
 
 public class InteractiveObject : MonoBehaviour
 {
     [Header("Object Information")]
-    [Tooltip("Name of this object (e.g., 'Copper Coffee Pot')")]
-    public string objectTitle = "Museum Artifact";
+    [Tooltip("Localized title of this object")]
+    public LocalizedString objectTitle;
 
-    [Tooltip("Description of this object and its historical significance")]
-    [TextArea(4, 10)]
-    public string objectDescription = "This artifact tells a story of Ottoman-era life in Berat. Fill in the description here.";
+    [Tooltip("Localized description of this object")]
+    public LocalizedString objectDescription;
+
+
+    //[Tooltip("Description of this object and its historical significance")]
+    //[TextArea(4, 10)]
+    //public string objectDescription = "This artifact tells a story of Ottoman-era life in Berat. Fill in the description here.";
+
     [Tooltip("Optional image of this object")]
     public Sprite objectImage;
 
@@ -169,7 +179,7 @@ public class InteractiveObject : MonoBehaviour
                     lookTimer += Time.deltaTime;
                     if (lookTimer >= autoExamineDelay)
                     {
-                        ExamineObject();
+                        ExamineObjectAsync();
                         lookTimer = 0f;
                     }
                 }
@@ -266,15 +276,15 @@ public class InteractiveObject : MonoBehaviour
     /// </summary>
     public void TriggerExamination()
     {
-        ExamineObject();
+        ExamineObjectAsync();
     }
 
     /// <summary>
     /// Called when player examines the object
     /// </summary>
-    void ExamineObject()
+    async Task ExamineObjectAsync()
     {
-        Debug.Log($"Examining: {objectTitle}");
+        Debug.Log($"Examining: {objectTitle.TableReference}/{objectTitle.TableEntryReference}");
 
         // Play sound
         if (audioSource != null && examinationSound != null)
@@ -289,19 +299,18 @@ public class InteractiveObject : MonoBehaviour
             StartCoroutine(WaitForPanelClose());
         }
 
+        // Get localized strings asynchronously
+        var titleTask = objectTitle.GetLocalizedStringAsync();
+        var descTask = objectDescription.GetLocalizedStringAsync();
+
+        await System.Threading.Tasks.Task.WhenAll(titleTask.Task, descTask.Task);
+
+        string localizedTitle = titleTask.Result;
+        string localizedDescription = descTask.Result;
         // Show info panel
         if (ObjectInfoUI.Instance != null)
         {
-            ObjectInfoUI.Instance.ShowObjectInfo(objectTitle, objectDescription, objectImage);
-        }
-        else
-        {
-            Debug.LogWarning("ObjectInfoUI not found!");
-
-            if (CardDiscoveryUI.Instance != null)
-            {
-                CardDiscoveryUI.Instance.ShowCardDiscovery(objectTitle, objectDescription);
-            }
+            ObjectInfoUI.Instance.ShowObjectInfo(localizedTitle, localizedDescription, objectImage);
         }
     }
 
@@ -327,40 +336,40 @@ public class InteractiveObject : MonoBehaviour
     /// <summary>
     /// Start tracking how long player examines this object
     /// </summary>
-    void StartInteractionTracking()
+    async void StartInteractionTracking()
     {
         currentlyExamining = true;
         interactionStartTime = Time.time;
         totalInteractions++;
-
-        Debug.Log($"📊 Started tracking: {objectTitle} (Interaction #{totalInteractions})");
+        string localizedTitle = await objectTitle.GetLocalizedStringAsync().Task;
+        Debug.Log($" Started tracking: {localizedTitle} (Interaction #{totalInteractions})");
     }
 
     /// <summary>
     /// Stop tracking and save to Firebase
     /// </summary>
-    void StopInteractionTracking()
+    async  void StopInteractionTracking()
     {
         if (!currentlyExamining) return;
 
         currentlyExamining = false;
         float timeSpent = Time.time - interactionStartTime;
         totalTimeSpent += timeSpent;
-
-        Debug.Log($"📊 {objectTitle}: Examined for {timeSpent:F1} seconds (Total: {totalTimeSpent:F1}s over {totalInteractions} interactions)");
+        string localizedTitle = await objectTitle.GetLocalizedStringAsync().Task;
+        Debug.Log($" {localizedTitle}: Examined for {timeSpent:F1} seconds (Total: {totalTimeSpent:F1}s over {totalInteractions} interactions)");
 
         // Save to Firebase
-        SaveInteractionToFirebase(timeSpent);
+        SaveInteractionToFirebase(timeSpent, localizedTitle);
     }
 
     /// <summary>
     /// Save interaction data to Firebase
     /// </summary>
-    async void SaveInteractionToFirebase(float duration)
+    async void SaveInteractionToFirebase(float duration, string objectName)
     {
         // Log to console
-        Debug.Log($"📊 INTERACTION DATA:");
-        Debug.Log($"   Object: {objectTitle}");
+        Debug.Log($"  INTERACTION DATA:");
+        Debug.Log($"   Object: {objectName}");
         Debug.Log($"   Duration: {duration:F1} seconds");
         Debug.Log($"   Total Interactions: {totalInteractions}");
         Debug.Log($"   Average Time: {(totalTimeSpent / totalInteractions):F1} seconds");
@@ -378,7 +387,7 @@ public class InteractiveObject : MonoBehaviour
 
                 await FirebaseManager.Instance.SaveObjectInteractionAsync(
                     userId,
-                    objectTitle,
+                    objectName,
                     duration,
                     totalInteractions,
                     avgTime
