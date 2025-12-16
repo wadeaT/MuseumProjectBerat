@@ -8,13 +8,11 @@ using UnityEngine.Localization.Settings;
 public class LanguageDropdownController : MonoBehaviour
 {
     [SerializeField] private TMP_Dropdown dropdown;
-
-    // We’ll allow language families, not only exact codes.
+    // We'll allow language families, not only exact codes.
     private readonly string[] allowedPrefixes = { "en", "sq" };
-
     private bool isInitializing;
 
-    private IEnumerator Awake()
+    private void Awake()  // Changed from IEnumerator to void
     {
         if (dropdown == null)
             dropdown = GetComponent<TMP_Dropdown>();
@@ -23,19 +21,16 @@ public class LanguageDropdownController : MonoBehaviour
         dropdown.ClearOptions();
         dropdown.AddOptions(new List<string> { "Loading..." });
         dropdown.RefreshShownValue();
-
-        yield return null;
     }
 
     private IEnumerator Start()
     {
         isInitializing = true;
-
         yield return LocalizationSettings.InitializationOperation;
 
         var locales = LocalizationSettings.AvailableLocales.Locales;
-
         var filtered = new List<Locale>();
+
         foreach (var loc in locales)
         {
             var code = loc.Identifier.Code; // e.g., "en", "en-US", "sq", "sq-AL"
@@ -49,25 +44,22 @@ public class LanguageDropdownController : MonoBehaviour
             }
         }
 
-        // If filtered ended up empty (shouldn’t), fallback to all
+        // If filtered ended up empty (shouldn't), fallback to all
         if (filtered.Count == 0)
             filtered = new List<Locale>(locales);
 
         dropdown.ClearOptions();
-
         var options = new List<string>();
         int selectedIndex = 0;
 
         for (int i = 0; i < filtered.Count; i++)
         {
             var code = filtered[i].Identifier.Code;
-
             // Friendly display names
             string name =
                 code.StartsWith("en") ? "English" :
                 code.StartsWith("sq") ? "Shqip" :
                 filtered[i].LocaleName;
-
             options.Add(name);
 
             if (LocalizationSettings.SelectedLocale == filtered[i])
