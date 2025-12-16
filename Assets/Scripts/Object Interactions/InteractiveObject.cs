@@ -348,7 +348,7 @@ public class InteractiveObject : MonoBehaviour
     /// <summary>
     /// Stop tracking and save to Firebase
     /// </summary>
-    async  void StopInteractionTracking()
+    async void StopInteractionTracking()
     {
         if (!currentlyExamining) return;
 
@@ -378,8 +378,9 @@ public class InteractiveObject : MonoBehaviour
         // Save to Firebase
         if (FirebaseManager.Instance != null && FirebaseManager.Instance.IsReady)
         {
-            // Get current user ID
-            string userId = FirebaseManager.Instance.Auth?.CurrentUser?.UserId;
+            // ✅ FIXED: Use GetCurrentUserId() instead of accessing Auth directly
+            // This method works for both WebGL and non-WebGL builds
+            string userId = FirebaseManager.Instance.GetCurrentUserId();
 
             if (!string.IsNullOrEmpty(userId))
             {

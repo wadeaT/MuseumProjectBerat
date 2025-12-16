@@ -239,7 +239,9 @@ public class ScoreManager : MonoBehaviour
         string userId = null;
         try
         {
-            userId = FirebaseManager.Instance.Auth?.CurrentUser?.UserId;
+            // ✅ FIXED: Use GetCurrentUserId() instead of accessing Auth directly
+            // This method works for both WebGL and non-WebGL builds
+            userId = FirebaseManager.Instance.GetCurrentUserId();
         }
         catch (System.Exception e)
         {

@@ -1,22 +1,28 @@
 ﻿using System.Threading.Tasks;
 using UnityEngine;
+
+#if !UNITY_WEBGL || UNITY_EDITOR
 using Firebase;
 using Firebase.Extensions;
 using Firebase.Auth;
 using Firebase.Firestore;
+#endif
 
 /// <summary>
 /// Ensures Firebase initializes before other managers try to use it.
 /// Use this if you have a dedicated "Startup" scene.
+/// NOTE: This class is disabled in WebGL builds (uses WebGLFirebaseAuth instead)
 /// </summary>
 public class FirebaseInitializer : MonoBehaviour
 {
     public static FirebaseInitializer Instance { get; private set; }
     public static bool IsReady { get; private set; } = false;
 
+#if !UNITY_WEBGL || UNITY_EDITOR
     public FirebaseApp App { get; private set; }
     public FirebaseAuth Auth { get; private set; }
     public FirebaseFirestore Firestore { get; private set; }
+#endif
 
     private async void Awake()
     {
@@ -38,6 +44,12 @@ public class FirebaseInitializer : MonoBehaviour
     /// </summary>
     private async Task InitializeFirebaseAsync()
     {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        // WebGL: Don't use Unity Firebase SDK, use JavaScript SDK instead
+        IsReady = true;
+        Debug.Log("✅ [FirebaseInitializer] WebGL mode: Using JavaScript Firebase SDK");
+        await Task.Yield();
+#else
         Debug.Log("[FirebaseInitializer] Checking dependencies...");
 
         var dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
@@ -62,6 +74,7 @@ public class FirebaseInitializer : MonoBehaviour
 
         IsReady = true;
         Debug.Log("✅ Firebase fully initialized and ready!");
+#endif
     }
 
     /// <summary>
