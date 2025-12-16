@@ -183,6 +183,7 @@ public class LoginUI : MonoBehaviour
 
     private async void OnStartClicked()
     {
+        Debug.Log("START TOUR CLICKED");
         Debug.Log("[LoginUI] Start button clicked!");
         // ✅ 1. Collect all answers
         string age = GetSelectedOption(ageGroup);
@@ -256,35 +257,28 @@ public class LoginUI : MonoBehaviour
         if (group == null)
         {
             Debug.LogWarning("[LoginUI] ToggleGroup is null!");
-            return "";
+            return string.Empty;
         }
 
-        var selected = group.ActiveToggles().FirstOrDefault();
-        if (selected == null)
+        Toggle activeToggle = group.ActiveToggles().FirstOrDefault();
+
+        if (activeToggle == null)
         {
-            Debug.LogWarning($"[LoginUI] No selected toggle found in group: {group.name}");
-            return "";
+            Debug.LogWarning($"[LoginUI] No toggle selected in group: {group.name}");
+            return string.Empty;
         }
 
-        // Look specifically for a TextMeshPro label named "Label" under the toggle
-        TMP_Text label = selected.transform.Find("Label")?.GetComponent<TMP_Text>();
-        if (label != null)
-        {
-            Debug.Log($"[LoginUI] Selected: {label.text}");
-            return label.text;
-        }
+        // ✅ Search including inactive children
+        TMP_Text tmpText = activeToggle.GetComponentInChildren<TMP_Text>(true);
+        if (tmpText != null)
+            return tmpText.text;
 
-        // Fallback if structure is different
-        label = selected.GetComponentsInChildren<TMP_Text>(true)
-                        .FirstOrDefault(t => t.name.ToLower().Contains("label"));
-        if (label != null)
-        {
-            Debug.Log($"[LoginUI] Selected (fallback): {label.text}");
-            return label.text;
-        }
+        Text legacyText = activeToggle.GetComponentInChildren<Text>(true);
+        if (legacyText != null)
+            return legacyText.text;
 
-        Debug.LogWarning($"[LoginUI] Could not find label text for toggle in group {group.name}");
-        return "";
+        Debug.LogWarning($"[LoginUI] No text component found, using toggle name: {activeToggle.name}");
+        return activeToggle.name;
     }
 
     // ------------------------------------------------------------------------

@@ -14,7 +14,7 @@ public class LanguageDropdownController : MonoBehaviour
 
     private bool isInitializing;
 
-    private IEnumerator Awake()
+    private void Awake() // Changed from IEnumerator to void
     {
         if (dropdown == null)
             dropdown = GetComponent<TMP_Dropdown>();
@@ -24,7 +24,7 @@ public class LanguageDropdownController : MonoBehaviour
         dropdown.AddOptions(new List<string> { "Loading..." });
         dropdown.RefreshShownValue();
 
-        yield return null;
+        // Removed: yield return null; 
     }
 
     private IEnumerator Start()
