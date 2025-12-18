@@ -236,26 +236,18 @@ public class ScoreManager : MonoBehaviour
             return;
         }
 
-        string userId = null;
-        try
+        // FIXED: Use PlayerManager.userId instead of Auth.CurrentUser
+        if (PlayerManager.Instance == null || string.IsNullOrEmpty(PlayerManager.Instance.userId))
         {
-            userId = FirebaseManager.Instance.Auth?.CurrentUser?.UserId;
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError($"❌ Error getting current user: {e.Message}");
+            Debug.LogWarning("⚠️ User not logged in, score not saved to Firebase");
             return;
         }
 
-        if (string.IsNullOrEmpty(userId))
-        {
-            Debug.LogWarning("⚠️ User not authenticated, score not saved to Firebase");
-            return;
-        }
+        string odId = PlayerManager.Instance.userId;
 
         try
         {
-            await FirebaseManager.Instance.SaveUserScoreAsync(userId, currentScore);
+            await FirebaseManager.Instance.SaveUserScoreAsync(odId, currentScore);
         }
         catch (System.Exception e)
         {

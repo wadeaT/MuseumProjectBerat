@@ -16,25 +16,29 @@ public class LoginUI : MonoBehaviour
     public GameObject questionsPanel;
 
     [Header("Login UI Elements")]
-    public TMP_InputField emailInput;
-    public TMP_InputField passwordInput;
+    // CHANGED: Single input field for participant code
+    public TMP_InputField participantCodeInput;  // ← Was: emailInput + passwordInput
     public Button loginButton;
-    public Button registerButton;
+    // REMOVED: registerButton - not needed for anonymous auth
     public TMP_Text messageText;
 
     [Header("Questions UI Elements")]
-    public ToggleGroup ageGroup;          // ✅ Replaced TMP_InputField with ToggleGroup
-    public ToggleGroup genderGroup;       // ✅ New question
-    public TMP_InputField nationalityInput; // ✅ Keep this as text input
-    public ToggleGroup skillsGroup;       // ✅ New question
-    public ToggleGroup vrGroup;           // ✅ New question
+    public ToggleGroup ageGroup;
+    public ToggleGroup genderGroup;
+    public TMP_InputField nationalityInput;
+    public ToggleGroup skillsGroup;
+    public ToggleGroup vrGroup;
     public Button startButton;
 
     [Header("Next Scene Settings")]
-    public string firstMuseumScene = "Room1"; // Change to your actual first room scene name
+    public string firstMuseumScene = "Room1";
 
     [Header("LoginDropdown")]
     public GameObject LanguageDropDownParent;
+
+    [Header("Participant Code Settings")]
+    public int minCodeLength = 2;
+    public int maxCodeLength = 20;
 
     private async void Start()
     {
@@ -47,45 +51,44 @@ public class LoginUI : MonoBehaviour
 
         // Add button listeners
         loginButton.onClick.AddListener(OnLoginClicked);
-        registerButton.onClick.AddListener(OnRegisterClicked);
+        // REMOVED: registerButton listener
         startButton.onClick.AddListener(OnStartClicked);
 
         CheckToggleGroups();
 
-        // ✅ NEW: Wait for Firebase to be ready
+        // Wait for Firebase to be ready
         await WaitForFirebase();
 
-        messageText.text = ""; // Clear the initializing message
+        messageText.text = "";
     }
 
     /// <summary>
     /// Wait until Firebase is fully initialized
     /// </summary>
-    private async System.Threading.Tasks.Task WaitForFirebase()
+    private async Task WaitForFirebase()
     {
         int maxRetries = 50; // 5 seconds max
         int retries = 0;
 
         while (FirebaseManager.Instance == null || !FirebaseManager.Instance.IsReady)
         {
-            await System.Threading.Tasks.Task.Delay(100); // Wait 100ms
+            await Task.Delay(100);
             retries++;
 
             if (retries >= maxRetries)
             {
-                Debug.LogError(" Firebase failed to initialize after 5 seconds!");
-                messageText.text = " Connection error. Please restart the app.";
+                Debug.LogError("Firebase failed to initialize after 5 seconds!");
+                messageText.text = "Connection error. Please restart the app.";
                 messageText.color = Color.red;
 
-                // Disable buttons if Firebase never initializes
                 loginButton.interactable = false;
-                registerButton.interactable = false;
                 return;
             }
         }
 
-        Debug.Log(" Firebase ready! Login UI enabled.");
+        Debug.Log("Firebase ready! Login UI enabled.");
     }
+
     private void CheckToggleGroups()
     {
         foreach (var group in new[] { ageGroup, genderGroup, skillsGroup, vrGroup })
@@ -101,38 +104,56 @@ public class LoginUI : MonoBehaviour
             }
         }
     }
+
     // ------------------------------------------------------------------------
-    // LOGIN & REGISTER BUTTONS
+    // LOGIN BUTTON (CHANGED: Now uses participant code)
     // ------------------------------------------------------------------------
 
     private async void OnLoginClicked()
     {
-        string email = emailInput.text.Trim();
-        string password = passwordInput.text.Trim();
+        // Get participant code
+        string code = participantCodeInput.text.Trim();
 
-        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+        // Validate input
+        if (string.IsNullOrEmpty(code))
         {
-            await ShowLocalizedMessage("Please enter both email and password.", Color.yellow);
+            await ShowLocalizedMessage("Please enter your participant code.", Color.yellow);
+            return;
+        }
+
+        if (code.Length < minCodeLength)
+        {
+            await ShowLocalizedMessage($"Code must be at least {minCodeLength} characters.", Color.yellow);
+            return;
+        }
+
+        if (code.Length > maxCodeLength)
+        {
+            await ShowLocalizedMessage($"Code must be {maxCodeLength} characters or less.", Color.yellow);
             return;
         }
 
         await ShowLocalizedMessage("Logging in...", Color.white);
 
-        bool success = await PlayerManager.Instance.LoginUser(email, password);
+        // CHANGED: Call PlayerManager with participant code
+        bool success = await PlayerManager.Instance.LoginWithParticipantCode(code);
 
         if (success)
         {
-            await ShowLocalizedMessage(" Login successful!", Color.green);
+            await ShowLocalizedMessage("Login successful!", Color.green);
 
-            //NEW: Load user's badge and card progress
+            // Load user's badge and card progress
             if (BadgeManager.instance != null)
             {
                 await BadgeManager.instance.LoadProgressFromFirebase();
             }
 
             await Task.Delay(400);
-            string userId = PlayerManager.Instance.userId;
-            bool hasDemographics = await FirebaseManager.Instance.UserHasDemographicsAsync(userId);
+
+            // Check if user already has demographics
+            string odId = PlayerManager.Instance.userId;
+            bool hasDemographics = await FirebaseManager.Instance.UserHasDemographicsAsync(odId);
+            
             if (hasDemographics)
             {
                 Debug.Log("[LoginUI] Existing user with demographics → go to museum.");
@@ -146,46 +167,22 @@ public class LoginUI : MonoBehaviour
         }
         else
         {
-            await ShowLocalizedMessage(" Login failed. Check your email or password.", Color.red);
+            await ShowLocalizedMessage("Login failed. Please try again.", Color.red);
         }
     }
 
-    private async void OnRegisterClicked()
-    {
-        string email = emailInput.text.Trim();
-        string password = passwordInput.text.Trim();
-
-        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
-        {
-            await ShowLocalizedMessage("Please fill in both fields.", Color.yellow);
-            return;
-        }
-
-        await ShowLocalizedMessage("Creating account...", Color.white);
-
-        bool success = await PlayerManager.Instance.RegisterUser(email, password);
-
-        if (success)
-        {
-            await ShowLocalizedMessage(" Account created successfully!", Color.green);
-            await Task.Delay(800);
-            ShowQuestionsPanel();
-        }
-        else
-        {
-            await ShowLocalizedMessage(" Registration failed. Try again.", Color.red);
-        }
-    }
+    // REMOVED: OnRegisterClicked() - not needed for anonymous auth
 
     // ------------------------------------------------------------------------
-    // QUESTIONS PANEL
+    // QUESTIONS PANEL (unchanged)
     // ------------------------------------------------------------------------
 
     private async void OnStartClicked()
     {
         Debug.Log("START TOUR CLICKED");
         Debug.Log("[LoginUI] Start button clicked!");
-        // ✅ 1. Collect all answers
+
+        // Collect all answers
         string age = GetSelectedOption(ageGroup);
         string gender = GetSelectedOption(genderGroup);
         string nationality = nationalityInput.text.Trim();
@@ -194,7 +191,7 @@ public class LoginUI : MonoBehaviour
 
         Debug.Log($"[LoginUI] Collected answers -> Age: {age}, Gender: {gender}, Nationality: {nationality}, Skills: {skills}, VR: {vr}");
 
-        // ✅ 2. Check for missing answers
+        // Check for missing answers
         if (string.IsNullOrEmpty(age) || string.IsNullOrEmpty(gender) ||
             string.IsNullOrEmpty(nationality) || string.IsNullOrEmpty(skills) || string.IsNullOrEmpty(vr))
         {
@@ -203,33 +200,33 @@ public class LoginUI : MonoBehaviour
             return;
         }
 
-        // ✅ 3. Show progress message
+        // Show progress message
         await ShowLocalizedMessage("Saving your answers...", Color.white);
         Debug.Log("[LoginUI] Starting demographic save...");
 
-        // ✅ 4. Validate Firebase and PlayerManager
+        // Validate Firebase and PlayerManager
         if (FirebaseManager.Instance == null)
         {
             Debug.LogError("[LoginUI] FirebaseManager.Instance is null!");
-            await ShowLocalizedMessage("❌ Firebase not initialized.", Color.red);
+            await ShowLocalizedMessage("Firebase not initialized.", Color.red);
             return;
         }
 
         if (PlayerManager.Instance == null || string.IsNullOrEmpty(PlayerManager.Instance.userId))
         {
-            Debug.LogError("[LoginUI] PlayerManager or userId is null!");
-            await ShowLocalizedMessage("❌ User not logged in.", Color.red);
+            Debug.LogError("[LoginUI] PlayerManager or odId is null!");
+            await ShowLocalizedMessage("User not logged in.", Color.red);
             return;
         }
 
-        string userId = PlayerManager.Instance.userId;
+        string odId = PlayerManager.Instance.userId;
 
         try
         {
-            // ✅ 5. Save data using FirebaseManager’s method
+            // Save data using FirebaseManager's method
             Debug.Log("[LoginUI] Calling SaveDemographicsAsync...");
             await FirebaseManager.Instance.SaveDemographicsAsync(
-                userId,
+                odId,
                 age,
                 gender,
                 nationality,
@@ -238,19 +235,18 @@ public class LoginUI : MonoBehaviour
             );
 
             Debug.Log("[LoginUI] Firestore save completed successfully!");
-            await ShowLocalizedMessage("✅ Data saved! Loading museum...", Color.green);
+            await ShowLocalizedMessage("Data saved! Loading museum...", Color.green);
 
-            // ✅ 6. Delay a bit then load next scene
+            // Delay a bit then load next scene
             await Task.Delay(1200);
             SceneManager.LoadScene(firstMuseumScene);
         }
         catch (System.Exception ex)
         {
-            Debug.LogError("[LoginUI] ❌ Error saving demographics: " + ex.Message);
-            await ShowLocalizedMessage("❌ Failed to save data. Check your internet connection.", Color.red);
+            Debug.LogError("[LoginUI] Error saving demographics: " + ex.Message);
+            await ShowLocalizedMessage("Failed to save data. Check your internet connection.", Color.red);
         }
     }
-
 
     private string GetSelectedOption(ToggleGroup group)
     {
@@ -268,7 +264,7 @@ public class LoginUI : MonoBehaviour
             return string.Empty;
         }
 
-        // ✅ Search including inactive children
+        // Search including inactive children
         TMP_Text tmpText = activeToggle.GetComponentInChildren<TMP_Text>(true);
         if (tmpText != null)
             return tmpText.text;
@@ -309,7 +305,7 @@ public class LoginUI : MonoBehaviour
         catch (System.Exception ex)
         {
             Debug.LogWarning($"Failed to get localized string for key '{tableKey}': {ex.Message}");
-            messageText.text = "...";
+            messageText.text = tableKey; // Fallback to the key itself
             messageText.color = color;
         }
     }

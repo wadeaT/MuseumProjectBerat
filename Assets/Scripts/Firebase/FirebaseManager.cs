@@ -5,15 +5,23 @@ using Firebase;
 using Firebase.Auth;
 using Firebase.Firestore;
 
+/// <summary>
+/// Simplified FirebaseManager for research studies.
+/// Uses participant code (e.g., "P001") directly as document ID.
+/// No authentication needed - just Firestore.
+/// </summary>
 public class FirebaseManager : MonoBehaviour
 {
     public static FirebaseManager Instance { get; private set; }
 
     public FirebaseApp App { get; private set; }
-    public FirebaseAuth Auth { get; private set; }
     public FirebaseFirestore Firestore { get; private set; }
+    public FirebaseAuth Auth { get; private set; }  // Kept for compatibility
 
     public bool IsReady { get; private set; } = false;
+
+    // Current participant code (used as document ID)
+    public string CurrentParticipantCode { get; private set; }
 
     private void Awake()
     {
@@ -41,18 +49,24 @@ public class FirebaseManager : MonoBehaviour
         }
 
         App = FirebaseApp.DefaultInstance;
-        Auth = FirebaseAuth.DefaultInstance;
         Firestore = FirebaseFirestore.DefaultInstance;
+        Auth = FirebaseAuth.DefaultInstance;  // Kept for compatibility
 
+        // No Auth needed!
         IsReady = true;
         Debug.Log("✅ [FirebaseManager] Firebase initialized successfully!");
     }
 
     // ------------------------------------------------------------------------
-    // USER AUTH (EMAIL + PASSWORD)
+    // PARTICIPANT LOGIN (No auth - just set the code)
     // ------------------------------------------------------------------------
 
-    public async Task<string> RegisterUserAsync(string email, string password)
+    /// <summary>
+    /// "Logs in" a participant by setting their code.
+    /// Creates their user document in Firestore.
+    /// The code becomes the document ID (e.g., users/P001)
+    /// </summary>
+    public async Task<string> LoginWithParticipantCodeAsync(string participantCode)
     {
         if (!IsReady)
         {
@@ -60,32 +74,32 @@ public class FirebaseManager : MonoBehaviour
             return null;
         }
 
-        try
+        if (string.IsNullOrWhiteSpace(participantCode))
         {
-            var result = await Auth.CreateUserWithEmailAndPasswordAsync(email, password);
-            Debug.Log($"✅ [FirebaseManager] Registered new user: {result.User.UserId}");
-            return result.User.UserId;
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError($"❌ [FirebaseManager] Register failed: {e.Message}");
-            return null;
-        }
-    }
-
-    public async Task<string> LoginUserAsync(string email, string password)
-    {
-        if (!IsReady)
-        {
-            Debug.LogWarning("⚠️ Firebase not ready yet.");
+            Debug.LogError("❌ [FirebaseManager] Participant code cannot be empty.");
             return null;
         }
 
+        // Clean up the code (trim whitespace, uppercase)
+        participantCode = participantCode.Trim().ToUpper();
+        CurrentParticipantCode = participantCode;
+
         try
         {
-            var result = await Auth.SignInWithEmailAndPasswordAsync(email, password);
-            Debug.Log($"✅ [FirebaseManager] Logged in: {result.User.UserId}");
-            return result.User.UserId;
+            // Create user document with participant code as the ID
+            var userDocRef = Firestore.Collection("users").Document(participantCode);
+
+            await userDocRef.SetAsync(new Dictionary<string, object>
+            {
+                { "participantCode", participantCode },
+                { "createdAt", FieldValue.ServerTimestamp },
+                { "lastActive", FieldValue.ServerTimestamp }
+            }, SetOptions.MergeAll);
+
+            Debug.Log($"✅ [FirebaseManager] Participant {participantCode} logged in!");
+
+            // Return the participant code (this is now the "userId")
+            return participantCode;
         }
         catch (System.Exception e)
         {
@@ -95,16 +109,16 @@ public class FirebaseManager : MonoBehaviour
     }
 
     // ------------------------------------------------------------------------
-    // FIRESTORE WRITES
+    // FIRESTORE WRITES (using participant code as document ID)
     // ------------------------------------------------------------------------
 
     public async Task SaveDemographicsAsync(
-    string userId,
-    string age,
-    string gender,
-    string nationality,
-    string computerSkills,
-    string vrInterest)
+        string odId,  // This is now the participant code (e.g., "P001")
+        string age,
+        string gender,
+        string nationality,
+        string computerSkills,
+        string vrInterest)
     {
         if (!IsReady || Firestore == null)
         {
@@ -112,39 +126,33 @@ public class FirebaseManager : MonoBehaviour
             return;
         }
 
-        Debug.Log($"[FirebaseManager] Saving demographics for user {userId}...");
+        Debug.Log($"[FirebaseManager] Saving demographics for {odId}...");
 
         try
         {
             var data = new Dictionary<string, object>
-        {
-            { "age", age },
-            { "gender", gender },
-            { "nationality", nationality },
-            { "computerSkills", computerSkills },
-            { "vrInterest", vrInterest },
-            { "timestamp", FieldValue.ServerTimestamp }
-        };
+            {
+                { "age", age },
+                { "gender", gender },
+                { "nationality", nationality },
+                { "computerSkills", computerSkills },
+                { "vrInterest", vrInterest },
+                { "timestamp", FieldValue.ServerTimestamp }
+            };
 
-            var doc = Firestore.Collection("users").Document(userId)
+            var doc = Firestore.Collection("users").Document(odId)
                 .Collection("demographics").Document("info");
 
-            Debug.Log("[FirebaseManager] Calling SetAsync...");
             await doc.SetAsync(data, SetOptions.MergeAll);
-            Debug.Log("✅ [FirebaseManager] Demographics saved successfully in Firestore!");
+            Debug.Log($"✅ [FirebaseManager] Demographics saved for {odId}!");
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"❌ [FirebaseManager] Failed to save demographics: {e.Message}\n{e.StackTrace}");
+            Debug.LogError($"❌ [FirebaseManager] Failed to save demographics: {e.Message}");
         }
     }
 
-
-
-    /// <summary>
-    /// Saves a badge with full details to Firestore
-    /// </summary>
-    public async Task SaveBadgeAsync(string userId, string badgeId, string badgeName, string description)
+    public async Task SaveBadgeAsync(string odId, string badgeId, string badgeName, string description)
     {
         if (!IsReady || Firestore == null)
         {
@@ -154,33 +162,18 @@ public class FirebaseManager : MonoBehaviour
 
         try
         {
-            // Save to badges subcollection with full details
-            var badgeDoc = Firestore.Collection("users").Document(userId)
+            var badgeDoc = Firestore.Collection("users").Document(odId)
                 .Collection("badges").Document(badgeId);
 
-            var badgeData = new Dictionary<string, object>
-        {
-            { "badgeId", badgeId },
-            { "name", badgeName },
-            { "description", description },
-            { "unlocked", true },
-            { "timestamp", FieldValue.ServerTimestamp }
-        };
+            await badgeDoc.SetAsync(new Dictionary<string, object>
+            {
+                { "badgeId", badgeId },
+                { "badgeName", badgeName },
+                { "description", description },
+                { "unlockedAt", FieldValue.ServerTimestamp }
+            }, SetOptions.MergeAll);
 
-            await badgeDoc.SetAsync(badgeData, SetOptions.MergeAll);
-
-            // Also update the progress document with total count
-            var progressDoc = Firestore.Collection("users").Document(userId)
-                .Collection("progress").Document("summary");
-
-            await progressDoc.SetAsync(new Dictionary<string, object>
-        {
-            { "totalBadges", FieldValue.Increment(1) },
-            { "lastBadgeUnlocked", badgeId },
-            { "lastBadgeTimestamp", FieldValue.ServerTimestamp }
-        }, SetOptions.MergeAll);
-
-            Debug.Log($"✅ [FirebaseManager] Badge '{badgeName}' saved for user {userId}");
+            Debug.Log($"✅ [FirebaseManager] Badge '{badgeName}' saved for {odId}");
         }
         catch (System.Exception e)
         {
@@ -188,10 +181,7 @@ public class FirebaseManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Saves card collection progress
-    /// </summary>
-    public async Task SaveCardCollectedAsync(string userId, string cardId, int totalCardsCollected)
+    public async Task SaveCardCollectedAsync(string odId, string cardId, int totalCardsCollected)
     {
         if (!IsReady || Firestore == null)
         {
@@ -201,29 +191,27 @@ public class FirebaseManager : MonoBehaviour
 
         try
         {
-            // Save individual card
-            var cardDoc = Firestore.Collection("users").Document(userId)
+            var cardDoc = Firestore.Collection("users").Document(odId)
                 .Collection("cards").Document(cardId);
 
             await cardDoc.SetAsync(new Dictionary<string, object>
-        {
-            { "cardId", cardId },
-            { "found", true },
-            { "timestamp", FieldValue.ServerTimestamp }
-        }, SetOptions.MergeAll);
+            {
+                { "cardId", cardId },
+                { "found", true },
+                { "timestamp", FieldValue.ServerTimestamp }
+            }, SetOptions.MergeAll);
 
-            // Update progress summary
-            var progressDoc = Firestore.Collection("users").Document(userId)
+            var progressDoc = Firestore.Collection("users").Document(odId)
                 .Collection("progress").Document("summary");
 
             await progressDoc.SetAsync(new Dictionary<string, object>
-        {
-            { "totalCardsCollected", totalCardsCollected },
-            { "lastCardFound", cardId },
-            { "lastCardTimestamp", FieldValue.ServerTimestamp }
-        }, SetOptions.MergeAll);
+            {
+                { "totalCardsCollected", totalCardsCollected },
+                { "lastCardFound", cardId },
+                { "lastCardTimestamp", FieldValue.ServerTimestamp }
+            }, SetOptions.MergeAll);
 
-            Debug.Log($"✅ [FirebaseManager] Card '{cardId}' saved for user {userId}");
+            Debug.Log($"✅ [FirebaseManager] Card '{cardId}' saved for {odId}");
         }
         catch (System.Exception e)
         {
@@ -231,10 +219,7 @@ public class FirebaseManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Loads user's badge progress from Firestore
-    /// </summary>
-    public async Task<List<string>> LoadUserBadgesAsync(string userId)
+    public async Task<List<string>> LoadUserBadgesAsync(string odId)
     {
         if (!IsReady || Firestore == null)
         {
@@ -244,16 +229,16 @@ public class FirebaseManager : MonoBehaviour
 
         try
         {
-            var badgesSnapshot = await Firestore.Collection("users").Document(userId)
+            var badgesSnapshot = await Firestore.Collection("users").Document(odId)
                 .Collection("badges").GetSnapshotAsync();
 
             var badgeList = new List<string>();
             foreach (var doc in badgesSnapshot.Documents)
             {
-                badgeList.Add(doc.Id); // Badge ID
+                badgeList.Add(doc.Id);
             }
 
-            Debug.Log($"✅ [FirebaseManager] Loaded {badgeList.Count} badges for user {userId}");
+            Debug.Log($"✅ [FirebaseManager] Loaded {badgeList.Count} badges for {odId}");
             return badgeList;
         }
         catch (System.Exception e)
@@ -263,10 +248,7 @@ public class FirebaseManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Loads user's card collection progress
-    /// </summary>
-    public async Task<int> LoadUserCardsAsync(string userId)
+    public async Task<int> LoadUserCardsAsync(string odId)
     {
         if (!IsReady || Firestore == null)
         {
@@ -276,10 +258,10 @@ public class FirebaseManager : MonoBehaviour
 
         try
         {
-            var cardsSnapshot = await Firestore.Collection("users").Document(userId)
+            var cardsSnapshot = await Firestore.Collection("users").Document(odId)
                 .Collection("cards").GetSnapshotAsync();
 
-            Debug.Log($"✅ [FirebaseManager] Loaded {cardsSnapshot.Count} cards for user {userId}");
+            Debug.Log($"✅ [FirebaseManager] Loaded {cardsSnapshot.Count} cards for {odId}");
             return cardsSnapshot.Count;
         }
         catch (System.Exception e)
@@ -289,55 +271,49 @@ public class FirebaseManager : MonoBehaviour
         }
     }
 
-    public async Task SaveRoomTimeAsync(string userId, string roomId, float timeSpent)
+    public async Task SaveRoomTimeAsync(string odId, string roomId, float timeSpent)
     {
         if (!IsReady || Firestore == null) return;
 
         try
         {
-            var docRef = Firestore.Collection("users").Document(userId)
+            var docRef = Firestore.Collection("users").Document(odId)
                 .Collection("roomStats").Document(roomId);
 
-            // Add time to total, and increment visit count by 1
             await docRef.SetAsync(new Dictionary<string, object>
-        {
-            { "timeSpent", FieldValue.Increment(timeSpent) },
-            { "visitCount", FieldValue.Increment(1) }
-        }, SetOptions.MergeAll);
+            {
+                { "timeSpent", FieldValue.Increment(timeSpent) },
+                { "visitCount", FieldValue.Increment(1) }
+            }, SetOptions.MergeAll);
 
-            Debug.Log($"✅ [FirebaseManager] Room '{roomId}' updated → +{timeSpent:F2}s, +1 visit");
+            Debug.Log($"✅ [FirebaseManager] Room '{roomId}' updated for {odId}");
         }
         catch (System.Exception e)
         {
             Debug.LogError($"❌ [FirebaseManager] Failed to save room time: {e.Message}");
         }
     }
-    /// <summary>
-    /// Save total user score to Firestore
-    /// </summary>
-    public async Task SaveUserScoreAsync(string userId, int totalScore)
+
+    public async Task SaveUserScoreAsync(string odId, int totalScore)
     {
         if (!IsReady || Firestore == null)
         {
-            Debug.LogError("❌ Firestore not ready in SaveUserScoreAsync.");
+            Debug.LogError("❌ Firestore not ready.");
             return;
         }
 
         try
         {
-            // We store score in the same "progress/summary" document
-            var progressDoc = Firestore.Collection("users").Document(userId)
+            var progressDoc = Firestore.Collection("users").Document(odId)
                 .Collection("progress").Document("summary");
 
-            var data = new Dictionary<string, object>
+            await progressDoc.SetAsync(new Dictionary<string, object>
             {
                 { "totalScore", totalScore },
                 { "lastScoreUpdate", FieldValue.ServerTimestamp }
-            };
+            }, SetOptions.MergeAll);
 
-            await progressDoc.SetAsync(data, SetOptions.MergeAll);
-
-            Debug.Log($"✅ Score {totalScore} saved for user {userId}");
+            Debug.Log($"✅ Score {totalScore} saved for {odId}");
         }
         catch (System.Exception e)
         {
@@ -345,11 +321,8 @@ public class FirebaseManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Saves object interaction data to Firestore
-    /// </summary>
     public async Task SaveObjectInteractionAsync(
-        string userId,
+        string odId,
         string objectName,
         float duration,
         int totalInteractions,
@@ -363,65 +336,61 @@ public class FirebaseManager : MonoBehaviour
 
         try
         {
-            // Create unique document ID with timestamp
             string docId = $"{objectName}_{System.DateTime.UtcNow.Ticks}";
 
-            var interactionDoc = Firestore.Collection("users").Document(userId)
+            var interactionDoc = Firestore.Collection("users").Document(odId)
                 .Collection("objectInteractions").Document(docId);
 
-            var interactionData = new Dictionary<string, object>
-        {
-            { "objectName", objectName },
-            { "duration", duration },
-            { "totalInteractions", totalInteractions },
-            { "averageTime", averageTime },
-            { "timestamp", FieldValue.ServerTimestamp }
-        };
+            await interactionDoc.SetAsync(new Dictionary<string, object>
+            {
+                { "objectName", objectName },
+                { "duration", duration },
+                { "totalInteractions", totalInteractions },
+                { "averageTime", averageTime },
+                { "timestamp", FieldValue.ServerTimestamp }
+            });
 
-            await interactionDoc.SetAsync(interactionData);
-
-            // Also update summary statistics
-            var statsDoc = Firestore.Collection("users").Document(userId)
+            var statsDoc = Firestore.Collection("users").Document(odId)
                 .Collection("objectStats").Document(objectName);
 
             await statsDoc.SetAsync(new Dictionary<string, object>
-        {
-            { "totalInteractions", totalInteractions },
-            { "totalTimeSpent", FieldValue.Increment(duration) },
-            { "averageTime", averageTime },
-            { "lastInteraction", FieldValue.ServerTimestamp }
-        }, SetOptions.MergeAll);
+            {
+                { "totalInteractions", totalInteractions },
+                { "totalTimeSpent", FieldValue.Increment(duration) },
+                { "averageTime", averageTime },
+                { "lastInteraction", FieldValue.ServerTimestamp }
+            }, SetOptions.MergeAll);
 
-            Debug.Log($"✅ [FirebaseManager] Object interaction '{objectName}' saved for user {userId}");
+            Debug.Log($"✅ [FirebaseManager] Object '{objectName}' saved for {odId}");
         }
         catch (System.Exception e)
         {
             Debug.LogError($"❌ [FirebaseManager] Failed to save object interaction: {e.Message}");
         }
     }
-    public async Task<bool> UserHasDemographicsAsync(string userId)
+
+    public async Task<bool> UserHasDemographicsAsync(string odId)
     {
         if (!IsReady || Firestore == null)
         {
-            Debug.LogError("❌ Firestore not ready in UserHasDemographicsAsync.");
+            Debug.LogError("❌ Firestore not ready.");
             return false;
         }
 
         try
         {
-            var docRef = Firestore.Collection("users").Document(userId)
+            var docRef = Firestore.Collection("users").Document(odId)
                 .Collection("demographics").Document("info");
 
             var snapshot = await docRef.GetSnapshotAsync();
             bool exists = snapshot.Exists;
 
-            Debug.Log($"[FirebaseManager] User {userId} has demographics: {exists}");
+            Debug.Log($"[FirebaseManager] {odId} has demographics: {exists}");
             return exists;
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"❌ Error checking demographics for user {userId}: {e.Message}");
-            // On error, be safe and treat as "no demographics"
+            Debug.LogError($"❌ Error checking demographics for {odId}: {e.Message}");
             return false;
         }
     }

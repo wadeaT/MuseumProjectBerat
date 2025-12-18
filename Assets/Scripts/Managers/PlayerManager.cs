@@ -7,7 +7,7 @@ public class PlayerManager : MonoBehaviour
     public static PlayerManager Instance { get; private set; }
 
     [Header("Player Data")]
-    public string userId;
+    public string userId;              // This IS the participant code (e.g., "P001")
     public string age;
     public string nationality;
     public List<string> badges = new List<string>();
@@ -29,10 +29,14 @@ public class PlayerManager : MonoBehaviour
     }
 
     // ------------------------------------------------------------------------
-    //  AUTHENTICATION
+    //  AUTHENTICATION (Participant Code)
     // ------------------------------------------------------------------------
 
-    public async Task<bool> RegisterUser(string email, string password)
+    /// <summary>
+    /// Login with a participant code (e.g., "P001").
+    /// The code becomes the document ID in Firestore.
+    /// </summary>
+    public async Task<bool> LoginWithParticipantCode(string code)
     {
         if (FirebaseManager.Instance == null)
         {
@@ -40,29 +44,12 @@ public class PlayerManager : MonoBehaviour
             return false;
         }
 
-        userId = await FirebaseManager.Instance.RegisterUserAsync(email, password);
+        // The returned value IS the participant code
+        userId = await FirebaseManager.Instance.LoginWithParticipantCodeAsync(code);
+        
         if (!string.IsNullOrEmpty(userId))
         {
-            Debug.Log($"✅ Registered new user: {userId}");
-            return true;
-        }
-
-        Debug.LogError("❌ Registration failed.");
-        return false;
-    }
-
-    public async Task<bool> LoginUser(string email, string password)
-    {
-        if (FirebaseManager.Instance == null)
-        {
-            Debug.LogError("FirebaseManager not found in scene!");
-            return false;
-        }
-
-        userId = await FirebaseManager.Instance.LoginUserAsync(email, password);
-        if (!string.IsNullOrEmpty(userId))
-        {
-            Debug.Log($"✅ Logged in user: {userId}");
+            Debug.Log($"✅ Logged in participant: {userId}");
             return true;
         }
 
@@ -87,11 +74,6 @@ public class PlayerManager : MonoBehaviour
 
         await FirebaseManager.Instance.SaveDemographicsAsync(userId, age, gender, nationality, skills, vr);
     }
-
-
-    // ------------------------------------------------------------------------
-    //  BADGES
-    // ------------------------------------------------------------------------
 
     // ------------------------------------------------------------------------
     //  BADGES
@@ -128,14 +110,12 @@ public class PlayerManager : MonoBehaviour
             return;
         }
 
-        // Load badges
         badges = await FirebaseManager.Instance.LoadUserBadgesAsync(userId);
-
-        // Load cards
         totalCardsCollected = await FirebaseManager.Instance.LoadUserCardsAsync(userId);
 
-        Debug.Log($" Loaded user progress: {badges.Count} badges, {totalCardsCollected} cards");
+        Debug.Log($"Loaded user progress: {badges.Count} badges, {totalCardsCollected} cards");
     }
+
     // ------------------------------------------------------------------------
     //  CARDS
     // ------------------------------------------------------------------------
@@ -157,6 +137,7 @@ public class PlayerManager : MonoBehaviour
             Debug.Log($"📜 Card collected: {cardId} (Total: {totalCardsCollected})");
         }
     }
+
     // ------------------------------------------------------------------------
     //  ROOM TIMES
     // ------------------------------------------------------------------------
@@ -184,8 +165,8 @@ public class PlayerManager : MonoBehaviour
         nationality = null;
         badges.Clear();
         roomTimes.Clear();
-        cardsFound.Clear(); // ✅ NEW
-        totalCardsCollected = 0; // ✅ NEW
+        cardsFound.Clear();
+        totalCardsCollected = 0;
         Debug.Log("🧹 Player data cleared.");
     }
 }
