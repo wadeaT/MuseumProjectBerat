@@ -66,8 +66,8 @@ public class BadgeManager : MonoBehaviour
 
         if (showDebugMessages)
         {
-            Debug.Log($"✅ BadgeManager initialized. Total cards collected: {totalCardsCollected}");
-            Debug.Log($"📊 Unlocked badges: {unlockedBadges.Count}");
+            Debug.Log($" BadgeManager initialized. Total cards collected: {totalCardsCollected}");
+            Debug.Log($" Unlocked badges: {unlockedBadges.Count}");
         }
     }
 
@@ -172,7 +172,7 @@ public class BadgeManager : MonoBehaviour
         // Log room progress for debugging
         int cardsInRoom = cardsByRoom[roomID].Count;
         int expectedCards = expectedCardsPerRoom.ContainsKey(roomID) ? expectedCardsPerRoom[roomID] : 0;
-        Debug.Log($"📍 Room '{roomID}' progress: {cardsInRoom}/{expectedCards} cards found");
+        Debug.Log($" Room '{roomID}' progress: {cardsInRoom}/{expectedCards} cards found");
 
         // Save to Firebase
         if (useFirebase && PlayerManager.Instance != null && !string.IsNullOrEmpty(PlayerManager.Instance.userId))
@@ -187,7 +187,7 @@ public class BadgeManager : MonoBehaviour
 
         if (showDebugMessages)
         {
-            Debug.Log($"📊 Card collected! Total: {totalCardsCollected}");
+            Debug.Log($" Card collected! Total: {totalCardsCollected}");
         }
 
         // Check if any badges should be unlocked
@@ -331,7 +331,7 @@ public class BadgeManager : MonoBehaviour
         }
 
         Debug.Log("╔════════════════════════════════════════╗");
-        Debug.Log($"║  🎉 BADGE UNLOCKED: {badgeName}");
+        Debug.Log($"║   BADGE UNLOCKED: {badgeName}");
         Debug.Log($"║  {description}");
         Debug.Log("╚════════════════════════════════════════╝");
 
@@ -450,7 +450,7 @@ public class BadgeManager : MonoBehaviour
         PlayerPrefs.DeleteAll();
         PlayerPrefs.Save();
 
-        Debug.Log("🔄 All badges, cards, and progress reset!");
+        Debug.Log(" All badges, cards, and progress reset!");
     }
 
     // ============================================================================

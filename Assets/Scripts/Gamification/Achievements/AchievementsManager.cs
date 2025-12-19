@@ -17,7 +17,7 @@ public class AchievementsManager : MonoBehaviour
     public TMP_Text scoreBreakdownText;
 
     [Header("TEST MODE")]
-    public bool useTestUserId = false;  // CHANGED: Default to false
+    public bool useTestUserId = false;  
     public string testUserId;
 
     [Header("Prefabs")]
@@ -41,15 +41,15 @@ public class AchievementsManager : MonoBehaviour
     [System.Serializable]
     public class BadgeIconEntry
     {
-        public string badgeId;   // e.g., "balcony_master"
-        public Sprite icon;      // local sprite
+        public string badgeId;   
+        public Sprite icon;      
     }
 
     [Header("Badge Icons (assign in Inspector)")]
     public List<BadgeIconEntry> badgeIcons;
 
     [Header("Localization")]
-    public string localizationTableName = "FullMuseum"; // Must match your String Table name
+    public string localizationTableName = "FullMuseum"; 
 
     private FirebaseFirestore db;
     private string odId;
@@ -80,7 +80,7 @@ public class AchievementsManager : MonoBehaviour
         }
         else
         {
-            Debug.Log($"✅ Loaded localization table '{localizationTableName}' with {localizedTable.Count} entries");
+            Debug.Log($" Loaded localization table '{localizationTableName}' with {localizedTable.Count} entries");
         }
 
         db = FirebaseFirestore.DefaultInstance;
@@ -104,7 +104,7 @@ public class AchievementsManager : MonoBehaviour
             odId = PlayerManager.Instance.userId;
         }
 
-        Debug.Log($"✅ Loading achievements for user: {odId}");
+        Debug.Log($" Loading achievements for user: {odId}");
 
         LoadBadges();
         LoadCards();
@@ -131,11 +131,11 @@ public class AchievementsManager : MonoBehaviour
             }
         }
         Debug.LogWarning($"Localization key '{key}' not found!");
-        return key; // Fallback to key
+        return key; 
     }
 
     /// <summary>
-    /// Get localized string with formatting (e.g., "Total cards: {0}")
+    /// Get localized string with formatting 
     /// </summary>
     private string GetLocalizedFormat(string key, params object[] args)
     {
@@ -179,12 +179,11 @@ public class AchievementsManager : MonoBehaviour
                     return;
                 }
 
-                Debug.Log($"✅ Found {task.Result.Count} badges for user {odId}");
+                Debug.Log($" Found {task.Result.Count} badges for user {odId}");
 
                 foreach (var doc in task.Result.Documents)
                 {
-                    // FIXED: If the document exists, the badge is unlocked
-                    // (removed the 'unlocked' field check that was failing)
+                    
 
                     string badgeId = doc.Id;
 
@@ -192,7 +191,7 @@ public class AchievementsManager : MonoBehaviour
                     string name = GetLocalizedString($"{badgeId}_name");
                     string description = GetLocalizedString($"{badgeId}_desc");
 
-                    Debug.Log($"📛 Loading badge: {badgeId} → {name}");
+                    Debug.Log($" Loading badge: {badgeId} → {name}");
 
                     // Spawn UI item
                     GameObject item = Instantiate(badgeUIPrefab, badgesContent);
@@ -232,14 +231,14 @@ public class AchievementsManager : MonoBehaviour
                   return;
               }
 
-              Debug.Log($"✅ Found {task.Result.Count} cards for user {odId}");
+              Debug.Log($" Found {task.Result.Count} cards for user {odId}");
 
               foreach (var doc in task.Result.Documents)
               {
                   string cardId = doc.Id;
-                  bool found = true; // If it exists in collection, it was found
+                  bool found = true; 
 
-                  // Try to get cardId from field, fallback to document ID
+                 
                   if (doc.ContainsField("cardId"))
                   {
                       cardId = doc.GetValue<string>("cardId");
@@ -260,8 +259,8 @@ public class AchievementsManager : MonoBehaviour
 
                   // Localized status text
                   string status = found
-                      ? GetLocalizedString("card_status_collected")    // "Collected ✓"
-                      : GetLocalizedString("card_status_not_found");   // "Not Found ✗"
+                      ? GetLocalizedString("card_status_collected")    
+                      : GetLocalizedString("card_status_not_found");  
 
                   item.transform.Find("Status").GetComponent<TMP_Text>().text = status;
               }
@@ -370,7 +369,7 @@ public class AchievementsManager : MonoBehaviour
                     int cardPoints = (int)(cardsCollected * 100);
                     int badgePoints = totalScore - cardPoints;
 
-                    // Localized breakdown: "Cards: +{0} | Badges: +{1}"
+                    
                     scoreBreakdownText.text = GetLocalizedFormat("ui_score_breakdown",
                         cardPoints.ToString("N0"),
                         badgePoints.ToString("N0"));
@@ -410,7 +409,6 @@ public class AchievementsManager : MonoBehaviour
                   string roomName = GetLocalizedString($"room_{roomId}_name");
                   if (roomName == $"room_{roomId}_name") roomName = roomId;
 
-                  // Localized format: "{0}: {1}s, visits: {2}"
                   summary += GetLocalizedFormat("ui_room_stats_line",
                       roomName,
                       timeSpent.ToString("F1"),

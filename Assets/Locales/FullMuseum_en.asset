@@ -16,8 +16,277 @@ MonoBehaviour:
     m_Code: en
   m_SharedData: {fileID: 11400000, guid: a4fc55730df6d414d9c34a16f3bbcc4e, type: 2}
   m_Metadata:
-    m_Items: []
+    m_Items:
+    - rid: 5969788933591269466
   m_TableData:
+  - m_Id: 259275819429888
+    m_Localized: Frozen Moments
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259510255857664
+    m_Localized: "These photographs capture Albanian life in the late 19th and early
+      20th centuries\u2014weddings in traditional dress, village gatherings, family
+      portraits. Before photography, such memories lived only in oral tradition,
+      subject to the distortions of time and retelling. These images are windows
+      into a world where every garment, gesture, and gathering carried deep cultural
+      meaning. The faces staring back at us are your ancestors, their formal poses
+      concealing vibrant personalities, their traditional costumes representing thousands
+      of hours of skilled handwork now mostly\_vanished."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259602136281088
+    m_Localized: Wedding as Theater
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259693827960832
+    m_Localized: "The wedding photographs reveal elaborate multi-day celebrations
+      that united not just two people, but two families and their broader communities.
+      Notice the intricate embroidery on the bride's costume\u2014months of work
+      by female relatives, each stitch a prayer for her future. The guests' formal
+      poses reflect the solemnity of the occasion. These weren't merely parties;
+      they were cultural performances where every detail\u2014from the dowry display
+      to the ritual dances\u2014reinforced social bonds and transmitted tradition
+      to the next generation. Weddings were living\_textbooks."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259885524430848
+    m_Localized: Community Memory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259999815020544
+    m_Localized: "Photos of village gatherings show the \xE7arshia (marketplace)
+      and public squares where men conducted business and discussed politics, while
+      women's gatherings happened in courtyards and homes. These images capture the
+      parallel social worlds of Ottoman Albanian life\u2014men in the public sphere,
+      women in the domestic\u2014yet both equally vital to community survival. The
+      traditional clothing, architecture, and body language in these photos tell
+      stories that words cannot. They remind us that before globalization homogenized
+      the world, every village had its distinct visual\_identity."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 260540431446016
+    m_Localized: The Family Sanctuary
+    m_Metadata:
+      m_Items: []
+  - m_Id: 260650561286144
+    m_Localized: "This modest room with its two mattresses and simple furnishings
+      was the private heart of family life. Unlike the guest room with its elaborate
+      decoration, the bedroom prioritized function and intimacy. The mattresses\u2014stuffed
+      with wool and covered in hand-woven textiles\u2014were rolled and stored in
+      the closet during the day, transforming the room into a multipurpose space.
+      At night, it became a sanctuary where parents told stories to children and
+      passed down oral traditions in whispered conversations\_by\_candlelight."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 260746392743936
+    m_Localized: 'The Hearth''s Warmth
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 260790382604288
+    m_Localized: "The chimney you see was essential for survival during Berat's cold
+      winters. Families would huddle around the mangal\u2014a metal brazier filled
+      with hot coals\u2014placed safely beneath the chimney hood. The rising smoke
+      carried not just warmth, but also the scent of burning wood and the comfort
+      of home. Winter evenings in this room meant the family gathered close, repairing
+      tools, telling stories, and maintaining the bonds that held households together
+      through harsh mountain\_winters."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 260914294927360
+    m_Localized: The Dowry Closet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261021471977472
+    m_Localized: "This wooden closet held far more than clothes\u2014it was the repository
+      of family heritage. A bride's dowry would be carefully stored here: hand-embroidered
+      linens, copper cookware, jewelry, and textiles that represented years of preparation.
+      The closet's contents told the story of a family's social standing and a woman's
+      industriousness. Mothers would open these doors with their daughters, teaching
+      them which items to treasure, which to use daily, and which to pass to the
+      next\_generation."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261510016118784
+    m_Localized: 'The Heart of the Home
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261636788957184
+    m_Localized: "This balcony, called a '\xE7ardak' in Albanian, was the social
+      center of traditional Berat homes. Families gathered here for meals, women
+      wove textiles, and honored guests were welcomed with coffee and raki. The wooden
+      railings allowed residents to observe street life below while maintaining privacy\u2014a
+      clever feature of Ottoman-era\_architecture."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261713188204544
+    m_Localized: 'Threads of Tradition
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261734897922048
+    m_Localized: "The carpets and rugs you see here were not mere decoration\u2014they
+      represented a family's wealth and a woman's skill. Berat was famous for its
+      textile crafts, with patterns passed down through generations. Each geometric
+      motif held meaning: diamonds symbolized protection, while birds represented
+      freedom and messengers\_between\_worlds."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261901822832640
+    m_Localized: 'Between Worlds
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261929446518784
+    m_Localized: "Notice how this balcony connects every room? Traditional Berat
+      homes were designed with the \xE7ardak as the axis\u2014symbolically linking
+      private family life with community obligations. From this very spot, you could
+      reach the kitchen, the guest room (oda e mikut), and the women's quarters.
+      The house itself was a miniature model of\_social\_harmony."
+    m_Metadata:
+      m_Items:
+      - rid: 5969788933591269466
+  - m_Id: 262525062852608
+    m_Localized: The Theater of Hospitality
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262642209763328
+    m_Localized: "This guest room, the most elaborately decorated space in the house,
+      was a stage for performing social status and cultural values. Every element\u2014from
+      the painted ceiling to the built-in divans\u2014announced to visitors that
+      they had entered a home of refinement and honor. In Ottoman Albanian culture,
+      hospitality was not merely kindness; it was a sacred duty. A family's reputation
+      rested on their treatment of guests, making this room far more than mere decoration\u2014it
+      was an investment in social\_survival."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262741925146624
+    m_Localized: The Mahfil's Secret
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262820434128896
+    m_Localized: "Notice the elevated platform\u2014the mahfil\u2014attached to the
+      wall? This architectural feature allowed women to observe guest receptions
+      while remaining separated by a decorative screen or curtain. Ottoman society
+      prescribed separate spheres for men and women in formal settings, yet the mahfil
+      reveals how architecture created spaces for women's presence and agency. From
+      this elevated position, the lady of the house could ensure proper hospitality
+      was extended while maintaining the appearance of seclusion expected\_by\_tradition."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262880530116608
+    m_Localized: Coffee, Raki, and Conversation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262985052172288
+    m_Localized: "The ritual of guest reception followed precise codes: Turkish coffee
+      was served in small cups on ornate trays, accompanied by sweets. For closer
+      friends, raki\u2014the anise-flavored spirit\u2014flowed freely. Conversations
+      in this room ranged from business negotiations to marriage arrangements to
+      political discussions. The decorative niches in the walls held precious objects\u2014copper
+      coffeepots, silver trays, fine glassware\u2014that were brought out only for
+      honored guests, transforming hospitality into an art form that bound communities\_together."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263369485299712
+    m_Localized: The Copper Treasury
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263473533399040
+    m_Localized: "The gleaming copper vessels displayed here were a family's pride
+      and a woman's tools of mastery. Each pot, pan, and kettle had a specific purpose
+      passed down through generations: the long-handled cezve for brewing coffee,
+      the wide tava for baking, the rounded kazan for cooking pilaf. Copper's excellent
+      heat distribution made it ideal for Albanian cuisine, while its beauty elevated
+      cooking from mere necessity to craft. These vessels were polished religiously,
+      their shine reflecting not just light but a family's\_self-respect."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263548162650112
+    m_Localized: Fire and Patience
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263592278339584
+    m_Localized: "The traditional hearth in this kitchen required constant attention
+      and skill. Women tended fires from dawn until evening, managing different zones
+      of heat for various cooking tasks. There were no thermometers or timers\u2014just
+      experience passed from mother to daughter about when coals glowed at the perfect
+      temperature for bread, when flames should leap for quick frying, when embers
+      should smolder for slow stews. The kitchen was a woman's laboratory where science
+      met tradition, and meals became expressions of love\_and\_expertise."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263740152721408
+    m_Localized: 'Preservation and Seasons
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263765717004288
+    m_Localized: "Notice the ceramic jars and wooden barrels? Before refrigeration,
+      families relied on ancient preservation methods. Summer's abundance\u2014peppers,
+      tomatoes, cucumbers\u2014was pickled in brine or vinegar to sustain the household
+      through winter. Fruit was dried in the sun, meats were cured with salt, cheese
+      was stored in oil. The kitchen was not just where meals were prepared, but
+      where families literally captured summer's bounty to survive mountain winters.
+      This room held the knowledge that separated survival from\_starvation."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263861116448768
+    m_Localized: 'The Loom''s Song
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 264192395161600
+    m_Localized: "The wooden loom standing before you was the economic engine of
+      many Berat households. Women spent countless hours at this machine, transforming
+      raw wool or cotton into fabric that clothed the family, furnished the home,
+      and could be sold for income. The rhythmic clack-clack-clack of the shuttle
+      passing through threads created a soundtrack to domestic life. Young girls
+      learned at their mothers' sides, their small hands gradually mastering the
+      coordination required to create tight, even weaves. The loom was both tool\_and\_teacher."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 264251396435968
+    m_Localized: 'Patterns of Identity
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 264307759493120
+    m_Localized: "The geometric patterns woven into Albanian textiles were far more
+      than decoration\u2014they were a visual language. Each region, even each family,
+      had distinctive motifs. A woman could identify a textile's origin by examining
+      its borders and central medallions. These patterns connected weavers to their
+      ancestors, as daughters recreated designs their great-grandmothers had invented.
+      In a world where few could read or write, these visual vocabularies preserved
+      cultural memory and announced identity. A rug was a signature, a declaration:
+      \"This\_is\_who\_we\_are.\""
+    m_Metadata:
+      m_Items: []
+  - m_Id: 264450390994944
+    m_Localized: 'The Economics of Thread
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 264558000058368
+    m_Localized: "his workshop represents women's economic power in a society that
+      restricted their public roles. The textiles produced here generated income
+      that women controlled, giving them influence over household decisions. A skilled
+      weaver could earn enough to contribute significantly to family expenses or
+      save for her daughter's dowry. The workshop was a space where women's labor
+      translated directly into economic value, challenging the notion that Ottoman
+      women were merely confined to domestic invisibility. Their hands held threads,
+      but also negotiating\_power."
+    m_Metadata:
+      m_Items: []
   - m_Id: 16720441344
     m_Localized: Cradle
     m_Metadata:
@@ -294,13 +563,13 @@ MonoBehaviour:
       coffee over hot coals or a small fire.
     m_Metadata:
       m_Items: []
+  - m_Id: 47261125816320
+    m_Localized: Weapons
+    m_Metadata:
+      m_Items: []
   - m_Id: 47298476093440
     m_Localized: The sword belongs to the late Middle Ages.The sword belongs to the
       late Middle Ages, the rifles belong to the period of democracy.
-    m_Metadata:
-      m_Items: []
-  - m_Id: 47261125816320
-    m_Localized: Weapons
     m_Metadata:
       m_Items: []
   - m_Id: 50541000241152
@@ -375,273 +644,6 @@ MonoBehaviour:
   - m_Id: 54808318685184
     m_Localized: "It belongs to the Renaissance period.\r\nAlso found in other rooms
       due to multipurpose household use.\r"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 259275819429888
-    m_Localized: Frozen Moments
-    m_Metadata:
-      m_Items: []
-  - m_Id: 259510255857664
-    m_Localized: "These photographs capture Albanian life in the late 19th and early
-      20th centuries\u2014weddings in traditional dress, village gatherings, family
-      portraits. Before photography, such memories lived only in oral tradition,
-      subject to the distortions of time and retelling. These images are windows
-      into a world where every garment, gesture, and gathering carried deep cultural
-      meaning. The faces staring back at us are your ancestors, their formal poses
-      concealing vibrant personalities, their traditional costumes representing thousands
-      of hours of skilled handwork now mostly\_vanished."
-    m_Metadata:
-      m_Items: []
-  - m_Id: 259602136281088
-    m_Localized: Wedding as Theater
-    m_Metadata:
-      m_Items: []
-  - m_Id: 259693827960832
-    m_Localized: "The wedding photographs reveal elaborate multi-day celebrations
-      that united not just two people, but two families and their broader communities.
-      Notice the intricate embroidery on the bride's costume\u2014months of work
-      by female relatives, each stitch a prayer for her future. The guests' formal
-      poses reflect the solemnity of the occasion. These weren't merely parties;
-      they were cultural performances where every detail\u2014from the dowry display
-      to the ritual dances\u2014reinforced social bonds and transmitted tradition
-      to the next generation. Weddings were living\_textbooks."
-    m_Metadata:
-      m_Items: []
-  - m_Id: 259885524430848
-    m_Localized: Community Memory
-    m_Metadata:
-      m_Items: []
-  - m_Id: 259999815020544
-    m_Localized: "Photos of village gatherings show the \xE7arshia (marketplace)
-      and public squares where men conducted business and discussed politics, while
-      women's gatherings happened in courtyards and homes. These images capture the
-      parallel social worlds of Ottoman Albanian life\u2014men in the public sphere,
-      women in the domestic\u2014yet both equally vital to community survival. The
-      traditional clothing, architecture, and body language in these photos tell
-      stories that words cannot. They remind us that before globalization homogenized
-      the world, every village had its distinct visual\_identity."
-    m_Metadata:
-      m_Items: []
-  - m_Id: 260540431446016
-    m_Localized: The Family Sanctuary
-    m_Metadata:
-      m_Items: []
-  - m_Id: 260650561286144
-    m_Localized: "This modest room with its two mattresses and simple furnishings
-      was the private heart of family life. Unlike the guest room with its elaborate
-      decoration, the bedroom prioritized function and intimacy. The mattresses\u2014stuffed
-      with wool and covered in hand-woven textiles\u2014were rolled and stored in
-      the closet during the day, transforming the room into a multipurpose space.
-      At night, it became a sanctuary where parents told stories to children and
-      passed down oral traditions in whispered conversations\_by\_candlelight."
-    m_Metadata:
-      m_Items: []
-  - m_Id: 260746392743936
-    m_Localized: 'The Hearth''s Warmth
-
-'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 260790382604288
-    m_Localized: "The chimney you see was essential for survival during Berat's cold
-      winters. Families would huddle around the mangal\u2014a metal brazier filled
-      with hot coals\u2014placed safely beneath the chimney hood. The rising smoke
-      carried not just warmth, but also the scent of burning wood and the comfort
-      of home. Winter evenings in this room meant the family gathered close, repairing
-      tools, telling stories, and maintaining the bonds that held households together
-      through harsh mountain\_winters."
-    m_Metadata:
-      m_Items: []
-  - m_Id: 260914294927360
-    m_Localized: The Dowry Closet
-    m_Metadata:
-      m_Items: []
-  - m_Id: 261021471977472
-    m_Localized: "This wooden closet held far more than clothes\u2014it was the repository
-      of family heritage. A bride's dowry would be carefully stored here: hand-embroidered
-      linens, copper cookware, jewelry, and textiles that represented years of preparation.
-      The closet's contents told the story of a family's social standing and a woman's
-      industriousness. Mothers would open these doors with their daughters, teaching
-      them which items to treasure, which to use daily, and which to pass to the
-      next\_generation."
-    m_Metadata:
-      m_Items: []
-  - m_Id: 261510016118784
-    m_Localized: 'The Heart of the Home
-
-'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 261636788957184
-    m_Localized: "This balcony, called a '\xE7ardak' in Albanian, was the social
-      center of traditional Berat homes. Families gathered here for meals, women
-      wove textiles, and honored guests were welcomed with coffee and raki. The wooden
-      railings allowed residents to observe street life below while maintaining privacy\u2014a
-      clever feature of Ottoman-era\_architecture."
-    m_Metadata:
-      m_Items: []
-  - m_Id: 261713188204544
-    m_Localized: 'Threads of Tradition
-
-'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 261734897922048
-    m_Localized: "The carpets and rugs you see here were not mere decoration\u2014they
-      represented a family's wealth and a woman's skill. Berat was famous for its
-      textile crafts, with patterns passed down through generations. Each geometric
-      motif held meaning: diamonds symbolized protection, while birds represented
-      freedom and messengers\_between\_worlds."
-    m_Metadata:
-      m_Items: []
-  - m_Id: 261901822832640
-    m_Localized: 'Between Worlds
-
-'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 261929446518784
-    m_Localized: "Notice how this balcony connects every room? Traditional Berat
-      homes were designed with the \xE7ardak as the axis\u2014symbolically linking
-      private family life with community obligations. From this very spot, you could
-      reach the kitchen, the guest room (oda e mikut), and the women's quarters.
-      The house itself was a miniature model of\_social\_harmony."
-    m_Metadata:
-      m_Items: []
-  - m_Id: 262525062852608
-    m_Localized: The Theater of Hospitality
-    m_Metadata:
-      m_Items: []
-  - m_Id: 262642209763328
-    m_Localized: "This guest room, the most elaborately decorated space in the house,
-      was a stage for performing social status and cultural values. Every element\u2014from
-      the painted ceiling to the built-in divans\u2014announced to visitors that
-      they had entered a home of refinement and honor. In Ottoman Albanian culture,
-      hospitality was not merely kindness; it was a sacred duty. A family's reputation
-      rested on their treatment of guests, making this room far more than mere decoration\u2014it
-      was an investment in social\_survival."
-    m_Metadata:
-      m_Items: []
-  - m_Id: 262741925146624
-    m_Localized: The Mahfil's Secret
-    m_Metadata:
-      m_Items: []
-  - m_Id: 262820434128896
-    m_Localized: "Notice the elevated platform\u2014the mahfil\u2014attached to the
-      wall? This architectural feature allowed women to observe guest receptions
-      while remaining separated by a decorative screen or curtain. Ottoman society
-      prescribed separate spheres for men and women in formal settings, yet the mahfil
-      reveals how architecture created spaces for women's presence and agency. From
-      this elevated position, the lady of the house could ensure proper hospitality
-      was extended while maintaining the appearance of seclusion expected\_by\_tradition."
-    m_Metadata:
-      m_Items: []
-  - m_Id: 262880530116608
-    m_Localized: Coffee, Raki, and Conversation
-    m_Metadata:
-      m_Items: []
-  - m_Id: 262985052172288
-    m_Localized: "The ritual of guest reception followed precise codes: Turkish coffee
-      was served in small cups on ornate trays, accompanied by sweets. For closer
-      friends, raki\u2014the anise-flavored spirit\u2014flowed freely. Conversations
-      in this room ranged from business negotiations to marriage arrangements to
-      political discussions. The decorative niches in the walls held precious objects\u2014copper
-      coffeepots, silver trays, fine glassware\u2014that were brought out only for
-      honored guests, transforming hospitality into an art form that bound communities\_together."
-    m_Metadata:
-      m_Items: []
-  - m_Id: 263369485299712
-    m_Localized: The Copper Treasury
-    m_Metadata:
-      m_Items: []
-  - m_Id: 263473533399040
-    m_Localized: "The gleaming copper vessels displayed here were a family's pride
-      and a woman's tools of mastery. Each pot, pan, and kettle had a specific purpose
-      passed down through generations: the long-handled cezve for brewing coffee,
-      the wide tava for baking, the rounded kazan for cooking pilaf. Copper's excellent
-      heat distribution made it ideal for Albanian cuisine, while its beauty elevated
-      cooking from mere necessity to craft. These vessels were polished religiously,
-      their shine reflecting not just light but a family's\_self-respect."
-    m_Metadata:
-      m_Items: []
-  - m_Id: 263548162650112
-    m_Localized: Fire and Patience
-    m_Metadata:
-      m_Items: []
-  - m_Id: 263592278339584
-    m_Localized: "The traditional hearth in this kitchen required constant attention
-      and skill. Women tended fires from dawn until evening, managing different zones
-      of heat for various cooking tasks. There were no thermometers or timers\u2014just
-      experience passed from mother to daughter about when coals glowed at the perfect
-      temperature for bread, when flames should leap for quick frying, when embers
-      should smolder for slow stews. The kitchen was a woman's laboratory where science
-      met tradition, and meals became expressions of love\_and\_expertise."
-    m_Metadata:
-      m_Items: []
-  - m_Id: 263740152721408
-    m_Localized: 'Preservation and Seasons
-
-'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 263765717004288
-    m_Localized: "Notice the ceramic jars and wooden barrels? Before refrigeration,
-      families relied on ancient preservation methods. Summer's abundance\u2014peppers,
-      tomatoes, cucumbers\u2014was pickled in brine or vinegar to sustain the household
-      through winter. Fruit was dried in the sun, meats were cured with salt, cheese
-      was stored in oil. The kitchen was not just where meals were prepared, but
-      where families literally captured summer's bounty to survive mountain winters.
-      This room held the knowledge that separated survival from\_starvation."
-    m_Metadata:
-      m_Items: []
-  - m_Id: 263861116448768
-    m_Localized: 'The Loom''s Song
-
-'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 264192395161600
-    m_Localized: "The wooden loom standing before you was the economic engine of
-      many Berat households. Women spent countless hours at this machine, transforming
-      raw wool or cotton into fabric that clothed the family, furnished the home,
-      and could be sold for income. The rhythmic clack-clack-clack of the shuttle
-      passing through threads created a soundtrack to domestic life. Young girls
-      learned at their mothers' sides, their small hands gradually mastering the
-      coordination required to create tight, even weaves. The loom was both tool\_and\_teacher."
-    m_Metadata:
-      m_Items: []
-  - m_Id: 264251396435968
-    m_Localized: 'Patterns of Identity
-
-'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 264307759493120
-    m_Localized: "The geometric patterns woven into Albanian textiles were far more
-      than decoration\u2014they were a visual language. Each region, even each family,
-      had distinctive motifs. A woman could identify a textile's origin by examining
-      its borders and central medallions. These patterns connected weavers to their
-      ancestors, as daughters recreated designs their great-grandmothers had invented.
-      In a world where few could read or write, these visual vocabularies preserved
-      cultural memory and announced identity. A rug was a signature, a declaration:
-      \"This\_is\_who\_we\_are.\""
-    m_Metadata:
-      m_Items: []
-  - m_Id: 264450390994944
-    m_Localized: 'The Economics of Thread
-
-'
-    m_Metadata:
-      m_Items: []
-  - m_Id: 264558000058368
-    m_Localized: "his workshop represents women's economic power in a society that
-      restricted their public roles. The textiles produced here generated income
-      that women controlled, giving them influence over household decisions. A skilled
-      weaver could earn enough to contribute significantly to family expenses or
-      save for her daughter's dowry. The workshop was a space where women's labor
-      translated directly into economic value, challenging the notion that Ottoman
-      women were merely confined to domestic invisibility. Their hands held threads,
-      but also negotiating\_power."
     m_Metadata:
       m_Items: []
   - m_Id: 274161106530304
@@ -782,4 +784,10 @@ MonoBehaviour:
       m_Items: []
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 5969788933591269466
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 
+        m_SharedEntries:
+        - id: 261929446518784

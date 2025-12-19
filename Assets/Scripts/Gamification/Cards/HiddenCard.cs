@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Localization; // ✅ ADD THIS
-using UnityEngine.Localization.Settings; // ✅ ADD THIS
+using UnityEngine.Localization; 
+using UnityEngine.Localization.Settings; 
 
 public class HiddenCard : MonoBehaviour
 {
@@ -14,10 +14,10 @@ public class HiddenCard : MonoBehaviour
 
     [Header("Localized Text")]
     [Tooltip("Localized title for this card")]
-    public LocalizedString cardTitle; // ✅ CHANGED from string to LocalizedString
+    public LocalizedString cardTitle; 
 
     [Tooltip("Localized description/story for this card")]
-    public LocalizedString cardDescription; // ✅ CHANGED from string to LocalizedString
+    public LocalizedString cardDescription; 
 
     [Header("Discovery Settings")]
     [Tooltip("How close must the player be to notice this card? (in meters)")]
@@ -216,7 +216,7 @@ public class HiddenCard : MonoBehaviour
     {
         isDiscovered = true;
 
-        // ✅ Get localized strings asynchronously
+        
         var titleOperation = cardTitle.GetLocalizedStringAsync();
         var descOperation = cardDescription.GetLocalizedStringAsync();
 

@@ -43,7 +43,7 @@ public class FirebaseInitializer : MonoBehaviour
         var dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
         if (dependencyStatus != DependencyStatus.Available)
         {
-            Debug.LogError($"❌ Could not resolve Firebase dependencies: {dependencyStatus}");
+            Debug.LogError($"Could not resolve Firebase dependencies: {dependencyStatus}");
             return;
         }
 
@@ -53,15 +53,15 @@ public class FirebaseInitializer : MonoBehaviour
         try
         {
             Firestore = FirebaseFirestore.DefaultInstance;
-            Debug.Log("✅ Firestore reference created.");
+            Debug.Log("Firestore reference created.");
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"❌ Failed to initialize Firestore: {e.Message}");
+            Debug.LogError($"Failed to initialize Firestore: {e.Message}");
         }
 
         IsReady = true;
-        Debug.Log("✅ Firebase fully initialized and ready!");
+        Debug.Log("Firebase fully initialized and ready!");
     }
 
     /// <summary>
@@ -78,6 +78,6 @@ public class FirebaseInitializer : MonoBehaviour
         }
 
         if (!IsReady)
-            Debug.LogWarning("⚠️ FirebaseInitializer.WaitUntilReady() timed out after 10 seconds.");
+            Debug.LogWarning("FirebaseInitializer.WaitUntilReady() timed out after 10 seconds.");
     }
 }

@@ -16,10 +16,10 @@ public class LoginUI : MonoBehaviour
     public GameObject questionsPanel;
 
     [Header("Login UI Elements")]
-    // CHANGED: Single input field for participant code
-    public TMP_InputField participantCodeInput;  // ← Was: emailInput + passwordInput
+    
+    public TMP_InputField participantCodeInput;  
     public Button loginButton;
-    // REMOVED: registerButton - not needed for anonymous auth
+   
     public TMP_Text messageText;
 
     [Header("Questions UI Elements")]
@@ -100,7 +100,7 @@ public class LoginUI : MonoBehaviour
 
             foreach (var toggle in toggles)
             {
-                Debug.Log($"   → {toggle.name} | isOn = {toggle.isOn} | group = {(toggle.group == null ? "❌ none" : toggle.group.name)}");
+                Debug.Log($"   → {toggle.name} | isOn = {toggle.isOn} | group = {(toggle.group == null ? " none" : toggle.group.name)}");
             }
         }
     }
@@ -305,7 +305,7 @@ public class LoginUI : MonoBehaviour
         catch (System.Exception ex)
         {
             Debug.LogWarning($"Failed to get localized string for key '{tableKey}': {ex.Message}");
-            messageText.text = tableKey; // Fallback to the key itself
+            messageText.text = tableKey; 
             messageText.color = color;
         }
     }

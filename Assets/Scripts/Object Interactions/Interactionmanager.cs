@@ -73,11 +73,11 @@ public class InteractionManager : MonoBehaviour
             {
                 buttonImage.color = normalColor;
             }
-            Debug.Log("✅ Button listener added!");
+            Debug.Log(" Button listener added!");
         }
         else
         {
-            Debug.LogError("❌ InteractionManager: No interact button assigned!");
+            Debug.LogError(" InteractionManager: No interact button assigned!");
         }
 
         // Setup layer mask if not set
@@ -155,7 +155,7 @@ public class InteractionManager : MonoBehaviour
     /// </summary>
     void OnInteractButtonPressed()
     {
-        Debug.Log("🔴 INTERACT BUTTON PRESSED!");
+        Debug.Log(" INTERACT BUTTON PRESSED!");
         TryInteract();
     }
 
@@ -166,17 +166,17 @@ public class InteractionManager : MonoBehaviour
     {
         if (currentObjectTarget != null)
         {
-            Debug.Log($"✅ Interacting with OBJECT: {currentObjectTarget.objectTitle}");
+            Debug.Log($" Interacting with OBJECT: {currentObjectTarget.objectTitle}");
             currentObjectTarget.TriggerExamination();
         }
         else if (currentCardTarget != null)
         {
-            Debug.Log($"✅ Interacting with CARD: {currentCardTarget.cardTitle}");
+            Debug.Log($" Interacting with CARD: {currentCardTarget.cardTitle}");
             currentCardTarget.TriggerCollection();
         }
         else
         {
-            Debug.Log("❌ Nothing to interact with");
+            Debug.Log(" Nothing to interact with");
         }
     }
 

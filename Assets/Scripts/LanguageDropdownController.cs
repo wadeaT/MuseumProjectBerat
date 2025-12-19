@@ -9,22 +9,22 @@ public class LanguageDropdownController : MonoBehaviour
 {
     [SerializeField] private TMP_Dropdown dropdown;
 
-    // We’ll allow language families, not only exact codes.
+    
     private readonly string[] allowedPrefixes = { "en", "sq" };
 
     private bool isInitializing;
 
-    private void Awake() // Changed from IEnumerator to void
+    private void Awake() 
     {
         if (dropdown == null)
             dropdown = GetComponent<TMP_Dropdown>();
 
-        // Optional: remove placeholder options in edit mode feel
+       
         dropdown.ClearOptions();
         dropdown.AddOptions(new List<string> { "Loading..." });
         dropdown.RefreshShownValue();
 
-        // Removed: yield return null; 
+       
     }
 
     private IEnumerator Start()
@@ -38,7 +38,7 @@ public class LanguageDropdownController : MonoBehaviour
         var filtered = new List<Locale>();
         foreach (var loc in locales)
         {
-            var code = loc.Identifier.Code; // e.g., "en", "en-US", "sq", "sq-AL"
+            var code = loc.Identifier.Code; 
             foreach (var prefix in allowedPrefixes)
             {
                 if (code.StartsWith(prefix))
@@ -49,7 +49,7 @@ public class LanguageDropdownController : MonoBehaviour
             }
         }
 
-        // If filtered ended up empty (shouldn’t), fallback to all
+        
         if (filtered.Count == 0)
             filtered = new List<Locale>(locales);
 

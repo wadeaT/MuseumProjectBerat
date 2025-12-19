@@ -3,8 +3,8 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using UnityEngine.InputSystem;
-using UnityEngine.Localization; // ✅ ADD THIS
-using UnityEngine.Localization.Settings; // ✅ ADD THIS
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings; 
 
 public class IntroPanel : MonoBehaviour
 {
@@ -27,10 +27,10 @@ public class IntroPanel : MonoBehaviour
 
     [Header("Localized Content")]
     [Tooltip("Localized welcome title")]
-    public LocalizedString welcomeTitle; // ✅ CHANGED from string to LocalizedString
+    public LocalizedString welcomeTitle; 
 
     [Tooltip("Localized welcome instructions")]
-    public LocalizedString welcomeInstructions; // ✅ CHANGED from string to LocalizedString
+    public LocalizedString welcomeInstructions; 
 
     private CanvasGroup canvasGroup;
     private bool isShowing = false;
@@ -57,7 +57,7 @@ public class IntroPanel : MonoBehaviour
         // Setup new input system actions
         SetupInputActions();
 
-        // ✅ Subscribe to locale change events
+        
         LocalizationSettings.SelectedLocaleChanged += OnLocaleChanged;
     }
 
@@ -96,20 +96,20 @@ public class IntroPanel : MonoBehaviour
             closeAction.Dispose();
         }
 
-        // ✅ Unsubscribe from locale change events
+        
         LocalizationSettings.SelectedLocaleChanged -= OnLocaleChanged;
     }
 
     void Start()
     {
-        // ✅ Load localized content
+       
         UpdateLocalizedContent();
 
         // Show intro on start
         ShowIntro();
     }
 
-    // ✅ NEW METHOD: Update all localized text
+   
     void UpdateLocalizedContent()
     {
         // Get localized title
@@ -139,7 +139,7 @@ public class IntroPanel : MonoBehaviour
         }
     }
 
-    // ✅ NEW METHOD: Handle language changes
+    
     private void OnLocaleChanged(UnityEngine.Localization.Locale locale)
     {
         // Update text when language changes

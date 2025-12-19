@@ -16,11 +16,11 @@ public class FirebaseManager : MonoBehaviour
 
     public FirebaseApp App { get; private set; }
     public FirebaseFirestore Firestore { get; private set; }
-    public FirebaseAuth Auth { get; private set; }  // Kept for compatibility
+    public FirebaseAuth Auth { get; private set; } 
 
     public bool IsReady { get; private set; } = false;
 
-    // Current participant code (used as document ID)
+    
     public string CurrentParticipantCode { get; private set; }
 
     private void Awake()
@@ -44,17 +44,17 @@ public class FirebaseManager : MonoBehaviour
         var status = await FirebaseApp.CheckAndFixDependenciesAsync();
         if (status != DependencyStatus.Available)
         {
-            Debug.LogError($"❌ [FirebaseManager] Firebase dependencies missing: {status}");
+            Debug.LogError($"[FirebaseManager] Firebase dependencies missing: {status}");
             return;
         }
 
         App = FirebaseApp.DefaultInstance;
         Firestore = FirebaseFirestore.DefaultInstance;
-        Auth = FirebaseAuth.DefaultInstance;  // Kept for compatibility
+        Auth = FirebaseAuth.DefaultInstance;  
 
-        // No Auth needed!
+        
         IsReady = true;
-        Debug.Log("✅ [FirebaseManager] Firebase initialized successfully!");
+        Debug.Log("[FirebaseManager] Firebase initialized successfully!");
     }
 
     // ------------------------------------------------------------------------
@@ -70,13 +70,13 @@ public class FirebaseManager : MonoBehaviour
     {
         if (!IsReady)
         {
-            Debug.LogWarning("⚠️ Firebase not ready yet.");
+            Debug.LogWarning("Firebase not ready yet.");
             return null;
         }
 
         if (string.IsNullOrWhiteSpace(participantCode))
         {
-            Debug.LogError("❌ [FirebaseManager] Participant code cannot be empty.");
+            Debug.LogError("[FirebaseManager] Participant code cannot be empty.");
             return null;
         }
 
@@ -96,14 +96,14 @@ public class FirebaseManager : MonoBehaviour
                 { "lastActive", FieldValue.ServerTimestamp }
             }, SetOptions.MergeAll);
 
-            Debug.Log($"✅ [FirebaseManager] Participant {participantCode} logged in!");
+            Debug.Log($"[FirebaseManager] Participant {participantCode} logged in!");
 
             // Return the participant code (this is now the "userId")
             return participantCode;
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"❌ [FirebaseManager] Login failed: {e.Message}");
+            Debug.LogError($"[FirebaseManager] Login failed: {e.Message}");
             return null;
         }
     }
@@ -122,7 +122,7 @@ public class FirebaseManager : MonoBehaviour
     {
         if (!IsReady || Firestore == null)
         {
-            Debug.LogError("❌ [FirebaseManager] Firestore not ready or null.");
+            Debug.LogError("[FirebaseManager] Firestore not ready or null.");
             return;
         }
 
@@ -144,11 +144,11 @@ public class FirebaseManager : MonoBehaviour
                 .Collection("demographics").Document("info");
 
             await doc.SetAsync(data, SetOptions.MergeAll);
-            Debug.Log($"✅ [FirebaseManager] Demographics saved for {odId}!");
+            Debug.Log($"[FirebaseManager] Demographics saved for {odId}!");
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"❌ [FirebaseManager] Failed to save demographics: {e.Message}");
+            Debug.LogError($"[FirebaseManager] Failed to save demographics: {e.Message}");
         }
     }
 
@@ -156,7 +156,7 @@ public class FirebaseManager : MonoBehaviour
     {
         if (!IsReady || Firestore == null)
         {
-            Debug.LogError("❌ [FirebaseManager] Firestore not ready.");
+            Debug.LogError("[FirebaseManager] Firestore not ready.");
             return;
         }
 
@@ -173,11 +173,11 @@ public class FirebaseManager : MonoBehaviour
                 { "unlockedAt", FieldValue.ServerTimestamp }
             }, SetOptions.MergeAll);
 
-            Debug.Log($"✅ [FirebaseManager] Badge '{badgeName}' saved for {odId}");
+            Debug.Log($"[FirebaseManager] Badge '{badgeName}' saved for {odId}");
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"❌ [FirebaseManager] Failed to save badge: {e.Message}");
+            Debug.LogError($"[FirebaseManager] Failed to save badge: {e.Message}");
         }
     }
 
@@ -185,7 +185,7 @@ public class FirebaseManager : MonoBehaviour
     {
         if (!IsReady || Firestore == null)
         {
-            Debug.LogError("❌ [FirebaseManager] Firestore not ready.");
+            Debug.LogError("[FirebaseManager] Firestore not ready.");
             return;
         }
 
@@ -211,11 +211,11 @@ public class FirebaseManager : MonoBehaviour
                 { "lastCardTimestamp", FieldValue.ServerTimestamp }
             }, SetOptions.MergeAll);
 
-            Debug.Log($"✅ [FirebaseManager] Card '{cardId}' saved for {odId}");
+            Debug.Log($"[FirebaseManager] Card '{cardId}' saved for {odId}");
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"❌ [FirebaseManager] Failed to save card: {e.Message}");
+            Debug.LogError($"[FirebaseManager] Failed to save card: {e.Message}");
         }
     }
 
@@ -223,7 +223,7 @@ public class FirebaseManager : MonoBehaviour
     {
         if (!IsReady || Firestore == null)
         {
-            Debug.LogError("❌ [FirebaseManager] Firestore not ready.");
+            Debug.LogError("[FirebaseManager] Firestore not ready.");
             return new List<string>();
         }
 
@@ -238,12 +238,12 @@ public class FirebaseManager : MonoBehaviour
                 badgeList.Add(doc.Id);
             }
 
-            Debug.Log($"✅ [FirebaseManager] Loaded {badgeList.Count} badges for {odId}");
+            Debug.Log($"[FirebaseManager] Loaded {badgeList.Count} badges for {odId}");
             return badgeList;
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"❌ [FirebaseManager] Failed to load badges: {e.Message}");
+            Debug.LogError($"[FirebaseManager] Failed to load badges: {e.Message}");
             return new List<string>();
         }
     }
@@ -252,7 +252,7 @@ public class FirebaseManager : MonoBehaviour
     {
         if (!IsReady || Firestore == null)
         {
-            Debug.LogError("❌ [FirebaseManager] Firestore not ready.");
+            Debug.LogError("[FirebaseManager] Firestore not ready.");
             return 0;
         }
 
@@ -261,12 +261,12 @@ public class FirebaseManager : MonoBehaviour
             var cardsSnapshot = await Firestore.Collection("users").Document(odId)
                 .Collection("cards").GetSnapshotAsync();
 
-            Debug.Log($"✅ [FirebaseManager] Loaded {cardsSnapshot.Count} cards for {odId}");
+            Debug.Log($"[FirebaseManager] Loaded {cardsSnapshot.Count} cards for {odId}");
             return cardsSnapshot.Count;
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"❌ [FirebaseManager] Failed to load cards: {e.Message}");
+            Debug.LogError($"[FirebaseManager] Failed to load cards: {e.Message}");
             return 0;
         }
     }
@@ -286,11 +286,11 @@ public class FirebaseManager : MonoBehaviour
                 { "visitCount", FieldValue.Increment(1) }
             }, SetOptions.MergeAll);
 
-            Debug.Log($"✅ [FirebaseManager] Room '{roomId}' updated for {odId}");
+            Debug.Log($"[FirebaseManager] Room '{roomId}' updated for {odId}");
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"❌ [FirebaseManager] Failed to save room time: {e.Message}");
+            Debug.LogError($"[FirebaseManager] Failed to save room time: {e.Message}");
         }
     }
 
@@ -298,7 +298,7 @@ public class FirebaseManager : MonoBehaviour
     {
         if (!IsReady || Firestore == null)
         {
-            Debug.LogError("❌ Firestore not ready.");
+            Debug.LogError("Firestore not ready.");
             return;
         }
 
@@ -313,11 +313,11 @@ public class FirebaseManager : MonoBehaviour
                 { "lastScoreUpdate", FieldValue.ServerTimestamp }
             }, SetOptions.MergeAll);
 
-            Debug.Log($"✅ Score {totalScore} saved for {odId}");
+            Debug.Log($"Score {totalScore} saved for {odId}");
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"❌ Failed to save user score: {e.Message}");
+            Debug.LogError($"Failed to save user score: {e.Message}");
         }
     }
 
@@ -330,7 +330,7 @@ public class FirebaseManager : MonoBehaviour
     {
         if (!IsReady || Firestore == null)
         {
-            Debug.LogError("❌ [FirebaseManager] Firestore not ready.");
+            Debug.LogError("[FirebaseManager] Firestore not ready.");
             return;
         }
 
@@ -361,11 +361,11 @@ public class FirebaseManager : MonoBehaviour
                 { "lastInteraction", FieldValue.ServerTimestamp }
             }, SetOptions.MergeAll);
 
-            Debug.Log($"✅ [FirebaseManager] Object '{objectName}' saved for {odId}");
+            Debug.Log($"[FirebaseManager] Object '{objectName}' saved for {odId}");
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"❌ [FirebaseManager] Failed to save object interaction: {e.Message}");
+            Debug.LogError($"[FirebaseManager] Failed to save object interaction: {e.Message}");
         }
     }
 
@@ -373,7 +373,7 @@ public class FirebaseManager : MonoBehaviour
     {
         if (!IsReady || Firestore == null)
         {
-            Debug.LogError("❌ Firestore not ready.");
+            Debug.LogError("Firestore not ready.");
             return false;
         }
 
@@ -390,7 +390,7 @@ public class FirebaseManager : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"❌ Error checking demographics for {odId}: {e.Message}");
+            Debug.LogError($"Error checking demographics for {odId}: {e.Message}");
             return false;
         }
     }

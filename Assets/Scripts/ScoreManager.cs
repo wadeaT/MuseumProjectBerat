@@ -26,7 +26,7 @@ public class ScoreManager : MonoBehaviour
 
     [Header("UI References")]
     public TextMeshProUGUI scoreText;
-    public GameObject scorePopupPrefab; // Optional: floating "+100" popup
+    public GameObject scorePopupPrefab; 
 
     [Header("Visual Feedback")]
     public AudioClip pointsEarnedSound;
@@ -71,7 +71,7 @@ public class ScoreManager : MonoBehaviour
     {
         currentScore += points;
 
-        Debug.Log($"💰 +{points} points! {reason} | Total: {currentScore}");
+        Debug.Log($" +{points} points! {reason} | Total: {currentScore}");
 
         // Visual feedback
         UpdateScoreUI();
@@ -152,7 +152,7 @@ public class ScoreManager : MonoBehaviour
 
         if (bonusPoints > 0)
         {
-            AddPoints(bonusPoints, $"🏆 {badgeName} Badge!", true);
+            AddPoints(bonusPoints, $" {badgeName} Badge!", true);
         }
     }
 
@@ -232,14 +232,14 @@ public class ScoreManager : MonoBehaviour
     {
         if (FirebaseManager.Instance == null || !FirebaseManager.Instance.IsReady)
         {
-            Debug.LogWarning("⚠️ FirebaseManager not ready, score not saved to cloud");
+            Debug.LogWarning(" FirebaseManager not ready, score not saved to cloud");
             return;
         }
 
-        // FIXED: Use PlayerManager.userId instead of Auth.CurrentUser
+        
         if (PlayerManager.Instance == null || string.IsNullOrEmpty(PlayerManager.Instance.userId))
         {
-            Debug.LogWarning("⚠️ User not logged in, score not saved to Firebase");
+            Debug.LogWarning(" User not logged in, score not saved to Firebase");
             return;
         }
 
@@ -251,7 +251,7 @@ public class ScoreManager : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"❌ Error saving score to Firebase: {e.Message}");
+            Debug.LogError($" Error saving score to Firebase: {e.Message}");
         }
     }
 }

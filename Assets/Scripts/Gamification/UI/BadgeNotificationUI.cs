@@ -20,8 +20,8 @@ public class BadgeNotificationUI : MonoBehaviour
     [System.Serializable]
     public class BadgeIconEntry
     {
-        public string badgeId;   // e.g., "balcony_master"
-        public Sprite icon;      // local sprite
+        public string badgeId;   
+        public Sprite icon;      
     }
 
     [Header("Badge Icons (assign in Inspector)")]
@@ -39,10 +39,10 @@ public class BadgeNotificationUI : MonoBehaviour
     private RectTransform panelRect;
     private bool isShowing = false;
 
-    // ✅ NEW: Queue for multiple badges
+    
     private Queue<BadgeData> badgeQueue = new Queue<BadgeData>();
 
-    // ✅ NEW: Store badge data
+    
     private class BadgeData
     {
         public string badgeId;
@@ -95,7 +95,7 @@ public class BadgeNotificationUI : MonoBehaviour
             if (entry.badgeId == badgeId)
                 return entry.icon;
         }
-        return null; // fallback if missing
+        return null; 
     }
 
     /// <summary>
@@ -104,10 +104,10 @@ public class BadgeNotificationUI : MonoBehaviour
     /// </summary>
     public void ShowBadge(string badgeId, string badgeName, string description)
     {
-        // ✅ NEW: Add to queue with badgeId
+       
         badgeQueue.Enqueue(new BadgeData(badgeId, badgeName, description));
 
-        // If not currently showing, start processing queue
+        
         if (!isShowing)
         {
             StartCoroutine(ProcessBadgeQueue());
@@ -133,7 +133,7 @@ public class BadgeNotificationUI : MonoBehaviour
     {
         isShowing = true;
 
-        // ✅ NEW: Get the badge icon sprite based on badgeId
+        
         Sprite iconSprite = GetBadgeIcon(badgeId);
 
         // Set icon image

@@ -2,7 +2,7 @@
 using TMPro;
 using System.Collections;
 using UnityEngine.UI;
-using UnityEngine.InputSystem; // ✅ NEW INPUT SYSTEM
+using UnityEngine.InputSystem; 
 
 public class CardDiscoveryUI : MonoBehaviour
 {
@@ -193,7 +193,6 @@ public class CardDiscoveryUI : MonoBehaviour
 
     void Update()
     {
-        // ✅ FIXED: New Input System - allow closing with keyboard after a short delay
         if (isShowing && Time.unscaledTime > showStartTime + 0.5f)
         {
             if (Keyboard.current != null &&

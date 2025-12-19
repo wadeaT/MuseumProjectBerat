@@ -7,7 +7,7 @@ public class PlayerManager : MonoBehaviour
     public static PlayerManager Instance { get; private set; }
 
     [Header("Player Data")]
-    public string userId;              // This IS the participant code (e.g., "P001")
+    public string userId;              
     public string age;
     public string nationality;
     public List<string> badges = new List<string>();
@@ -167,6 +167,6 @@ public class PlayerManager : MonoBehaviour
         roomTimes.Clear();
         cardsFound.Clear();
         totalCardsCollected = 0;
-        Debug.Log("🧹 Player data cleared.");
+        Debug.Log(" Player data cleared.");
     }
 }

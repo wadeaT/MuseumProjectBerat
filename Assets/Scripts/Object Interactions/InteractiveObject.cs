@@ -19,9 +19,7 @@ public class InteractiveObject : MonoBehaviour
     public LocalizedString objectDescription;
 
 
-    //[Tooltip("Description of this object and its historical significance")]
-    //[TextArea(4, 10)]
-    //public string objectDescription = "This artifact tells a story of Ottoman-era life in Berat. Fill in the description here.";
+
 
     [Tooltip("Optional image of this object")]
     public Sprite objectImage;
@@ -36,7 +34,7 @@ public class InteractiveObject : MonoBehaviour
     [Tooltip("Key to press to examine the object")]
     public KeyCode interactionKey = KeyCode.E;
 
-    // ✅ REMOVED: useMobileControls - now handled by InteractionManager button
+    
 
     [Tooltip("Auto-examine after looking for this many seconds (0 = disabled)")]
     [Range(0f, 3f)]
@@ -44,10 +42,10 @@ public class InteractiveObject : MonoBehaviour
 
     [Header("Visual Feedback")]
     [Tooltip("Color when player is too far away")]
-    public Color idleColor = new Color(1f, 1f, 1f, 1f); // White
+    public Color idleColor = new Color(1f, 1f, 1f, 1f); 
 
     [Tooltip("Color when player can interact")]
-    public Color highlightColor = new Color(1f, 0.9f, 0.6f, 1f); // Warm glow
+    public Color highlightColor = new Color(1f, 0.9f, 0.6f, 1f); 
 
     [Tooltip("How bright should the highlight glow be?")]
     [Range(0f, 2f)]
@@ -78,7 +76,7 @@ public class InteractiveObject : MonoBehaviour
     private int totalInteractions = 0;
     private float totalTimeSpent = 0f;
     private bool currentlyExamining = false;
-    private float lookTimer = 0f; // For auto-examine feature
+    private float lookTimer = 0f; 
 
     void Start()
     {
@@ -184,8 +182,7 @@ public class InteractiveObject : MonoBehaviour
                     }
                 }
 
-                // ✅ E key still works for PC/Editor testing
-                // Touch/mobile is handled by InteractionManager button
+                
             }
             else
             {
@@ -244,7 +241,7 @@ public class InteractiveObject : MonoBehaviour
     /// </summary>
     void HighlightObject(bool highlight)
     {
-        if (isHighlighted == highlight) return; // Already in this state
+        if (isHighlighted == highlight) return; 
 
         isHighlighted = highlight;
 
@@ -271,9 +268,7 @@ public class InteractiveObject : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// ✅ PUBLIC METHOD - Called by InteractionManager when button is pressed
-    /// </summary>
+
     public void TriggerExamination()
     {
         ExamineObjectAsync();
@@ -292,7 +287,7 @@ public class InteractiveObject : MonoBehaviour
             audioSource.PlayOneShot(examinationSound);
         }
 
-        // ✅ Start tracking AND wait for panel close
+        //  Start tracking AND wait for panel close
         if (trackInteractionTime && !currentlyExamining)
         {
             StartInteractionTracking();
@@ -395,12 +390,12 @@ public class InteractiveObject : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("⚠ No user logged in - interaction not saved to Firebase");
+                Debug.LogWarning(" No user logged in - interaction not saved to Firebase");
             }
         }
         else
         {
-            Debug.LogWarning("⚠ FirebaseManager not ready - interaction only logged locally");
+            Debug.LogWarning(" FirebaseManager not ready - interaction only logged locally");
         }
     }
 
