@@ -4756,7 +4756,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 66.2
+  m_fontSize: 61.7
   m_fontSizeBase: 47.8
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4878,7 +4878,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerManager
   userId: 
-  participantCode: 
   age: 
   nationality: 
   badges: []
@@ -5610,7 +5609,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 37.2
+  m_fontSize: 38.3
   m_fontSizeBase: 19.5
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5787,7 +5786,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 56.1
+  m_fontSize: 52.25
   m_fontSizeBase: 26.6
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -8891,7 +8890,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1219623873}
-  - component: {fileID: 1219623872}
   - component: {fileID: 1219623871}
   m_Layer: 0
   m_Name: FirebaseManager
@@ -8912,18 +8910,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ff7dc5b29393c547a1e9bbfdb6f5b00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FirebaseManager
---- !u!114 &1219623872
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1219623870}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24097b31de581864bbc3ee2f5f150161, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FirebaseInitializer
 --- !u!4 &1219623873
 Transform:
   m_ObjectHideFlags: 0
@@ -10432,7 +10418,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45.8
+  m_fontSize: 49.25
   m_fontSizeBase: 17.5
   m_fontWeight: 400
   m_enableAutoSizing: 1

@@ -1,27 +1,37 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using Firebase;
-using Firebase.Auth;
-using Firebase.Firestore;
 
 /// <summary>
-/// Simplified FirebaseManager for research studies.
-/// Uses participant code (e.g., "P001") directly as document ID.
-/// No authentication needed - just Firestore.
+/// FirebaseManager for WebGL builds.
+/// Uses JavaScript bridge for all Firebase operations.
+/// FIXED: Replaced async/await with coroutine-based callbacks for WebGL compatibility.
 /// </summary>
 public class FirebaseManager : MonoBehaviour
 {
     public static FirebaseManager Instance { get; private set; }
 
-    public FirebaseApp App { get; private set; }
-    public FirebaseFirestore Firestore { get; private set; }
-    public FirebaseAuth Auth { get; private set; } 
-
     public bool IsReady { get; private set; } = false;
-
-    
     public string CurrentParticipantCode { get; private set; }
+
+    // Callback delegates for async operations
+    private Action<string> _loginSuccessCallback;
+    private Action<string> _loginErrorCallback;
+    private Action<bool> _demographicsCallback;
+    private Action<bool> _badgeCallback;
+    private Action<bool> _cardCallback;
+    private Action<List<string>> _loadBadgesCallback;
+    private Action<int> _loadCardsCallback;
+    private Action<bool> _roomStatsCallback;
+    private Action<bool> _scoreCallback;
+    private Action<bool> _interactionCallback;
+    private Action<bool> _statsCallback;
+    private Action<bool> _checkDemographicsCallback;
+    private Action<List<BadgeDocumentData>> _loadBadgesWithDataCallback;
+    private Action<List<CardDocumentData>> _loadCardsWithDataCallback;
+    private Action<ProgressSummaryData> _loadProgressSummaryCallback;
+    private Action<List<RoomStatsDocumentData>> _loadRoomStatsCallback;
 
     private void Awake()
     {
@@ -29,7 +39,7 @@ public class FirebaseManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            InitializeFirebase();
+            Debug.Log("[FirebaseManager] WebGL build - waiting for Firebase initialization from JavaScript");
         }
         else
         {
@@ -37,361 +47,997 @@ public class FirebaseManager : MonoBehaviour
         }
     }
 
-    private async void InitializeFirebase()
+    /// <summary>
+    /// Called from JavaScript when Firebase is initialized and ready
+    /// </summary>
+    public void OnFirebaseReady()
     {
-        Debug.Log("[FirebaseManager] Checking dependencies...");
-
-        var status = await FirebaseApp.CheckAndFixDependenciesAsync();
-        if (status != DependencyStatus.Available)
-        {
-            Debug.LogError($"[FirebaseManager] Firebase dependencies missing: {status}");
-            return;
-        }
-
-        App = FirebaseApp.DefaultInstance;
-        Firestore = FirebaseFirestore.DefaultInstance;
-        Auth = FirebaseAuth.DefaultInstance;  
-
-        
         IsReady = true;
-        Debug.Log("[FirebaseManager] Firebase initialized successfully!");
+        Debug.Log("[FirebaseManager] Firebase ready (WebGL)");
     }
 
     // ------------------------------------------------------------------------
-    // PARTICIPANT LOGIN (No auth - just set the code)
+    // PARTICIPANT LOGIN - Coroutine-based approach
     // ------------------------------------------------------------------------
 
     /// <summary>
-    /// "Logs in" a participant by setting their code.
-    /// Creates their user document in Firestore.
-    /// The code becomes the document ID (e.g., users/P001)
+    /// Login with participant code using coroutine callback pattern
     /// </summary>
-    public async Task<string> LoginWithParticipantCodeAsync(string participantCode)
+    public void LoginWithParticipantCode(string participantCode, Action<string> onSuccess, Action<string> onError)
     {
         if (!IsReady)
         {
-            Debug.LogWarning("Firebase not ready yet.");
-            return null;
+            Debug.LogWarning("[FirebaseManager] Firebase not ready yet.");
+            onError?.Invoke("Firebase not ready");
+            return;
         }
 
         if (string.IsNullOrWhiteSpace(participantCode))
         {
             Debug.LogError("[FirebaseManager] Participant code cannot be empty.");
-            return null;
+            onError?.Invoke("Participant code cannot be empty");
+            return;
         }
 
-        // Clean up the code (trim whitespace, uppercase)
         participantCode = participantCode.Trim().ToUpper();
         CurrentParticipantCode = participantCode;
 
-        try
+        var data = JsonUtility.ToJson(new UserData
         {
-            // Create user document with participant code as the ID
-            var userDocRef = Firestore.Collection("users").Document(participantCode);
+            participantCode = participantCode,
+            lastActive = "SERVER_TIMESTAMP"
+        });
 
-            await userDocRef.SetAsync(new Dictionary<string, object>
-            {
-                { "participantCode", participantCode },
-                { "createdAt", FieldValue.ServerTimestamp },
-                { "lastActive", FieldValue.ServerTimestamp }
-            }, SetOptions.MergeAll);
+        _loginSuccessCallback = onSuccess;
+        _loginErrorCallback = onError;
 
-            Debug.Log($"[FirebaseManager] Participant {participantCode} logged in!");
+        FirebaseBridge.SetDocument("users", participantCode, data,
+            gameObject.name, "OnLoginSuccess", "OnLoginError");
+    }
 
-            // Return the participant code (this is now the "userId")
-            return participantCode;
-        }
-        catch (System.Exception e)
+    /// <summary>
+    /// Async wrapper for backward compatibility - use sparingly in WebGL
+    /// </summary>
+    public IEnumerator LoginWithParticipantCodeCoroutine(string participantCode, Action<string> callback)
+    {
+        bool completed = false;
+        string result = null;
+
+        LoginWithParticipantCode(participantCode,
+            (userId) => { result = userId; completed = true; },
+            (error) => { result = null; completed = true; }
+        );
+
+        while (!completed)
         {
-            Debug.LogError($"[FirebaseManager] Login failed: {e.Message}");
-            return null;
+            yield return null;
         }
+
+        callback?.Invoke(result);
+    }
+
+    public void OnLoginSuccess(string resultMsg)
+    {
+        Debug.Log($"[FirebaseManager] Participant {CurrentParticipantCode} logged in!");
+        _loginSuccessCallback?.Invoke(CurrentParticipantCode);
+        _loginSuccessCallback = null;
+        _loginErrorCallback = null;
+    }
+
+    public void OnLoginError(string error)
+    {
+        Debug.LogError($"[FirebaseManager] Login failed: {error}");
+        _loginErrorCallback?.Invoke(error);
+        _loginSuccessCallback = null;
+        _loginErrorCallback = null;
     }
 
     // ------------------------------------------------------------------------
-    // FIRESTORE WRITES (using participant code as document ID)
+    // SAVE DEMOGRAPHICS
     // ------------------------------------------------------------------------
 
-    public async Task SaveDemographicsAsync(
-        string odId,  // This is now the participant code (e.g., "P001")
-        string age,
-        string gender,
-        string nationality,
-        string computerSkills,
-        string vrInterest)
+    public void SaveDemographics(string odId, string age, string gender, string nationality,
+        string computerSkills, string vrInterest, Action<bool> callback = null)
     {
-        if (!IsReady || Firestore == null)
+        if (!IsReady)
         {
-            Debug.LogError("[FirebaseManager] Firestore not ready or null.");
+            Debug.LogError("[FirebaseManager] Firestore not ready.");
+            callback?.Invoke(false);
             return;
         }
 
         Debug.Log($"[FirebaseManager] Saving demographics for {odId}...");
 
-        try
+        var data = JsonUtility.ToJson(new DemographicsData
         {
-            var data = new Dictionary<string, object>
-            {
-                { "age", age },
-                { "gender", gender },
-                { "nationality", nationality },
-                { "computerSkills", computerSkills },
-                { "vrInterest", vrInterest },
-                { "timestamp", FieldValue.ServerTimestamp }
-            };
+            age = age,
+            gender = gender,
+            nationality = nationality,
+            computerSkills = computerSkills,
+            vrInterest = vrInterest
+        });
 
-            var doc = Firestore.Collection("users").Document(odId)
-                .Collection("demographics").Document("info");
+        _demographicsCallback = callback;
 
-            await doc.SetAsync(data, SetOptions.MergeAll);
-            Debug.Log($"[FirebaseManager] Demographics saved for {odId}!");
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError($"[FirebaseManager] Failed to save demographics: {e.Message}");
-        }
+        FirebaseBridge.SetDocumentInSubcollection(
+            $"users/{odId}/demographics",
+            "info",
+            data,
+            gameObject.name,
+            "OnDemographicsSaved",
+            "OnDemographicsError"
+        );
     }
 
-    public async Task SaveBadgeAsync(string odId, string badgeId, string badgeName, string description)
+    public IEnumerator SaveDemographicsCoroutine(string odId, string age, string gender,
+        string nationality, string computerSkills, string vrInterest, Action<bool> callback)
     {
-        if (!IsReady || Firestore == null)
+        bool completed = false;
+        bool success = false;
+
+        SaveDemographics(odId, age, gender, nationality, computerSkills, vrInterest,
+            (result) => { success = result; completed = true; });
+
+        while (!completed)
+        {
+            yield return null;
+        }
+
+        callback?.Invoke(success);
+    }
+
+    public void OnDemographicsSaved(string result)
+    {
+        Debug.Log("[FirebaseManager] Demographics saved!");
+        _demographicsCallback?.Invoke(true);
+        _demographicsCallback = null;
+    }
+
+    public void OnDemographicsError(string error)
+    {
+        Debug.LogError($"[FirebaseManager] Failed to save demographics: {error}");
+        _demographicsCallback?.Invoke(false);
+        _demographicsCallback = null;
+    }
+
+    // ------------------------------------------------------------------------
+    // SAVE BADGE
+    // ------------------------------------------------------------------------
+
+    public void SaveBadge(string odId, string badgeId, string badgeName, string description, Action<bool> callback = null)
+    {
+        if (!IsReady)
         {
             Debug.LogError("[FirebaseManager] Firestore not ready.");
+            callback?.Invoke(false);
             return;
         }
 
-        try
+        var data = JsonUtility.ToJson(new BadgeData
         {
-            var badgeDoc = Firestore.Collection("users").Document(odId)
-                .Collection("badges").Document(badgeId);
+            badgeId = badgeId,
+            badgeName = badgeName,
+            description = description
+        });
 
-            await badgeDoc.SetAsync(new Dictionary<string, object>
-            {
-                { "badgeId", badgeId },
-                { "badgeName", badgeName },
-                { "description", description },
-                { "unlockedAt", FieldValue.ServerTimestamp }
-            }, SetOptions.MergeAll);
+        _badgeCallback = callback;
 
-            Debug.Log($"[FirebaseManager] Badge '{badgeName}' saved for {odId}");
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError($"[FirebaseManager] Failed to save badge: {e.Message}");
-        }
+        FirebaseBridge.SetDocumentInSubcollection(
+            $"users/{odId}/badges",
+            badgeId,
+            data,
+            gameObject.name,
+            "OnBadgeSaved",
+            "OnBadgeError"
+        );
     }
 
-    public async Task SaveCardCollectedAsync(string odId, string cardId, int totalCardsCollected)
+    public void OnBadgeSaved(string result)
     {
-        if (!IsReady || Firestore == null)
+        Debug.Log("[FirebaseManager] Badge saved!");
+        _badgeCallback?.Invoke(true);
+        _badgeCallback = null;
+    }
+
+    public void OnBadgeError(string error)
+    {
+        Debug.LogError($"[FirebaseManager] Badge error: {error}");
+        _badgeCallback?.Invoke(false);
+        _badgeCallback = null;
+    }
+
+    // ------------------------------------------------------------------------
+    // SAVE CARD
+    // ------------------------------------------------------------------------
+
+    public void SaveCardCollected(string odId, string cardId, int totalCardsCollected, Action<bool> callback = null)
+    {
+        if (!IsReady)
         {
             Debug.LogError("[FirebaseManager] Firestore not ready.");
+            callback?.Invoke(false);
             return;
         }
 
-        try
+        _cardCallback = callback;
+
+        // Save the card document
+        var cardData = JsonUtility.ToJson(new CardData
         {
-            var cardDoc = Firestore.Collection("users").Document(odId)
-                .Collection("cards").Document(cardId);
+            cardId = cardId,
+            found = true
+        });
 
-            await cardDoc.SetAsync(new Dictionary<string, object>
-            {
-                { "cardId", cardId },
-                { "found", true },
-                { "timestamp", FieldValue.ServerTimestamp }
-            }, SetOptions.MergeAll);
+        FirebaseBridge.SetDocumentInSubcollection(
+            $"users/{odId}/cards",
+            cardId,
+            cardData,
+            gameObject.name,
+            "OnCardSavedStep1",
+            "OnCardError"
+        );
 
-            var progressDoc = Firestore.Collection("users").Document(odId)
-                .Collection("progress").Document("summary");
-
-            await progressDoc.SetAsync(new Dictionary<string, object>
-            {
-                { "totalCardsCollected", totalCardsCollected },
-                { "lastCardFound", cardId },
-                { "lastCardTimestamp", FieldValue.ServerTimestamp }
-            }, SetOptions.MergeAll);
-
-            Debug.Log($"[FirebaseManager] Card '{cardId}' saved for {odId}");
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError($"[FirebaseManager] Failed to save card: {e.Message}");
-        }
+        // Store data for step 2
+        _pendingCardOdId = odId;
+        _pendingTotalCards = totalCardsCollected;
+        _pendingCardId = cardId;
     }
 
-    public async Task<List<string>> LoadUserBadgesAsync(string odId)
+    private string _pendingCardOdId;
+    private int _pendingTotalCards;
+    private string _pendingCardId;
+
+    public void OnCardSavedStep1(string result)
     {
-        if (!IsReady || Firestore == null)
+        // Now save progress summary
+        var progressData = JsonUtility.ToJson(new ProgressData
+        {
+            totalCardsCollected = _pendingTotalCards,
+            lastCardFound = _pendingCardId
+        });
+
+        FirebaseBridge.SetDocumentInSubcollection(
+            $"users/{_pendingCardOdId}/progress",
+            "summary",
+            progressData,
+            gameObject.name,
+            "OnCardSaved",
+            "OnCardError"
+        );
+    }
+
+    public void OnCardSaved(string result)
+    {
+        Debug.Log($"[FirebaseManager] Card '{_pendingCardId}' saved for {_pendingCardOdId}");
+        _cardCallback?.Invoke(true);
+        _cardCallback = null;
+    }
+
+    public void OnCardError(string error)
+    {
+        Debug.LogError($"[FirebaseManager] Card error: {error}");
+        _cardCallback?.Invoke(false);
+        _cardCallback = null;
+    }
+
+    // ------------------------------------------------------------------------
+    // LOAD USER BADGES
+    // ------------------------------------------------------------------------
+
+    public void LoadUserBadges(string odId, Action<List<string>> callback)
+    {
+        if (!IsReady)
         {
             Debug.LogError("[FirebaseManager] Firestore not ready.");
-            return new List<string>();
+            callback?.Invoke(new List<string>());
+            return;
         }
 
+        _loadBadgesCallback = callback;
+
+        FirebaseBridge.GetCollection(
+            $"users/{odId}/badges",
+            gameObject.name,
+            "OnBadgesLoaded",
+            "OnBadgesLoadError"
+        );
+    }
+
+    public void OnBadgesLoaded(string jsonArray)
+    {
         try
         {
-            var badgesSnapshot = await Firestore.Collection("users").Document(odId)
-                .Collection("badges").GetSnapshotAsync();
+            var wrapper = JsonUtility.FromJson<StringArrayWrapper>("{\"items\":" + jsonArray + "}");
+            var badges = new List<string>(wrapper.items ?? new string[0]);
+            Debug.Log($"[FirebaseManager] Loaded {badges.Count} badges");
+            _loadBadgesCallback?.Invoke(badges);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[FirebaseManager] Failed to parse badges: {e.Message}");
+            _loadBadgesCallback?.Invoke(new List<string>());
+        }
+        _loadBadgesCallback = null;
+    }
 
-            var badgeList = new List<string>();
-            foreach (var doc in badgesSnapshot.Documents)
+    public void OnBadgesLoadError(string error)
+    {
+        Debug.LogError($"[FirebaseManager] Failed to load badges: {error}");
+        _loadBadgesCallback?.Invoke(new List<string>());
+        _loadBadgesCallback = null;
+    }
+
+    // ------------------------------------------------------------------------
+    // LOAD USER CARDS COUNT
+    // ------------------------------------------------------------------------
+
+    public void LoadUserCards(string odId, Action<int> callback)
+    {
+        if (!IsReady)
+        {
+            Debug.LogError("[FirebaseManager] Firestore not ready.");
+            callback?.Invoke(0);
+            return;
+        }
+
+        _loadCardsCallback = callback;
+
+        FirebaseBridge.GetCollection(
+            $"users/{odId}/cards",
+            gameObject.name,
+            "OnCardsLoaded",
+            "OnCardsLoadError"
+        );
+    }
+
+    public void OnCardsLoaded(string jsonArray)
+    {
+        try
+        {
+            var wrapper = JsonUtility.FromJson<StringArrayWrapper>("{\"items\":" + jsonArray + "}");
+            int count = wrapper.items?.Length ?? 0;
+            Debug.Log($"[FirebaseManager] Loaded {count} cards");
+            _loadCardsCallback?.Invoke(count);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[FirebaseManager] Failed to parse cards: {e.Message}");
+            _loadCardsCallback?.Invoke(0);
+        }
+        _loadCardsCallback = null;
+    }
+
+    public void OnCardsLoadError(string error)
+    {
+        Debug.LogError($"[FirebaseManager] Failed to load cards: {error}");
+        _loadCardsCallback?.Invoke(0);
+        _loadCardsCallback = null;
+    }
+
+    // ------------------------------------------------------------------------
+    // SAVE ROOM TIME
+    // ------------------------------------------------------------------------
+
+    public void SaveRoomTime(string odId, string roomId, float timeSpent, Action<bool> callback = null)
+    {
+        if (!IsReady)
+        {
+            callback?.Invoke(false);
+            return;
+        }
+
+        var data = JsonUtility.ToJson(new RoomStatsData
+        {
+            timeSpent = timeSpent,
+            visitCount = 1
+        });
+
+        _roomStatsCallback = callback;
+
+        FirebaseBridge.SetDocumentInSubcollection(
+            $"users/{odId}/roomStats",
+            roomId,
+            data,
+            gameObject.name,
+            "OnRoomStatsSaved",
+            "OnRoomStatsError"
+        );
+    }
+
+    public void OnRoomStatsSaved(string result)
+    {
+        Debug.Log("[FirebaseManager] Room stats saved!");
+        _roomStatsCallback?.Invoke(true);
+        _roomStatsCallback = null;
+    }
+
+    public void OnRoomStatsError(string error)
+    {
+        Debug.LogError($"[FirebaseManager] Room stats error: {error}");
+        _roomStatsCallback?.Invoke(false);
+        _roomStatsCallback = null;
+    }
+
+    // ------------------------------------------------------------------------
+    // SAVE USER SCORE
+    // ------------------------------------------------------------------------
+
+    public void SaveUserScore(string odId, int totalScore, Action<bool> callback = null)
+    {
+        if (!IsReady)
+        {
+            Debug.LogError("[FirebaseManager] Firestore not ready.");
+            callback?.Invoke(false);
+            return;
+        }
+
+        var data = JsonUtility.ToJson(new ScoreData { totalScore = totalScore });
+
+        _scoreCallback = callback;
+
+        FirebaseBridge.SetDocumentInSubcollection(
+            $"users/{odId}/progress",
+            "summary",
+            data,
+            gameObject.name,
+            "OnScoreSaved",
+            "OnScoreError"
+        );
+    }
+
+    public void OnScoreSaved(string result)
+    {
+        Debug.Log("[FirebaseManager] Score saved!");
+        _scoreCallback?.Invoke(true);
+        _scoreCallback = null;
+    }
+
+    public void OnScoreError(string error)
+    {
+        Debug.LogError($"[FirebaseManager] Score error: {error}");
+        _scoreCallback?.Invoke(false);
+        _scoreCallback = null;
+    }
+
+    // ------------------------------------------------------------------------
+    // SAVE OBJECT INTERACTION
+    // ------------------------------------------------------------------------
+
+    private string _pendingInteractionOdId;
+    private string _pendingObjectName;
+    private int _pendingTotalInteractions;
+    private float _pendingAverageTime;
+
+    public void SaveObjectInteraction(string odId, string objectName, float duration,
+        int totalInteractions, float averageTime, Action<bool> callback = null)
+    {
+        if (!IsReady)
+        {
+            Debug.LogError("[FirebaseManager] Firestore not ready.");
+            callback?.Invoke(false);
+            return;
+        }
+
+        string docId = $"{objectName}_{DateTime.UtcNow.Ticks}";
+
+        // Store for step 2
+        _pendingInteractionOdId = odId;
+        _pendingObjectName = objectName;
+        _pendingTotalInteractions = totalInteractions;
+        _pendingAverageTime = averageTime;
+        _interactionCallback = callback;
+
+        // Save interaction record
+        var interactionData = JsonUtility.ToJson(new ObjectInteractionData
+        {
+            objectName = objectName,
+            duration = duration,
+            totalInteractions = totalInteractions,
+            averageTime = averageTime
+        });
+
+        FirebaseBridge.SetDocumentInSubcollection(
+            $"users/{odId}/objectInteractions",
+            docId,
+            interactionData,
+            gameObject.name,
+            "OnInteractionSavedStep1",
+            "OnInteractionError"
+        );
+    }
+
+    public void OnInteractionSavedStep1(string result)
+    {
+        // Save stats summary
+        var statsData = JsonUtility.ToJson(new ObjectStatsData
+        {
+            totalInteractions = _pendingTotalInteractions,
+            averageTime = _pendingAverageTime
+        });
+
+        FirebaseBridge.SetDocumentInSubcollection(
+            $"users/{_pendingInteractionOdId}/objectStats",
+            _pendingObjectName,
+            statsData,
+            gameObject.name,
+            "OnInteractionSaved",
+            "OnStatsError"
+        );
+    }
+
+    public void OnInteractionSaved(string result)
+    {
+        Debug.Log($"[FirebaseManager] Object '{_pendingObjectName}' interaction saved");
+        _interactionCallback?.Invoke(true);
+        _interactionCallback = null;
+    }
+
+    public void OnInteractionError(string error)
+    {
+        Debug.LogError($"[FirebaseManager] Interaction error: {error}");
+        _interactionCallback?.Invoke(false);
+        _interactionCallback = null;
+    }
+
+    public void OnStatsSaved(string result)
+    {
+        Debug.Log("[FirebaseManager] Stats saved!");
+        _statsCallback?.Invoke(true);
+        _statsCallback = null;
+    }
+
+    public void OnStatsError(string error)
+    {
+        Debug.LogError($"[FirebaseManager] Stats error: {error}");
+        _interactionCallback?.Invoke(false);
+        _interactionCallback = null;
+    }
+
+    // ------------------------------------------------------------------------
+    // CHECK IF USER HAS DEMOGRAPHICS
+    // ------------------------------------------------------------------------
+
+    public void CheckUserHasDemographics(string odId, Action<bool> callback)
+    {
+        if (!IsReady)
+        {
+            Debug.LogError("[FirebaseManager] Firestore not ready.");
+            callback?.Invoke(false);
+            return;
+        }
+
+        _checkDemographicsCallback = callback;
+
+        FirebaseBridge.DocumentExists(
+            $"users/{odId}/demographics",
+            "info",
+            gameObject.name,
+            "OnDemographicsCheckSuccess",
+            "OnDemographicsCheckError"
+        );
+    }
+
+    public void OnDemographicsCheckSuccess(string result)
+    {
+        bool exists = result.ToLower() == "true";
+        Debug.Log($"[FirebaseManager] Demographics check: {exists}");
+        _checkDemographicsCallback?.Invoke(exists);
+        _checkDemographicsCallback = null;
+    }
+
+    public void OnDemographicsCheckError(string error)
+    {
+        Debug.LogError($"[FirebaseManager] Demographics check error: {error}");
+        _checkDemographicsCallback?.Invoke(false);
+        _checkDemographicsCallback = null;
+    }
+
+    // ------------------------------------------------------------------------
+    // LOAD BADGES WITH DATA (for AchievementsManager)
+    // ------------------------------------------------------------------------
+
+    public void LoadBadgesWithData(string odId, Action<List<BadgeDocumentData>> callback)
+    {
+        if (!IsReady)
+        {
+            Debug.LogError("[FirebaseManager] Firestore not ready.");
+            callback?.Invoke(new List<BadgeDocumentData>());
+            return;
+        }
+
+        _loadBadgesWithDataCallback = callback;
+
+        FirebaseBridge.GetCollectionWithData(
+            $"users/{odId}/badges",
+            gameObject.name,
+            "OnBadgesWithDataLoaded",
+            "OnBadgesWithDataError"
+        );
+    }
+
+    public void OnBadgesWithDataLoaded(string json)
+    {
+        try
+        {
+            var wrapper = JsonUtility.FromJson<DocumentArrayWrapper>("{\"documents\":" + json + "}");
+            var badges = new List<BadgeDocumentData>();
+
+            if (wrapper.documents != null)
             {
-                badgeList.Add(doc.Id);
+                foreach (var doc in wrapper.documents)
+                {
+                    badges.Add(new BadgeDocumentData
+                    {
+                        badgeId = doc.id,
+                        badgeName = doc.data?.badgeName ?? "",
+                        description = doc.data?.description ?? ""
+                    });
+                }
             }
 
-            Debug.Log($"[FirebaseManager] Loaded {badgeList.Count} badges for {odId}");
-            return badgeList;
+            Debug.Log($"[FirebaseManager] Loaded {badges.Count} badges with data");
+            _loadBadgesWithDataCallback?.Invoke(badges);
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
-            Debug.LogError($"[FirebaseManager] Failed to load badges: {e.Message}");
-            return new List<string>();
+            Debug.LogError($"[FirebaseManager] Failed to parse badges: {e.Message}");
+            _loadBadgesWithDataCallback?.Invoke(new List<BadgeDocumentData>());
         }
+        _loadBadgesWithDataCallback = null;
     }
 
-    public async Task<int> LoadUserCardsAsync(string odId)
+    public void OnBadgesWithDataError(string error)
     {
-        if (!IsReady || Firestore == null)
+        Debug.LogError($"[FirebaseManager] Failed to load badges with data: {error}");
+        _loadBadgesWithDataCallback?.Invoke(new List<BadgeDocumentData>());
+        _loadBadgesWithDataCallback = null;
+    }
+
+    // ------------------------------------------------------------------------
+    // LOAD CARDS WITH DATA (for AchievementsManager)
+    // ------------------------------------------------------------------------
+
+    public void LoadCardsWithData(string odId, Action<List<CardDocumentData>> callback)
+    {
+        if (!IsReady)
         {
             Debug.LogError("[FirebaseManager] Firestore not ready.");
-            return 0;
-        }
-
-        try
-        {
-            var cardsSnapshot = await Firestore.Collection("users").Document(odId)
-                .Collection("cards").GetSnapshotAsync();
-
-            Debug.Log($"[FirebaseManager] Loaded {cardsSnapshot.Count} cards for {odId}");
-            return cardsSnapshot.Count;
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError($"[FirebaseManager] Failed to load cards: {e.Message}");
-            return 0;
-        }
-    }
-
-    public async Task SaveRoomTimeAsync(string odId, string roomId, float timeSpent)
-    {
-        if (!IsReady || Firestore == null) return;
-
-        try
-        {
-            var docRef = Firestore.Collection("users").Document(odId)
-                .Collection("roomStats").Document(roomId);
-
-            await docRef.SetAsync(new Dictionary<string, object>
-            {
-                { "timeSpent", FieldValue.Increment(timeSpent) },
-                { "visitCount", FieldValue.Increment(1) }
-            }, SetOptions.MergeAll);
-
-            Debug.Log($"[FirebaseManager] Room '{roomId}' updated for {odId}");
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError($"[FirebaseManager] Failed to save room time: {e.Message}");
-        }
-    }
-
-    public async Task SaveUserScoreAsync(string odId, int totalScore)
-    {
-        if (!IsReady || Firestore == null)
-        {
-            Debug.LogError("Firestore not ready.");
+            callback?.Invoke(new List<CardDocumentData>());
             return;
         }
 
-        try
-        {
-            var progressDoc = Firestore.Collection("users").Document(odId)
-                .Collection("progress").Document("summary");
+        _loadCardsWithDataCallback = callback;
 
-            await progressDoc.SetAsync(new Dictionary<string, object>
-            {
-                { "totalScore", totalScore },
-                { "lastScoreUpdate", FieldValue.ServerTimestamp }
-            }, SetOptions.MergeAll);
-
-            Debug.Log($"Score {totalScore} saved for {odId}");
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError($"Failed to save user score: {e.Message}");
-        }
+        FirebaseBridge.GetCollectionWithData(
+            $"users/{odId}/cards",
+            gameObject.name,
+            "OnCardsWithDataLoaded",
+            "OnCardsWithDataError"
+        );
     }
 
-    public async Task SaveObjectInteractionAsync(
-        string odId,
-        string objectName,
-        float duration,
-        int totalInteractions,
-        float averageTime)
+    public void OnCardsWithDataLoaded(string json)
     {
-        if (!IsReady || Firestore == null)
+        try
+        {
+            var wrapper = JsonUtility.FromJson<CardDocumentArrayWrapper>("{\"documents\":" + json + "}");
+            var cards = new List<CardDocumentData>();
+
+            if (wrapper.documents != null)
+            {
+                foreach (var doc in wrapper.documents)
+                {
+                    cards.Add(new CardDocumentData
+                    {
+                        cardId = !string.IsNullOrEmpty(doc.data?.cardId) ? doc.data.cardId : doc.id,
+                        found = doc.data?.found ?? true
+                    });
+                }
+            }
+
+            Debug.Log($"[FirebaseManager] Loaded {cards.Count} cards with data");
+            _loadCardsWithDataCallback?.Invoke(cards);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[FirebaseManager] Failed to parse cards: {e.Message}");
+            _loadCardsWithDataCallback?.Invoke(new List<CardDocumentData>());
+        }
+        _loadCardsWithDataCallback = null;
+    }
+
+    public void OnCardsWithDataError(string error)
+    {
+        Debug.LogError($"[FirebaseManager] Failed to load cards with data: {error}");
+        _loadCardsWithDataCallback?.Invoke(new List<CardDocumentData>());
+        _loadCardsWithDataCallback = null;
+    }
+
+    // ------------------------------------------------------------------------
+    // LOAD PROGRESS SUMMARY (for AchievementsManager)
+    // ------------------------------------------------------------------------
+
+    public void LoadProgressSummary(string odId, Action<ProgressSummaryData> callback)
+    {
+        if (!IsReady)
         {
             Debug.LogError("[FirebaseManager] Firestore not ready.");
+            callback?.Invoke(new ProgressSummaryData());
             return;
         }
 
-        try
-        {
-            string docId = $"{objectName}_{System.DateTime.UtcNow.Ticks}";
+        _loadProgressSummaryCallback = callback;
 
-            var interactionDoc = Firestore.Collection("users").Document(odId)
-                .Collection("objectInteractions").Document(docId);
-
-            await interactionDoc.SetAsync(new Dictionary<string, object>
-            {
-                { "objectName", objectName },
-                { "duration", duration },
-                { "totalInteractions", totalInteractions },
-                { "averageTime", averageTime },
-                { "timestamp", FieldValue.ServerTimestamp }
-            });
-
-            var statsDoc = Firestore.Collection("users").Document(odId)
-                .Collection("objectStats").Document(objectName);
-
-            await statsDoc.SetAsync(new Dictionary<string, object>
-            {
-                { "totalInteractions", totalInteractions },
-                { "totalTimeSpent", FieldValue.Increment(duration) },
-                { "averageTime", averageTime },
-                { "lastInteraction", FieldValue.ServerTimestamp }
-            }, SetOptions.MergeAll);
-
-            Debug.Log($"[FirebaseManager] Object '{objectName}' saved for {odId}");
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError($"[FirebaseManager] Failed to save object interaction: {e.Message}");
-        }
+        FirebaseBridge.GetDocument(
+            $"users/{odId}/progress",
+            "summary",
+            gameObject.name,
+            "OnProgressSummaryLoaded",
+            "OnProgressSummaryError"
+        );
     }
 
-    public async Task<bool> UserHasDemographicsAsync(string odId)
+    public void OnProgressSummaryLoaded(string json)
     {
-        if (!IsReady || Firestore == null)
-        {
-            Debug.LogError("Firestore not ready.");
-            return false;
-        }
-
         try
         {
-            var docRef = Firestore.Collection("users").Document(odId)
-                .Collection("demographics").Document("info");
-
-            var snapshot = await docRef.GetSnapshotAsync();
-            bool exists = snapshot.Exists;
-
-            Debug.Log($"[FirebaseManager] {odId} has demographics: {exists}");
-            return exists;
+            var data = JsonUtility.FromJson<ProgressSummaryData>(json);
+            Debug.Log($"[FirebaseManager] Loaded progress summary: {data.totalCardsCollected} cards, {data.totalScore} score");
+            _loadProgressSummaryCallback?.Invoke(data);
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
-            Debug.LogError($"Error checking demographics for {odId}: {e.Message}");
-            return false;
+            Debug.LogError($"[FirebaseManager] Failed to parse progress summary: {e.Message}");
+            _loadProgressSummaryCallback?.Invoke(new ProgressSummaryData());
         }
+        _loadProgressSummaryCallback = null;
     }
+
+    public void OnProgressSummaryError(string error)
+    {
+        Debug.LogWarning($"[FirebaseManager] Failed to load progress summary: {error}");
+        _loadProgressSummaryCallback?.Invoke(new ProgressSummaryData());
+        _loadProgressSummaryCallback = null;
+    }
+
+    // ------------------------------------------------------------------------
+    // LOAD ROOM STATS (for AchievementsManager)
+    // ------------------------------------------------------------------------
+
+    public void LoadRoomStats(string odId, Action<List<RoomStatsDocumentData>> callback)
+    {
+        if (!IsReady)
+        {
+            Debug.LogError("[FirebaseManager] Firestore not ready.");
+            callback?.Invoke(new List<RoomStatsDocumentData>());
+            return;
+        }
+
+        _loadRoomStatsCallback = callback;
+
+        FirebaseBridge.GetCollectionWithData(
+            $"users/{odId}/roomStats",
+            gameObject.name,
+            "OnRoomStatsWithDataLoaded",
+            "OnRoomStatsWithDataError"
+        );
+    }
+
+    public void OnRoomStatsWithDataLoaded(string json)
+    {
+        try
+        {
+            var wrapper = JsonUtility.FromJson<RoomStatsDocumentArrayWrapper>("{\"documents\":" + json + "}");
+            var roomStats = new List<RoomStatsDocumentData>();
+
+            if (wrapper.documents != null)
+            {
+                foreach (var doc in wrapper.documents)
+                {
+                    roomStats.Add(new RoomStatsDocumentData
+                    {
+                        roomId = doc.id,
+                        timeSpent = doc.data?.timeSpent ?? 0f,
+                        visitCount = doc.data?.visitCount ?? 0
+                    });
+                }
+            }
+
+            Debug.Log($"[FirebaseManager] Loaded {roomStats.Count} room stats");
+            _loadRoomStatsCallback?.Invoke(roomStats);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[FirebaseManager] Failed to parse room stats: {e.Message}");
+            _loadRoomStatsCallback?.Invoke(new List<RoomStatsDocumentData>());
+        }
+        _loadRoomStatsCallback = null;
+    }
+
+    public void OnRoomStatsWithDataError(string error)
+    {
+        Debug.LogError($"[FirebaseManager] Failed to load room stats: {error}");
+        _loadRoomStatsCallback?.Invoke(new List<RoomStatsDocumentData>());
+        _loadRoomStatsCallback = null;
+    }
+}
+
+// ------------------------------------------------------------------------
+// DATA CLASSES FOR JSON SERIALIZATION
+// ------------------------------------------------------------------------
+
+[Serializable]
+public class UserData
+{
+    public string participantCode;
+    public string lastActive;
+}
+
+[Serializable]
+public class DemographicsData
+{
+    public string age;
+    public string gender;
+    public string nationality;
+    public string computerSkills;
+    public string vrInterest;
+}
+
+[Serializable]
+public class BadgeData
+{
+    public string badgeId;
+    public string badgeName;
+    public string description;
+}
+
+[Serializable]
+public class CardData
+{
+    public string cardId;
+    public bool found;
+}
+
+[Serializable]
+public class ProgressData
+{
+    public int totalCardsCollected;
+    public string lastCardFound;
+}
+
+[Serializable]
+public class RoomStatsData
+{
+    public float timeSpent;
+    public int visitCount;
+}
+
+[Serializable]
+public class ScoreData
+{
+    public int totalScore;
+}
+
+[Serializable]
+public class ObjectInteractionData
+{
+    public string objectName;
+    public float duration;
+    public int totalInteractions;
+    public float averageTime;
+}
+
+[Serializable]
+public class ObjectStatsData
+{
+    public int totalInteractions;
+    public float averageTime;
+}
+
+[Serializable]
+public class StringArrayWrapper
+{
+    public string[] items;
+}
+
+// ------------------------------------------------------------------------
+// DATA CLASSES FOR ACHIEVEMENTS MANAGER
+// ------------------------------------------------------------------------
+
+[Serializable]
+public class BadgeDocumentData
+{
+    public string badgeId;
+    public string badgeName;
+    public string description;
+}
+
+[Serializable]
+public class CardDocumentData
+{
+    public string cardId;
+    public bool found;
+}
+
+[Serializable]
+public class ProgressSummaryData
+{
+    public int totalCardsCollected;
+    public int totalBadges;
+    public string lastCardFound;
+    public string lastBadgeUnlocked;
+    public int totalScore;
+}
+
+[Serializable]
+public class RoomStatsDocumentData
+{
+    public string roomId;
+    public float timeSpent;
+    public int visitCount;
+}
+
+// Wrapper classes for JSON parsing
+[Serializable]
+public class DocumentWrapper
+{
+    public string id;
+    public DocumentDataWrapper data;
+}
+
+[Serializable]
+public class DocumentDataWrapper
+{
+    public string badgeName;
+    public string description;
+    public string cardId;
+    public bool found;
+    public float timeSpent;
+    public int visitCount;
+}
+
+[Serializable]
+public class DocumentArrayWrapper
+{
+    public DocumentWrapper[] documents;
+}
+
+[Serializable]
+public class CardDocumentWrapper
+{
+    public string id;
+    public CardDataWrapper data;
+}
+
+[Serializable]
+public class CardDataWrapper
+{
+    public string cardId;
+    public bool found;
+}
+
+[Serializable]
+public class CardDocumentArrayWrapper
+{
+    public CardDocumentWrapper[] documents;
+}
+
+[Serializable]
+public class RoomStatsDocumentWrapper
+{
+    public string id;
+    public RoomStatsDataWrapper data;
+}
+
+[Serializable]
+public class RoomStatsDataWrapper
+{
+    public float timeSpent;
+    public int visitCount;
+}
+
+[Serializable]
+public class RoomStatsDocumentArrayWrapper
+{
+    public RoomStatsDocumentWrapper[] documents;
 }

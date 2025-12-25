@@ -2,8 +2,12 @@
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Localization.Tables;
+using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// BadgeManager - WebGL-safe version using coroutines instead of async/await
+/// </summary>
 public class BadgeManager : MonoBehaviour
 {
     // Singleton pattern - only one BadgeManager exists
@@ -28,13 +32,15 @@ public class BadgeManager : MonoBehaviour
     };
 
     [Header("Localization")]
-    public string badgeTableName = "FullMuseum"; // Name of your String Table for badges
+    public string badgeTableName = "FullMuseum";
 
     [Header("Debug")]
     public bool showDebugMessages = true;
 
     [Header("Firebase Integration")]
-    public bool useFirebase = true; // Toggle for testing without Firebase
+    public bool useFirebase = true;
+
+    private bool _isInitialized = false;
 
     void Awake()
     {
@@ -42,7 +48,7 @@ public class BadgeManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject); // Persists between scenes
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -51,12 +57,21 @@ public class BadgeManager : MonoBehaviour
         }
     }
 
-    async void Start()
+    void Start()
     {
+        // Use coroutine-based initialization instead of async
+        StartCoroutine(InitializeCoroutine());
+    }
+
+    private IEnumerator InitializeCoroutine()
+    {
+        // Wait a frame to ensure other managers are initialized
+        yield return null;
+
         // Load progress from Firebase when game starts
         if (useFirebase && PlayerManager.Instance != null && !string.IsNullOrEmpty(PlayerManager.Instance.userId))
         {
-            await LoadProgressFromFirebase();
+            yield return StartCoroutine(LoadProgressFromFirebaseCoroutineInternal());
         }
         else
         {
@@ -64,10 +79,12 @@ public class BadgeManager : MonoBehaviour
             LoadBadgeProgress();
         }
 
+        _isInitialized = true;
+
         if (showDebugMessages)
         {
-            Debug.Log($" BadgeManager initialized. Total cards collected: {totalCardsCollected}");
-            Debug.Log($" Unlocked badges: {unlockedBadges.Count}");
+            Debug.Log($"[BadgeManager] Initialized. Total cards collected: {totalCardsCollected}");
+            Debug.Log($"[BadgeManager] Unlocked badges: {unlockedBadges.Count}");
         }
     }
 
@@ -76,22 +93,28 @@ public class BadgeManager : MonoBehaviour
     // ============================================================================
 
     /// <summary>
-    /// Get localized string from the Badges table
+    /// Get localized string from the Badges table - synchronous version with fallback
     /// </summary>
     private string GetLocalizedString(string key)
     {
-        var stringTable = LocalizationSettings.StringDatabase.GetTable(badgeTableName);
-        if (stringTable != null)
+        try
         {
-            var entry = stringTable.GetEntry(key);
-            if (entry != null)
+            var stringTable = LocalizationSettings.StringDatabase.GetTable(badgeTableName);
+            if (stringTable != null)
             {
-                return entry.GetLocalizedString();
+                var entry = stringTable.GetEntry(key);
+                if (entry != null)
+                {
+                    return entry.GetLocalizedString();
+                }
             }
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogWarning($"[BadgeManager] Localization error for '{key}': {e.Message}");
         }
 
         // Fallback: return the key itself if not found
-        Debug.LogWarning($"Localization key '{key}' not found in table '{badgeTableName}'");
         return key;
     }
 
@@ -112,22 +135,56 @@ public class BadgeManager : MonoBehaviour
     }
 
     // ============================================================================
-    // FIREBASE INTEGRATION
+    // FIREBASE INTEGRATION - Coroutine-based
     // ============================================================================
 
     /// <summary>
-    /// Load user's progress from Firebase
+    /// Public method to load progress from Firebase with callback
     /// </summary>
-    public async System.Threading.Tasks.Task LoadProgressFromFirebase()
+    public void LoadProgressFromFirebaseCoroutine(System.Action callback = null)
+    {
+        StartCoroutine(LoadProgressFromFirebaseCoroutineWithCallback(callback));
+    }
+
+    private IEnumerator LoadProgressFromFirebaseCoroutineWithCallback(System.Action callback)
+    {
+        yield return StartCoroutine(LoadProgressFromFirebaseCoroutineInternal());
+        callback?.Invoke();
+    }
+
+    /// <summary>
+    /// Load user's progress from Firebase using coroutine
+    /// </summary>
+    private IEnumerator LoadProgressFromFirebaseCoroutineInternal()
     {
         if (PlayerManager.Instance == null || string.IsNullOrEmpty(PlayerManager.Instance.userId))
         {
-            Debug.LogWarning("Cannot load from Firebase: User not logged in");
-            return;
+            Debug.LogWarning("[BadgeManager] Cannot load from Firebase: User not logged in");
+            yield break;
         }
 
+        bool completed = false;
+
         // Load from PlayerManager (which loads from Firebase)
-        await PlayerManager.Instance.LoadUserProgressAsync();
+        PlayerManager.Instance.LoadUserProgress(() =>
+        {
+            completed = true;
+        });
+
+        // Wait for completion with timeout
+        float timeout = 10f;
+        float elapsed = 0f;
+        while (!completed && elapsed < timeout)
+        {
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        if (!completed)
+        {
+            Debug.LogWarning("[BadgeManager] Loading from Firebase timed out");
+            yield break;
+        }
 
         // Sync local data
         totalCardsCollected = PlayerManager.Instance.totalCardsCollected;
@@ -138,7 +195,7 @@ public class BadgeManager : MonoBehaviour
             unlockedBadges.Add(badgeId);
         }
 
-        Debug.Log($"✅ Loaded from Firebase: {totalCardsCollected} cards, {unlockedBadges.Count} badges");
+        Debug.Log($"[BadgeManager] Loaded from Firebase: {totalCardsCollected} cards, {unlockedBadges.Count} badges");
     }
 
     // ============================================================================
@@ -172,7 +229,7 @@ public class BadgeManager : MonoBehaviour
         // Log room progress for debugging
         int cardsInRoom = cardsByRoom[roomID].Count;
         int expectedCards = expectedCardsPerRoom.ContainsKey(roomID) ? expectedCardsPerRoom[roomID] : 0;
-        Debug.Log($" Room '{roomID}' progress: {cardsInRoom}/{expectedCards} cards found");
+        Debug.Log($"[BadgeManager] Room '{roomID}' progress: {cardsInRoom}/{expectedCards} cards found");
 
         // Save to Firebase
         if (useFirebase && PlayerManager.Instance != null && !string.IsNullOrEmpty(PlayerManager.Instance.userId))
@@ -187,7 +244,7 @@ public class BadgeManager : MonoBehaviour
 
         if (showDebugMessages)
         {
-            Debug.Log($" Card collected! Total: {totalCardsCollected}");
+            Debug.Log($"[BadgeManager] Card collected! Total: {totalCardsCollected}");
         }
 
         // Check if any badges should be unlocked
@@ -425,7 +482,7 @@ public class BadgeManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("BadgeNotificationUI not found in scene!");
+            Debug.LogWarning("[BadgeManager] BadgeNotificationUI not found in scene!");
         }
     }
 
@@ -436,7 +493,7 @@ public class BadgeManager : MonoBehaviour
     {
         unlockedBadges.Clear();
         totalCardsCollected = 0;
-        cardsByRoom.Clear(); // Clear room progress
+        cardsByRoom.Clear();
 
         // Clear Firebase data
         if (PlayerManager.Instance != null)
@@ -446,11 +503,11 @@ public class BadgeManager : MonoBehaviour
             PlayerManager.Instance.cardsFound.Clear();
         }
 
-        // Clear ALL PlayerPrefs (easiest way to reset everything)
+        // Clear ALL PlayerPrefs
         PlayerPrefs.DeleteAll();
         PlayerPrefs.Save();
 
-        Debug.Log(" All badges, cards, and progress reset!");
+        Debug.Log("[BadgeManager] All badges, cards, and progress reset!");
     }
 
     // ============================================================================
@@ -464,7 +521,7 @@ public class BadgeManager : MonoBehaviour
     {
         if (!expectedCardsPerRoom.ContainsKey(roomID))
         {
-            Debug.LogWarning($"Room '{roomID}' not defined in expectedCardsPerRoom!");
+            Debug.LogWarning($"[BadgeManager] Room '{roomID}' not defined in expectedCardsPerRoom!");
             return false;
         }
 

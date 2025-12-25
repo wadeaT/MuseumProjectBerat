@@ -2,6 +2,9 @@
 using TMPro;
 using System.Collections;
 
+/// <summary>
+/// ScoreManager - WebGL-safe version using coroutines instead of async/await
+/// </summary>
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance { get; private set; }
@@ -26,12 +29,12 @@ public class ScoreManager : MonoBehaviour
 
     [Header("UI References")]
     public TextMeshProUGUI scoreText;
-    public GameObject scorePopupPrefab; 
+    public GameObject scorePopupPrefab;
 
     [Header("Visual Feedback")]
     public AudioClip pointsEarnedSound;
     public Color normalPointsColor = Color.white;
-    public Color bonusPointsColor = Color.gold;
+    public Color bonusPointsColor = Color.yellow;
 
     private int currentScore = 0;
     private AudioSource audioSource;
@@ -71,7 +74,7 @@ public class ScoreManager : MonoBehaviour
     {
         currentScore += points;
 
-        Debug.Log($" +{points} points! {reason} | Total: {currentScore}");
+        Debug.Log($"[ScoreManager] +{points} points! {reason} | Total: {currentScore}");
 
         // Visual feedback
         UpdateScoreUI();
@@ -86,7 +89,7 @@ public class ScoreManager : MonoBehaviour
         // Save to PlayerPrefs
         SaveScore();
 
-        // Save to Firebase
+        // Save to Firebase (non-blocking)
         SaveScoreToFirebase();
     }
 
@@ -152,7 +155,7 @@ public class ScoreManager : MonoBehaviour
 
         if (bonusPoints > 0)
         {
-            AddPoints(bonusPoints, $" {badgeName} Badge!", true);
+            AddPoints(bonusPoints, $"{badgeName} Badge!", true);
         }
     }
 
@@ -172,7 +175,7 @@ public class ScoreManager : MonoBehaviour
     /// </summary>
     void ShowPointsPopup(int points, bool isBonus)
     {
-        if (scorePopupPrefab != null)
+        if (scorePopupPrefab != null && scoreText != null)
         {
             // Instantiate popup near score text
             GameObject popup = Instantiate(scorePopupPrefab, scoreText.transform.position, Quaternion.identity, scoreText.transform.parent);
@@ -214,7 +217,7 @@ public class ScoreManager : MonoBehaviour
         currentScore = 0;
         SaveScore();
         UpdateScoreUI();
-        Debug.Log("Score reset to 0");
+        Debug.Log("[ScoreManager] Score reset to 0");
     }
 
     /// <summary>
@@ -226,32 +229,31 @@ public class ScoreManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Save score to Firebase
+    /// Save score to Firebase - non-blocking coroutine approach
     /// </summary>
-    private async void SaveScoreToFirebase()
+    private void SaveScoreToFirebase()
     {
         if (FirebaseManager.Instance == null || !FirebaseManager.Instance.IsReady)
         {
-            Debug.LogWarning(" FirebaseManager not ready, score not saved to cloud");
+            Debug.LogWarning("[ScoreManager] FirebaseManager not ready, score not saved to cloud");
             return;
         }
 
-        
         if (PlayerManager.Instance == null || string.IsNullOrEmpty(PlayerManager.Instance.userId))
         {
-            Debug.LogWarning(" User not logged in, score not saved to Firebase");
+            Debug.LogWarning("[ScoreManager] User not logged in, score not saved to Firebase");
             return;
         }
 
         string odId = PlayerManager.Instance.userId;
 
-        try
+        // Non-blocking Firebase save
+        FirebaseManager.Instance.SaveUserScore(odId, currentScore, (success) =>
         {
-            await FirebaseManager.Instance.SaveUserScoreAsync(odId, currentScore);
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError($" Error saving score to Firebase: {e.Message}");
-        }
+            if (!success)
+            {
+                Debug.LogWarning("[ScoreManager] Failed to save score to Firebase");
+            }
+        });
     }
 }

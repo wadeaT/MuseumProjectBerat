@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// RoomTimerManager - WebGL-safe version without async void
+/// </summary>
 public class RoomTimerManager : MonoBehaviour
 {
     public static RoomTimerManager Instance;
@@ -24,16 +27,18 @@ public class RoomTimerManager : MonoBehaviour
         if (PlayerManager.Instance != null)
         {
             userId = PlayerManager.Instance.userId;
-            Debug.Log("RoomTimerManager: Loaded userId = " + userId);
+            Debug.Log("[RoomTimerManager] Loaded userId = " + userId);
         }
         else
         {
-            Debug.LogWarning("RoomTimerManager: PlayerManager not found in scene!");
+            Debug.LogWarning("[RoomTimerManager] PlayerManager not found in scene!");
         }
     }
 
-
-    public async void ReportRoomTime(string roomId, float timeSpent)
+    /// <summary>
+    /// Report room time - non-blocking callback approach instead of async
+    /// </summary>
+    public void ReportRoomTime(string roomId, float timeSpent)
     {
         // Pull live user ID from PlayerManager
         string currentUserId = PlayerManager.Instance != null
@@ -42,16 +47,27 @@ public class RoomTimerManager : MonoBehaviour
 
         if (string.IsNullOrEmpty(currentUserId))
         {
-            Debug.LogWarning("RoomTimerManager: No logged-in user. Cannot save room time.");
+            Debug.LogWarning("[RoomTimerManager] No logged-in user. Cannot save room time.");
             return;
         }
 
         if (FirebaseManager.Instance == null || !FirebaseManager.Instance.IsReady)
         {
-            Debug.LogWarning("Firebase not ready yet.");
+            Debug.LogWarning("[RoomTimerManager] Firebase not ready yet.");
             return;
         }
 
-        await FirebaseManager.Instance.SaveRoomTimeAsync(currentUserId, roomId, timeSpent);
+        // Non-blocking Firebase save
+        FirebaseManager.Instance.SaveRoomTime(currentUserId, roomId, timeSpent, (success) =>
+        {
+            if (success)
+            {
+                Debug.Log($"[RoomTimerManager] Room time saved: {roomId} = {timeSpent:F2}s");
+            }
+            else
+            {
+                Debug.LogWarning($"[RoomTimerManager] Failed to save room time for {roomId}");
+            }
+        });
     }
 }

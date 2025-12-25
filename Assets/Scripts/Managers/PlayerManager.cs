@@ -1,13 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using System.Threading.Tasks;
 
+/// <summary>
+/// PlayerManager - WebGL-safe version using coroutines instead of async/await
+/// </summary>
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance { get; private set; }
 
     [Header("Player Data")]
-    public string userId;              
+    public string userId;
     public string age;
     public string nationality;
     public List<string> badges = new List<string>();
@@ -21,6 +24,7 @@ public class PlayerManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            Debug.Log("[PlayerManager] Initialized");
         }
         else
         {
@@ -29,102 +33,165 @@ public class PlayerManager : MonoBehaviour
     }
 
     // ------------------------------------------------------------------------
-    //  AUTHENTICATION (Participant Code)
+    //  AUTHENTICATION (Participant Code) - Coroutine-based
     // ------------------------------------------------------------------------
 
     /// <summary>
-    /// Login with a participant code (e.g., "P001").
-    /// The code becomes the document ID in Firestore.
+    /// Login with a participant code using coroutine callback pattern
+    /// Returns success via callback
     /// </summary>
-    public async Task<bool> LoginWithParticipantCode(string code)
+    public void LoginWithParticipantCode(string code, System.Action<bool> callback)
+    {
+        StartCoroutine(LoginCoroutine(code, callback));
+    }
+
+    private IEnumerator LoginCoroutine(string code, System.Action<bool> callback)
     {
         if (FirebaseManager.Instance == null)
         {
-            Debug.LogError("FirebaseManager not found in scene!");
-            return false;
+            Debug.LogError("[PlayerManager] FirebaseManager not found in scene!");
+            callback?.Invoke(false);
+            yield break;
         }
 
-        // The returned value IS the participant code
-        userId = await FirebaseManager.Instance.LoginWithParticipantCodeAsync(code);
-        
-        if (!string.IsNullOrEmpty(userId))
+        bool completed = false;
+        string result = null;
+
+        FirebaseManager.Instance.LoginWithParticipantCode(code,
+            (uid) => { result = uid; completed = true; },
+            (error) => { result = null; completed = true; }
+        );
+
+        // Wait for completion with timeout
+        float timeout = 10f;
+        float elapsed = 0f;
+        while (!completed && elapsed < timeout)
         {
-            Debug.Log($"✅ Logged in participant: {userId}");
-            return true;
+            elapsed += Time.deltaTime;
+            yield return null;
         }
 
-        Debug.LogError("❌ Login failed.");
-        return false;
+        if (!string.IsNullOrEmpty(result))
+        {
+            userId = result;
+            Debug.Log($"[PlayerManager] Logged in participant: {userId}");
+            callback?.Invoke(true);
+        }
+        else
+        {
+            Debug.LogError("[PlayerManager] Login failed.");
+            callback?.Invoke(false);
+        }
     }
 
     // ------------------------------------------------------------------------
-    //  DEMOGRAPHICS
+    //  DEMOGRAPHICS - Coroutine-based
     // ------------------------------------------------------------------------
 
-    public async void SaveDemographics(string age, string gender, string nationality, string skills, string vr)
+    public void SaveDemographics(string age, string gender, string nationality, string skills, string vr, System.Action<bool> callback = null)
     {
         if (string.IsNullOrEmpty(userId))
         {
-            Debug.LogWarning("User not logged in; demographics not saved.");
+            Debug.LogWarning("[PlayerManager] User not logged in; demographics not saved.");
+            callback?.Invoke(false);
             return;
         }
 
         this.age = age;
         this.nationality = nationality;
 
-        await FirebaseManager.Instance.SaveDemographicsAsync(userId, age, gender, nationality, skills, vr);
+        FirebaseManager.Instance.SaveDemographics(userId, age, gender, nationality, skills, vr, callback);
     }
 
     // ------------------------------------------------------------------------
-    //  BADGES
+    //  BADGES - Coroutine-based
     // ------------------------------------------------------------------------
 
-    public async void AddBadge(string badgeId, string badgeName, string description)
+    public void AddBadge(string badgeId, string badgeName, string description, System.Action<bool> callback = null)
     {
         if (string.IsNullOrEmpty(userId))
         {
-            Debug.LogWarning("User not logged in; badge not saved.");
+            Debug.LogWarning("[PlayerManager] User not logged in; badge not saved.");
+            callback?.Invoke(false);
             return;
         }
 
         if (!badges.Contains(badgeId))
         {
             badges.Add(badgeId);
-            await FirebaseManager.Instance.SaveBadgeAsync(userId, badgeId, badgeName, description);
-            Debug.Log($"🏅 Badge added: {badgeName}");
+            FirebaseManager.Instance.SaveBadge(userId, badgeId, badgeName, description, (success) =>
+            {
+                if (success)
+                {
+                    Debug.Log($"[PlayerManager] Badge added: {badgeName}");
+                }
+                callback?.Invoke(success);
+            });
         }
         else
         {
-            Debug.Log($"Badge '{badgeId}' already unlocked.");
+            Debug.Log($"[PlayerManager] Badge '{badgeId}' already unlocked.");
+            callback?.Invoke(true);
         }
     }
 
     /// <summary>
     /// Load user's badges from Firebase when they log in
     /// </summary>
-    public async Task LoadUserProgressAsync()
+    public void LoadUserProgress(System.Action callback = null)
+    {
+        StartCoroutine(LoadUserProgressCoroutine(callback));
+    }
+
+    private IEnumerator LoadUserProgressCoroutine(System.Action callback)
     {
         if (string.IsNullOrEmpty(userId))
         {
-            Debug.LogWarning("User not logged in; cannot load progress.");
-            return;
+            Debug.LogWarning("[PlayerManager] User not logged in; cannot load progress.");
+            callback?.Invoke();
+            yield break;
         }
 
-        badges = await FirebaseManager.Instance.LoadUserBadgesAsync(userId);
-        totalCardsCollected = await FirebaseManager.Instance.LoadUserCardsAsync(userId);
+        bool badgesLoaded = false;
+        bool cardsLoaded = false;
 
-        Debug.Log($"Loaded user progress: {badges.Count} badges, {totalCardsCollected} cards");
+        // Load badges
+        FirebaseManager.Instance.LoadUserBadges(userId, (loadedBadges) =>
+        {
+            badges = loadedBadges;
+            badgesLoaded = true;
+        });
+
+        // Load cards count
+        FirebaseManager.Instance.LoadUserCards(userId, (count) =>
+        {
+            totalCardsCollected = count;
+            cardsLoaded = true;
+        });
+
+        // Wait for both to complete with timeout
+        float timeout = 10f;
+        float elapsed = 0f;
+        while ((!badgesLoaded || !cardsLoaded) && elapsed < timeout)
+        {
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        Debug.Log($"[PlayerManager] Loaded user progress: {badges.Count} badges, {totalCardsCollected} cards");
+        callback?.Invoke();
     }
 
     // ------------------------------------------------------------------------
-    //  CARDS
+    //  CARDS - Coroutine-based
     // ------------------------------------------------------------------------
 
-    public async void OnCardCollected(string cardId)
+    public void OnCardCollected(string cardId, System.Action<bool> callback = null)
     {
         if (string.IsNullOrEmpty(userId))
         {
-            Debug.LogWarning("User not logged in; card not saved.");
+            Debug.LogWarning("[PlayerManager] User not logged in; card not saved.");
+            callback?.Invoke(false);
             return;
         }
 
@@ -133,25 +200,36 @@ public class PlayerManager : MonoBehaviour
             cardsFound.Add(cardId);
             totalCardsCollected++;
 
-            await FirebaseManager.Instance.SaveCardCollectedAsync(userId, cardId, totalCardsCollected);
-            Debug.Log($"📜 Card collected: {cardId} (Total: {totalCardsCollected})");
+            FirebaseManager.Instance.SaveCardCollected(userId, cardId, totalCardsCollected, (success) =>
+            {
+                if (success)
+                {
+                    Debug.Log($"[PlayerManager] Card collected: {cardId} (Total: {totalCardsCollected})");
+                }
+                callback?.Invoke(success);
+            });
+        }
+        else
+        {
+            callback?.Invoke(true);
         }
     }
 
     // ------------------------------------------------------------------------
-    //  ROOM TIMES
+    //  ROOM TIMES - Coroutine-based
     // ------------------------------------------------------------------------
 
-    public async void SaveRoomTime(string roomId, float time)
+    public void SaveRoomTime(string roomId, float time, System.Action<bool> callback = null)
     {
         if (string.IsNullOrEmpty(userId))
         {
-            Debug.LogWarning("User not logged in; room time not saved.");
+            Debug.LogWarning("[PlayerManager] User not logged in; room time not saved.");
+            callback?.Invoke(false);
             return;
         }
 
         roomTimes[roomId] = time;
-        await FirebaseManager.Instance.SaveRoomTimeAsync(userId, roomId, time);
+        FirebaseManager.Instance.SaveRoomTime(userId, roomId, time, callback);
     }
 
     // ------------------------------------------------------------------------
@@ -167,6 +245,6 @@ public class PlayerManager : MonoBehaviour
         roomTimes.Clear();
         cardsFound.Clear();
         totalCardsCollected = 0;
-        Debug.Log(" Player data cleared.");
+        Debug.Log("[PlayerManager] Player data cleared.");
     }
 }

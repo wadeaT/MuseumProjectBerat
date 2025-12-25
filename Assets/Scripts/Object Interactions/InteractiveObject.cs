@@ -1,14 +1,16 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Localization;
 
-
-
+/// <summary>
+/// InteractiveObject - WebGL-safe version using coroutines instead of async/await
+/// </summary>
 public class InteractiveObject : MonoBehaviour
 {
     [Header("Object Information")]
@@ -17,9 +19,6 @@ public class InteractiveObject : MonoBehaviour
 
     [Tooltip("Localized description of this object")]
     public LocalizedString objectDescription;
-
-
-
 
     [Tooltip("Optional image of this object")]
     public Sprite objectImage;
@@ -34,18 +33,16 @@ public class InteractiveObject : MonoBehaviour
     [Tooltip("Key to press to examine the object")]
     public KeyCode interactionKey = KeyCode.E;
 
-    
-
     [Tooltip("Auto-examine after looking for this many seconds (0 = disabled)")]
     [Range(0f, 3f)]
     public float autoExamineDelay = 0f;
 
     [Header("Visual Feedback")]
     [Tooltip("Color when player is too far away")]
-    public Color idleColor = new Color(1f, 1f, 1f, 1f); 
+    public Color idleColor = new Color(1f, 1f, 1f, 1f);
 
     [Tooltip("Color when player can interact")]
-    public Color highlightColor = new Color(1f, 0.9f, 0.6f, 1f); 
+    public Color highlightColor = new Color(1f, 0.9f, 0.6f, 1f);
 
     [Tooltip("How bright should the highlight glow be?")]
     [Range(0f, 2f)]
@@ -76,7 +73,14 @@ public class InteractiveObject : MonoBehaviour
     private int totalInteractions = 0;
     private float totalTimeSpent = 0f;
     private bool currentlyExamining = false;
-    private float lookTimer = 0f; 
+    private float lookTimer = 0f;
+    private string cachedLocalizedTitle;
+
+    void Awake()
+    {
+        if (interactableMask.value == 0)
+            interactableMask = LayerMask.GetMask("Interactable");
+    }
 
     void Start()
     {
@@ -94,12 +98,12 @@ public class InteractiveObject : MonoBehaviour
 
             if (playerCamera == null)
             {
-                Debug.LogError($"InteractiveObject ({objectTitle}): No camera found!");
+                Debug.LogError($"[InteractiveObject] ({name}): No camera found!");
             }
         }
         else
         {
-            Debug.LogError("InteractiveObject: No GameObject with 'Player' tag found!");
+            Debug.LogError("[InteractiveObject] No GameObject with 'Player' tag found!");
         }
 
         // Get renderer and store original material
@@ -112,7 +116,7 @@ public class InteractiveObject : MonoBehaviour
 
             if (objectRenderer != null)
             {
-                Debug.Log($"{objectTitle}: Using renderer from child object '{objectRenderer.gameObject.name}'");
+                Debug.Log($"[InteractiveObject] {name}: Using renderer from child object '{objectRenderer.gameObject.name}'");
             }
         }
 
@@ -128,7 +132,7 @@ public class InteractiveObject : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"{objectTitle}: No Renderer found on this object or its children. Highlight won't work.");
+            Debug.LogWarning($"[InteractiveObject] {name}: No Renderer found on this object or its children. Highlight won't work.");
         }
 
         // Setup audio
@@ -144,14 +148,26 @@ public class InteractiveObject : MonoBehaviour
         {
             highlightEffect.SetActive(false);
         }
+
+        // Cache the localized title for tracking
+        CacheLocalizedTitle();
     }
 
-    void Awake()
+    private void CacheLocalizedTitle()
     {
-        if (interactableMask.value == 0)
-            interactableMask = LayerMask.GetMask("Interactable");
+        if (objectTitle != null && !objectTitle.IsEmpty)
+        {
+            var op = objectTitle.GetLocalizedStringAsync();
+            op.Completed += (handle) =>
+            {
+                cachedLocalizedTitle = handle.Result;
+            };
+        }
+        else
+        {
+            cachedLocalizedTitle = name;
+        }
     }
-
 
     void Update()
     {
@@ -177,12 +193,10 @@ public class InteractiveObject : MonoBehaviour
                     lookTimer += Time.deltaTime;
                     if (lookTimer >= autoExamineDelay)
                     {
-                        ExamineObjectAsync();
+                        ExamineObject();
                         lookTimer = 0f;
                     }
                 }
-
-                
             }
             else
             {
@@ -241,7 +255,7 @@ public class InteractiveObject : MonoBehaviour
     /// </summary>
     void HighlightObject(bool highlight)
     {
-        if (isHighlighted == highlight) return; 
+        if (isHighlighted == highlight) return;
 
         isHighlighted = highlight;
 
@@ -268,18 +282,17 @@ public class InteractiveObject : MonoBehaviour
         }
     }
 
-
     public void TriggerExamination()
     {
-        ExamineObjectAsync();
+        ExamineObject();
     }
 
     /// <summary>
-    /// Called when player examines the object
+    /// Called when player examines the object - coroutine-based
     /// </summary>
-    async Task ExamineObjectAsync()
+    void ExamineObject()
     {
-        Debug.Log($"Examining: {objectTitle.TableReference}/{objectTitle.TableEntryReference}");
+        Debug.Log($"[InteractiveObject] Examining: {name}");
 
         // Play sound
         if (audioSource != null && examinationSound != null)
@@ -287,21 +300,62 @@ public class InteractiveObject : MonoBehaviour
             audioSource.PlayOneShot(examinationSound);
         }
 
-        //  Start tracking AND wait for panel close
+        // Start tracking AND wait for panel close
         if (trackInteractionTime && !currentlyExamining)
         {
             StartInteractionTracking();
             StartCoroutine(WaitForPanelClose());
         }
 
-        // Get localized strings asynchronously
-        var titleTask = objectTitle.GetLocalizedStringAsync();
-        var descTask = objectDescription.GetLocalizedStringAsync();
+        // Start coroutine to get localized strings and show UI
+        StartCoroutine(ShowInfoCoroutine());
+    }
 
-        await System.Threading.Tasks.Task.WhenAll(titleTask.Task, descTask.Task);
+    private IEnumerator ShowInfoCoroutine()
+    {
+        string localizedTitle = cachedLocalizedTitle ?? name;
+        string localizedDescription = "";
 
-        string localizedTitle = titleTask.Result;
-        string localizedDescription = descTask.Result;
+        // Get localized title if not cached
+        if (objectTitle != null && !objectTitle.IsEmpty)
+        {
+            bool titleLoaded = false;
+            var titleOp = objectTitle.GetLocalizedStringAsync();
+            titleOp.Completed += (handle) =>
+            {
+                localizedTitle = handle.Result;
+                titleLoaded = true;
+            };
+
+            // Wait with timeout
+            float timeout = 0f;
+            while (!titleLoaded && timeout < 2f)
+            {
+                timeout += Time.deltaTime;
+                yield return null;
+            }
+        }
+
+        // Get localized description
+        if (objectDescription != null && !objectDescription.IsEmpty)
+        {
+            bool descLoaded = false;
+            var descOp = objectDescription.GetLocalizedStringAsync();
+            descOp.Completed += (handle) =>
+            {
+                localizedDescription = handle.Result;
+                descLoaded = true;
+            };
+
+            // Wait with timeout
+            float timeout = 0f;
+            while (!descLoaded && timeout < 2f)
+            {
+                timeout += Time.deltaTime;
+                yield return null;
+            }
+        }
+
         // Show info panel
         if (ObjectInfoUI.Instance != null)
         {
@@ -327,82 +381,87 @@ public class InteractiveObject : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, interactionRadius);
     }
 
-
     /// <summary>
     /// Start tracking how long player examines this object
     /// </summary>
-    async void StartInteractionTracking()
+    void StartInteractionTracking()
     {
         currentlyExamining = true;
         interactionStartTime = Time.time;
         totalInteractions++;
-        string localizedTitle = await objectTitle.GetLocalizedStringAsync().Task;
-        Debug.Log($" Started tracking: {localizedTitle} (Interaction #{totalInteractions})");
+        Debug.Log($"[InteractiveObject] Started tracking: {cachedLocalizedTitle ?? name} (Interaction #{totalInteractions})");
     }
 
     /// <summary>
     /// Stop tracking and save to Firebase
     /// </summary>
-    async  void StopInteractionTracking()
+    void StopInteractionTracking()
     {
         if (!currentlyExamining) return;
 
         currentlyExamining = false;
         float timeSpent = Time.time - interactionStartTime;
         totalTimeSpent += timeSpent;
-        string localizedTitle = await objectTitle.GetLocalizedStringAsync().Task;
-        Debug.Log($" {localizedTitle}: Examined for {timeSpent:F1} seconds (Total: {totalTimeSpent:F1}s over {totalInteractions} interactions)");
+        string objectName = cachedLocalizedTitle ?? name;
+        Debug.Log($"[InteractiveObject] {objectName}: Examined for {timeSpent:F1} seconds (Total: {totalTimeSpent:F1}s over {totalInteractions} interactions)");
 
         // Save to Firebase
-        SaveInteractionToFirebase(timeSpent, localizedTitle);
+        SaveInteractionToFirebase(timeSpent, objectName);
     }
 
     /// <summary>
-    /// Save interaction data to Firebase
+    /// Save interaction data to Firebase - non-blocking
     /// </summary>
-    async void SaveInteractionToFirebase(float duration, string objectName)
+    void SaveInteractionToFirebase(float duration, string objectName)
     {
         // Log to console
-        Debug.Log($"  INTERACTION DATA:");
-        Debug.Log($"   Object: {objectName}");
-        Debug.Log($"   Duration: {duration:F1} seconds");
-        Debug.Log($"   Total Interactions: {totalInteractions}");
-        Debug.Log($"   Average Time: {(totalTimeSpent / totalInteractions):F1} seconds");
-        Debug.Log($"   Timestamp: {System.DateTime.UtcNow}");
+        Debug.Log($"[InteractiveObject] INTERACTION DATA:");
+        Debug.Log($"  Object: {objectName}");
+        Debug.Log($"  Duration: {duration:F1} seconds");
+        Debug.Log($"  Total Interactions: {totalInteractions}");
+        Debug.Log($"  Average Time: {(totalTimeSpent / totalInteractions):F1} seconds");
+        Debug.Log($"  Timestamp: {DateTime.UtcNow}");
 
         // Save to Firebase
         if (FirebaseManager.Instance != null && FirebaseManager.Instance.IsReady)
         {
-            // Get current user ID
-            string userId = FirebaseManager.Instance.Auth?.CurrentUser?.UserId;
+            // Get current user ID (WebGL uses CurrentParticipantCode)
+            string userId = FirebaseManager.Instance.CurrentParticipantCode;
 
             if (!string.IsNullOrEmpty(userId))
             {
                 float avgTime = totalTimeSpent / totalInteractions;
 
-                await FirebaseManager.Instance.SaveObjectInteractionAsync(
+                FirebaseManager.Instance.SaveObjectInteraction(
                     userId,
                     objectName,
                     duration,
                     totalInteractions,
-                    avgTime
+                    avgTime,
+                    (success) =>
+                    {
+                        if (!success)
+                        {
+                            Debug.LogWarning($"[InteractiveObject] Failed to save interaction to Firebase");
+                        }
+                    }
                 );
             }
             else
             {
-                Debug.LogWarning(" No user logged in - interaction not saved to Firebase");
+                Debug.LogWarning("[InteractiveObject] No user logged in - interaction not saved to Firebase");
             }
         }
         else
         {
-            Debug.LogWarning(" FirebaseManager not ready - interaction only logged locally");
+            Debug.LogWarning("[InteractiveObject] FirebaseManager not ready - interaction only logged locally");
         }
     }
 
     /// <summary>
     /// Wait for panel to close, then stop tracking
     /// </summary>
-    System.Collections.IEnumerator WaitForPanelClose()
+    IEnumerator WaitForPanelClose()
     {
         // Wait until panel is active
         while (ObjectInfoUI.Instance != null && ObjectInfoUI.Instance.infoPanel != null &&

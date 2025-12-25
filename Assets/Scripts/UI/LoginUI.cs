@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Firebase.Firestore;
-using UnityEngine.Localization;
-using UnityEngine.Localization.Settings;
 
+/// <summary>
+/// LoginUI - WebGL-safe version using coroutines instead of async/await
+/// </summary>
 public class LoginUI : MonoBehaviour
 {
     [Header("Panels")]
@@ -16,10 +16,8 @@ public class LoginUI : MonoBehaviour
     public GameObject questionsPanel;
 
     [Header("Login UI Elements")]
-    
-    public TMP_InputField participantCodeInput;  
+    public TMP_InputField participantCodeInput;
     public Button loginButton;
-   
     public TMP_Text messageText;
 
     [Header("Questions UI Elements")]
@@ -40,120 +38,189 @@ public class LoginUI : MonoBehaviour
     public int minCodeLength = 2;
     public int maxCodeLength = 20;
 
-    private async void Start()
+    private void Start()
     {
         // Start with login panel visible
-        loginPanel.SetActive(true);
-        questionsPanel.SetActive(false);
-        LanguageDropDownParent.SetActive(true);
+        if (loginPanel != null) loginPanel.SetActive(true);
+        if (questionsPanel != null) questionsPanel.SetActive(false);
+        if (LanguageDropDownParent != null) LanguageDropDownParent.SetActive(true);
 
-        messageText.text = "Initializing...";
+        if (messageText != null) messageText.text = "Initializing...";
 
         // Add button listeners
-        loginButton.onClick.AddListener(OnLoginClicked);
-        // REMOVED: registerButton listener
-        startButton.onClick.AddListener(OnStartClicked);
+        if (loginButton != null) loginButton.onClick.AddListener(OnLoginButtonClicked);
+        if (startButton != null) startButton.onClick.AddListener(OnStartButtonClicked);
 
-        CheckToggleGroups();
-
-        // Wait for Firebase to be ready
-        await WaitForFirebase();
-
-        messageText.text = "";
+        // Wait for Firebase using coroutine (safer for WebGL)
+        StartCoroutine(WaitForFirebaseCoroutine());
     }
 
     /// <summary>
-    /// Wait until Firebase is fully initialized
+    /// Wait until Firebase is fully initialized (using coroutine for WebGL safety)
     /// </summary>
-    private async Task WaitForFirebase()
+    private IEnumerator WaitForFirebaseCoroutine()
     {
-        int maxRetries = 50; // 5 seconds max
-        int retries = 0;
+        float maxWaitTime = 10f;
+        float elapsed = 0f;
 
         while (FirebaseManager.Instance == null || !FirebaseManager.Instance.IsReady)
         {
-            await Task.Delay(100);
-            retries++;
+            elapsed += Time.deltaTime;
 
-            if (retries >= maxRetries)
+            if (elapsed >= maxWaitTime)
             {
-                Debug.LogError("Firebase failed to initialize after 5 seconds!");
-                messageText.text = "Connection error. Please restart the app.";
-                messageText.color = Color.red;
-
-                loginButton.interactable = false;
-                return;
+                Debug.LogError("[LoginUI] Firebase failed to initialize after 10 seconds!");
+                ShowMessage("Connection error. Please refresh the page.", Color.red);
+                if (loginButton != null) loginButton.interactable = false;
+                yield break;
             }
+
+            yield return null;
         }
 
-        Debug.Log("Firebase ready! Login UI enabled.");
-    }
-
-    private void CheckToggleGroups()
-    {
-        foreach (var group in new[] { ageGroup, genderGroup, skillsGroup, vrGroup })
-        {
-            if (group == null) continue;
-
-            var toggles = group.GetComponentsInChildren<Toggle>(true);
-            Debug.Log($"[CheckToggleGroups] Group '{group.name}' has {toggles.Length} toggles.");
-
-            foreach (var toggle in toggles)
-            {
-                Debug.Log($"   → {toggle.name} | isOn = {toggle.isOn} | group = {(toggle.group == null ? " none" : toggle.group.name)}");
-            }
-        }
+        Debug.Log("[LoginUI] Firebase ready! Login UI enabled.");
+        ShowMessage("", Color.white);
+        if (loginButton != null) loginButton.interactable = true;
     }
 
     // ------------------------------------------------------------------------
-    // LOGIN BUTTON (CHANGED: Now uses participant code)
+    // LOGIN BUTTON
     // ------------------------------------------------------------------------
 
-    private async void OnLoginClicked()
+    private void OnLoginButtonClicked()
     {
+        StartCoroutine(LoginCoroutine());
+    }
+
+    private IEnumerator LoginCoroutine()
+    {
+        Debug.Log("[LoginUI] === LOGIN CLICKED ===");
+
         // Get participant code
-        string code = participantCodeInput.text.Trim();
+        string code = participantCodeInput != null ? participantCodeInput.text.Trim() : "";
 
         // Validate input
         if (string.IsNullOrEmpty(code))
         {
-            await ShowLocalizedMessage("Please enter your participant code.", Color.yellow);
-            return;
+            ShowMessage("Please enter your participant code.", Color.yellow);
+            yield break;
         }
 
         if (code.Length < minCodeLength)
         {
-            await ShowLocalizedMessage($"Code must be at least {minCodeLength} characters.", Color.yellow);
-            return;
+            ShowMessage($"Code must be at least {minCodeLength} characters.", Color.yellow);
+            yield break;
         }
 
         if (code.Length > maxCodeLength)
         {
-            await ShowLocalizedMessage($"Code must be {maxCodeLength} characters or less.", Color.yellow);
-            return;
+            ShowMessage($"Code must be {maxCodeLength} characters or less.", Color.yellow);
+            yield break;
         }
 
-        await ShowLocalizedMessage("Logging in...", Color.white);
+        ShowMessage("Logging in...", Color.white);
+        if (loginButton != null) loginButton.interactable = false;
 
-        // CHANGED: Call PlayerManager with participant code
-        bool success = await PlayerManager.Instance.LoginWithParticipantCode(code);
-
-        if (success)
+        // Check PlayerManager exists
+        if (PlayerManager.Instance == null)
         {
-            await ShowLocalizedMessage("Login successful!", Color.green);
+            Debug.LogError("[LoginUI] PlayerManager.Instance is NULL!");
+            ShowMessage("Error: PlayerManager not found.", Color.red);
+            if (loginButton != null) loginButton.interactable = true;
+            yield break;
+        }
 
-            // Load user's badge and card progress
+        // Call PlayerManager with participant code
+        Debug.Log("[LoginUI] Calling LoginWithParticipantCode...");
+
+        bool loginCompleted = false;
+        bool loginSuccess = false;
+
+        PlayerManager.Instance.LoginWithParticipantCode(code, (success) =>
+        {
+            loginSuccess = success;
+            loginCompleted = true;
+        });
+
+        // Wait for login to complete with timeout
+        float timeout = 15f;
+        float elapsed = 0f;
+        while (!loginCompleted && elapsed < timeout)
+        {
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        if (!loginCompleted)
+        {
+            Debug.LogError("[LoginUI] Login timed out!");
+            ShowMessage("Login timed out. Please try again.", Color.red);
+            if (loginButton != null) loginButton.interactable = true;
+            yield break;
+        }
+
+        if (loginSuccess)
+        {
+            Debug.Log("[LoginUI] Login succeeded!");
+            ShowMessage("Login successful!", Color.green);
+
+            // Small delay
+            yield return new WaitForSeconds(0.5f);
+
+            // Load badge progress (optional, with null check)
             if (BadgeManager.instance != null)
             {
-                await BadgeManager.instance.LoadProgressFromFirebase();
-            }
+                Debug.Log("[LoginUI] Loading badge progress...");
+                bool badgeLoadComplete = false;
 
-            await Task.Delay(400);
+                BadgeManager.instance.LoadProgressFromFirebaseCoroutine(() =>
+                {
+                    badgeLoadComplete = true;
+                });
+
+                // Wait with timeout
+                float badgeTimeout = 0f;
+                while (!badgeLoadComplete && badgeTimeout < 5f)
+                {
+                    badgeTimeout += Time.deltaTime;
+                    yield return null;
+                }
+
+                if (!badgeLoadComplete)
+                {
+                    Debug.LogWarning("[LoginUI] Badge loading timed out, continuing...");
+                }
+            }
 
             // Check if user already has demographics
             string odId = PlayerManager.Instance.userId;
-            bool hasDemographics = await FirebaseManager.Instance.UserHasDemographicsAsync(odId);
-            
+            Debug.Log($"[LoginUI] Checking demographics for user: {odId}");
+
+            bool demographicsCheckComplete = false;
+            bool hasDemographics = false;
+
+            FirebaseManager.Instance.CheckUserHasDemographics(odId, (exists) =>
+            {
+                hasDemographics = exists;
+                demographicsCheckComplete = true;
+            });
+
+            // Wait with timeout
+            float demoTimeout = 0f;
+            while (!demographicsCheckComplete && demoTimeout < 5f)
+            {
+                demoTimeout += Time.deltaTime;
+                yield return null;
+            }
+
+            if (!demographicsCheckComplete)
+            {
+                Debug.LogWarning("[LoginUI] Demographics check timed out. Assuming no demographics.");
+                hasDemographics = false;
+            }
+
+            Debug.Log($"[LoginUI] Demographics check result: {hasDemographics}");
+
             if (hasDemographics)
             {
                 Debug.Log("[LoginUI] Existing user with demographics → go to museum.");
@@ -167,25 +234,29 @@ public class LoginUI : MonoBehaviour
         }
         else
         {
-            await ShowLocalizedMessage("Login failed. Please try again.", Color.red);
+            Debug.LogError("[LoginUI] Login failed!");
+            ShowMessage("Login failed. Please try again.", Color.red);
+            if (loginButton != null) loginButton.interactable = true;
         }
     }
 
-    // REMOVED: OnRegisterClicked() - not needed for anonymous auth
-
     // ------------------------------------------------------------------------
-    // QUESTIONS PANEL (unchanged)
+    // START BUTTON
     // ------------------------------------------------------------------------
 
-    private async void OnStartClicked()
+    private void OnStartButtonClicked()
     {
-        Debug.Log("START TOUR CLICKED");
-        Debug.Log("[LoginUI] Start button clicked!");
+        StartCoroutine(StartTourCoroutine());
+    }
+
+    private IEnumerator StartTourCoroutine()
+    {
+        Debug.Log("[LoginUI] === START TOUR CLICKED ===");
 
         // Collect all answers
         string age = GetSelectedOption(ageGroup);
         string gender = GetSelectedOption(genderGroup);
-        string nationality = nationalityInput.text.Trim();
+        string nationality = nationalityInput != null ? nationalityInput.text.Trim() : "";
         string skills = GetSelectedOption(skillsGroup);
         string vr = GetSelectedOption(vrGroup);
 
@@ -195,58 +266,72 @@ public class LoginUI : MonoBehaviour
         if (string.IsNullOrEmpty(age) || string.IsNullOrEmpty(gender) ||
             string.IsNullOrEmpty(nationality) || string.IsNullOrEmpty(skills) || string.IsNullOrEmpty(vr))
         {
-            await ShowLocalizedMessage("Please answer all questions before continuing.", Color.yellow);
-            Debug.Log("[LoginUI] Exit NullAnswers");
-            return;
+            ShowMessage("Please answer all questions before continuing.", Color.yellow);
+            yield break;
         }
 
-        // Show progress message
-        await ShowLocalizedMessage("Saving your answers...", Color.white);
-        Debug.Log("[LoginUI] Starting demographic save...");
+        ShowMessage("Saving your answers...", Color.white);
+        if (startButton != null) startButton.interactable = false;
 
         // Validate Firebase and PlayerManager
         if (FirebaseManager.Instance == null)
         {
             Debug.LogError("[LoginUI] FirebaseManager.Instance is null!");
-            await ShowLocalizedMessage("Firebase not initialized.", Color.red);
-            return;
+            ShowMessage("Firebase not initialized.", Color.red);
+            if (startButton != null) startButton.interactable = true;
+            yield break;
         }
 
         if (PlayerManager.Instance == null || string.IsNullOrEmpty(PlayerManager.Instance.userId))
         {
-            Debug.LogError("[LoginUI] PlayerManager or odId is null!");
-            await ShowLocalizedMessage("User not logged in.", Color.red);
-            return;
+            Debug.LogError("[LoginUI] PlayerManager or userId is null!");
+            ShowMessage("User not logged in.", Color.red);
+            if (startButton != null) startButton.interactable = true;
+            yield break;
         }
 
         string odId = PlayerManager.Instance.userId;
 
-        try
+        // Save demographics
+        Debug.Log("[LoginUI] Calling SaveDemographics...");
+
+        bool saveCompleted = false;
+        bool saveSuccess = false;
+
+        FirebaseManager.Instance.SaveDemographics(odId, age, gender, nationality, skills, vr, (success) =>
         {
-            // Save data using FirebaseManager's method
-            Debug.Log("[LoginUI] Calling SaveDemographicsAsync...");
-            await FirebaseManager.Instance.SaveDemographicsAsync(
-                odId,
-                age,
-                gender,
-                nationality,
-                skills,
-                vr
-            );
+            saveSuccess = success;
+            saveCompleted = true;
+        });
 
-            Debug.Log("[LoginUI] Firestore save completed successfully!");
-            await ShowLocalizedMessage("Data saved! Loading museum...", Color.green);
+        // Wait with timeout
+        float timeout = 0f;
+        while (!saveCompleted && timeout < 10f)
+        {
+            timeout += Time.deltaTime;
+            yield return null;
+        }
 
-            // Delay a bit then load next scene
-            await Task.Delay(1200);
+        if (saveCompleted && saveSuccess)
+        {
+            Debug.Log("[LoginUI] Demographics saved successfully!");
+            ShowMessage("Data saved! Loading museum...", Color.green);
+
+            yield return new WaitForSeconds(1f);
+
             SceneManager.LoadScene(firstMuseumScene);
         }
-        catch (System.Exception ex)
+        else
         {
-            Debug.LogError("[LoginUI] Error saving demographics: " + ex.Message);
-            await ShowLocalizedMessage("Failed to save data. Check your internet connection.", Color.red);
+            Debug.LogError("[LoginUI] Failed to save demographics!");
+            ShowMessage("Failed to save data. Please try again.", Color.red);
+            if (startButton != null) startButton.interactable = true;
         }
     }
+
+    // ------------------------------------------------------------------------
+    // HELPERS
+    // ------------------------------------------------------------------------
 
     private string GetSelectedOption(ToggleGroup group)
     {
@@ -277,35 +362,24 @@ public class LoginUI : MonoBehaviour
         return activeToggle.name;
     }
 
-    // ------------------------------------------------------------------------
-    // UI HELPERS
-    // ------------------------------------------------------------------------
-
     private void ShowQuestionsPanel()
     {
-        loginPanel.SetActive(false);
-        LanguageDropDownParent.SetActive(false);
-        questionsPanel.SetActive(true);
-        messageText.text = "";
+        Debug.Log("[LoginUI] === SHOWING QUESTIONS PANEL ===");
+        if (loginPanel != null) loginPanel.SetActive(false);
+        if (LanguageDropDownParent != null) LanguageDropDownParent.SetActive(false);
+        if (questionsPanel != null) questionsPanel.SetActive(true);
+        ShowMessage("", Color.white);
+        if (startButton != null) startButton.interactable = true;
     }
 
-    private async Task ShowLocalizedMessage(string tableKey, Color color)
+    /// <summary>
+    /// Show message directly (no async localization to avoid WebGL issues)
+    /// </summary>
+    private void ShowMessage(string message, Color color)
     {
-        if (messageText == null || string.IsNullOrEmpty(tableKey))
-            return;
-
-        try
+        if (messageText != null)
         {
-            var operation = LocalizationSettings.StringDatabase.GetLocalizedStringAsync("StatusMessages", tableKey);
-            string localizedText = await operation.Task;
-
-            messageText.text = localizedText;
-            messageText.color = color;
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogWarning($"Failed to get localized string for key '{tableKey}': {ex.Message}");
-            messageText.text = tableKey; 
+            messageText.text = message;
             messageText.color = color;
         }
     }
