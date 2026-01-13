@@ -39,7 +39,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 5490635288576
-    m_Localized: "pyet\xEBsor demografik"
+    m_Localized: "Pyet\xEBsor demografik"
     m_Metadata:
       m_Items: []
   - m_Id: 5707795378176
@@ -76,28 +76,27 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 7070625411072
-    m_Localized: "Sa e leht\xEB \xEBsht\xEB p\xEBr ju t\xEB p\xEBrdorni kompjuter\xEBt
-      ose teknologjin\xEB?"
+    m_Localized: "Sa t\xEB leht\xEB e keni t\xEB p\xEBrdorni kompjuter\xEBt ose teknologjin\xEB?"
     m_Metadata:
       m_Items: []
   - m_Id: 7245146206208
-    m_Localized: "Shum\xEB e v\xEBshtir\xEB"
+    m_Localized: "Shum\xEB t\xEB v\xEBshtir\xEB"
     m_Metadata:
       m_Items: []
   - m_Id: 7414596087808
-    m_Localized: "E v\xEBshtir\xEB"
+    m_Localized: "T\xEB v\xEBshtir\xEB"
     m_Metadata:
       m_Items: []
   - m_Id: 7521890578432
-    m_Localized: Mesatarja
+    m_Localized: Mesatarisht
     m_Metadata:
       m_Items: []
   - m_Id: 7634172096512
-    m_Localized: "E leht\xEB"
+    m_Localized: "T\xEB leht\xEB"
     m_Metadata:
       m_Items: []
   - m_Id: 7718930591744
-    m_Localized: "Shum\xEB e leht\xEB"
+    m_Localized: "Shum\xEB t\xEB leht\xEB"
     m_Metadata:
       m_Items: []
   - m_Id: 7777235611648
@@ -106,23 +105,23 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 8155830267904
-    m_Localized: "Shum\xEB e ul\xEBt"
+    m_Localized: "Shum\xEB pak"
     m_Metadata:
       m_Items: []
   - m_Id: 8276299067392
-    m_Localized: "I ul\xEBt"
+    m_Localized: Pak
     m_Metadata:
       m_Items: []
   - m_Id: 8338672562176
-    m_Localized: Mesatare
+    m_Localized: Mesatar
     m_Metadata:
       m_Items: []
   - m_Id: 8440812253184
-    m_Localized: "I lart\xEB"
+    m_Localized: "Shum\xEB"
     m_Metadata:
       m_Items: []
   - m_Id: 8554096209920
-    m_Localized: "Shum\xEB i lart\xEB"
+    m_Localized: "Shum\xEB t\xEB interesuar"
     m_Metadata:
       m_Items: []
   - m_Id: 8691925233664
@@ -134,8 +133,72 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 48111780999168
-    m_Localized: "Eksploro dhoma virtuale, zbulo objekte t\xEB fshehura dhe p\xEBrjeto
+    m_Localized: "Eksploro dhomat virtuale, zbulo objektet e fshehura dhe p\xEBrjeto
       historin\xEB n\xEB nj\xEB m\xEBnyr\xEB t\xEB re."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6948865858973696
+    m_Localized: Duke inicializuar...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6949133023555584
+    m_Localized: "Kodi duhet t\xEB ket\xEB t\xEB pakt\xEBn {1} karaktere."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6949320341172224
+    m_Localized: "Ju lutemi vendosni kodin tuaj t\xEB pjes\xEBmarr\xEBsit."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6949392793579520
+    m_Localized: "Kodi duhet t\xEB ket\xEB {4} karaktere ose m\xEB pak."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6949641658413056
+    m_Localized: "Duke hyr\xEB..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6949721148862464
+    m_Localized: Hyrja u krye me sukses!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6949840686526464
+    m_Localized: "Hyrja d\xEBshtoi. Ju lutemi provoni p\xEBrs\xEBri."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6949944252280832
+    m_Localized: "Koha e hyrjes mbaroi. Ju lutemi provoni p\xEBrs\xEBri."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6950016926986240
+    m_Localized: "Gabim: Sistemi nuk \xEBsht\xEB gati."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6950108367007744
+    m_Localized: "Ju lutemi p\xEBrgjigjuni t\xEB gjitha pyetjeve para se t\xEB vazhdoni."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6950213992165376
+    m_Localized: "Duke ruajtur p\xEBrgjigjet tuaja..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6950332770660352
+    m_Localized: "Lidhja nuk \xEBsht\xEB inicializuar."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6950451050033152
+    m_Localized: "P\xEBrdoruesi nuk ka hyr\xEB."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6950525607981056
+    m_Localized: "Ruajtja e t\xEB dh\xEBnave d\xEBshtoi. Ju lutemi provoni p\xEBrs\xEBri."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6950615026348032
+    m_Localized: "T\xEB dh\xEBnat u ruajt\xEBn! Duke ngarkuar muzeun..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6950864641961984
+    m_Localized: Gabim lidhjeje. Ju lutemi rifreskoni faqen.
     m_Metadata:
       m_Items: []
   references:

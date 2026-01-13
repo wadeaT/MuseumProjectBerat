@@ -23,7 +23,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 134400028672
-    m_Localized: Mbrapa
+    m_Localized: Kthehu Pas
     m_Metadata:
       m_Items: []
   - m_Id: 788480765952
@@ -35,8 +35,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 261955539283968
-    m_Localized: "Gjet\xEBt kart\xEBn tuaj t\xEB par\xEB t\xEB fshehur! Sekretet
-      e muzeut ju presin."
+    m_Localized: "Ju sapo gjet\xEBt kart\xEBn e par\xEB t\xEB fshehur! Sekrete t\xEB
+      m\xEBtejshme t\xEB muzeut ju presin."
     m_Metadata:
       m_Items: []
   - m_Id: 262008064552960
@@ -44,7 +44,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 262097503891456
-    m_Localized: "Tre karta t\xEB zbuluara! Kureshtja juaj po ju \xE7on m\xEB thell\xEB
+    m_Localized: "Keni zbuluar tre karta! Kureshtja juaj po ju \xE7on m\xEB thell\xEB
       n\xEB historin\xEB e Beratit."
     m_Metadata:
       m_Items: []
@@ -54,7 +54,7 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 262193285017600
     m_Localized: "Gjasht\xEB karta t\xEB gjetura! Po zbuloni shtresat e jet\xEBs
-      familjare osmane."
+      s\xEB familjes osmane."
     m_Metadata:
       m_Items: []
   - m_Id: 262253821407232
@@ -62,7 +62,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 262298415247360
-    m_Localized: "N\xEBnt\xEB karta! Jeni n\xEB gjysm\xEBn e rr\xEBfimit t\xEB muzeut."
+    m_Localized: "N\xEBnt\xEB karta! Jeni n\xEB gjysm\xEBn e historis\xEB s\xEB muzeut."
     m_Metadata:
       m_Items: []
   - m_Id: 262662841544704
@@ -87,7 +87,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 262970569240576
-    m_Localized: "Keni zbuluar sekretet e \xE7ardakut\u2014qendra shoq\xEBrore ku
+    m_Localized: "Keni zbuluar sekretet e \"\xC7ardakut\", qendra shoq\xEBrore ku
       familjet mblidheshin, endnin dhe mir\xEBprisnin mysafir\xEB."
     m_Metadata:
       m_Items: []
@@ -96,8 +96,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 263171644174336
-    m_Localized: "Keni eksploruar hap\xEBsir\xEBn private ku familjet gjenin ngroht\xEBsi
-      e pushim dhe p\xEBrcillnin traditat gojore brez pas brezi."
+    m_Localized: "Keni eksploruar hap\xEBsir\xEBn private ku familjet gjenin ngroht\xEBsi,
+      pushim dhe p\xEBrcillnin traditat gojore brez pas brezi."
     m_Metadata:
       m_Items: []
   - m_Id: 263227696852992
@@ -105,8 +105,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 263287583125504
-    m_Localized: "Keni kuptuar artin e shenjt\xEB t\xEB mikpritjes osmane\u2014ku
-      arkitektura, dekorimi dhe rituali bashkoheshin p\xEBr t\xEB nderuar mysafir\xEBt."
+    m_Localized: "Keni kuptuar artin e mikpritjes osmane ku arkitektura, dekorimi
+      dhe rituali bashkoheshin p\xEBr t\xEB nderuar mysafir\xEBt."
     m_Metadata:
       m_Items: []
   - m_Id: 263331614928896
@@ -114,8 +114,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 263396798607360
-    m_Localized: "Keni zbuluar mjetet dhe traditat e gatimit osman\u2014ku zjarri,
-      bakri dhe durimi e shnd\xEBrronin p\xEBrb\xEBr\xEBsit n\xEB shprehje kulturore."
+    m_Localized: "Keni zbuluar mjetet dhe traditat e gatimit osman ku zjarri dhe
+      bakri ishin p\xEBrb\xEBr\xEBsit kryesor t\xEB k\xEBsaj kulture."
     m_Metadata:
       m_Items: []
   - m_Id: 263425823191040
@@ -123,7 +123,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 263472128307200
-    m_Localized: "Keni m\xEBsuar artin e endjes tradicionale\u2014zanati q\xEB mbajti
+    m_Localized: "Keni m\xEBsuar artin e endjes tradicionale zanati q\xEB mbajti
       familjet, ruajti identitetin dhe u dha grave fuqi ekonomike."
     m_Metadata:
       m_Items: []
@@ -132,8 +132,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 263646649102336
-    m_Localized: "Keni d\xEBshmuar momentet e ngrira t\xEB historis\xEB shqiptare\u2014fotografi
-      q\xEB ruajn\xEB zakone, ceremoni dhe komunitete tashm\xEB t\xEB transformuara
+    m_Localized: "Keni d\xEBshmuar momentet e ngrira t\xEB historis\xEB shqiptare;
+      fotografi q\xEB ruajn\xEB zakone, ceremoni dhe komunitete tashm\xEB t\xEB transformuara
       nga koha."
     m_Metadata:
       m_Items: []
@@ -142,9 +142,9 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 263721676812288
-    m_Localized: "\U0001F3C6 Keni eksploruar \xE7do cep t\xEB muzeut dhe keni p\xEBrjetuar
-      rr\xEBfimin e plot\xEB t\xEB jet\xEBs familjare n\xEB Beratin e epok\xEBs osmane.
-      Tani jeni nj\xEB ruajt\xEBs i k\xEBsaj trash\xEBgimie kulturore!"
+    m_Localized: "Keni eksploruar \xE7do cep t\xEB muzeut dhe keni p\xEBrjetuar rr\xEBfimin
+      e plot\xEB t\xEB jet\xEBs familjare n\xEB Beratin e epok\xEBs osmane. Tani
+      jeni nj\xEB ruajt\xEBs i k\xEBsaj trash\xEBgimie kulturore!"
     m_Metadata:
       m_Items: []
   - m_Id: 269289099472896
@@ -168,11 +168,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 269509342375936
-    m_Localized: "E mbledhur \u2713"
+    m_Localized: U mor
     m_Metadata:
       m_Items: []
   - m_Id: 269542326382592
-    m_Localized: "Nuk u Gjet \u2717"
+    m_Localized: Nuk u Gjet
     m_Metadata:
       m_Items: []
   - m_Id: 269610240552960

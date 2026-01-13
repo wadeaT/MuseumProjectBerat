@@ -131,6 +131,70 @@ MonoBehaviour:
     m_Key: login.SubTitle
     m_Metadata:
       m_Items: []
+  - m_Id: 6948865858973696
+    m_Key: login_msg_initializing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6949133023555584
+    m_Key: login_msg_code_too_short
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6949320341172224
+    m_Key: login_msg_enter_code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6949392793579520
+    m_Key: login_msg_code_too_long
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6949641658413056
+    m_Key: login_msg_logging_in
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6949721148862464
+    m_Key: login_msg_login_success
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6949840686526464
+    m_Key: login_msg_login_failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6949944252280832
+    m_Key: login_msg_login_timeout
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6950016926986240
+    m_Key: login_msg_player_manager_error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6950108367007744
+    m_Key: login_msg_answer_all
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6950213992165376
+    m_Key: login_msg_saving
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6950332770660352
+    m_Key: login_msg_firebase_error
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6950451050033152
+    m_Key: login_msg_not_logged_in
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6950525607981056
+    m_Key: login_msg_save_failed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6950615026348032
+    m_Key: login_msg_data_saved
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6950864641961984
+    m_Key: login_msg_connection_error
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -184,9 +184,9 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 262985052172288
-    m_Localized: "The ritual of guest reception followed precise codes: Turkish coffee
-      was served in small cups on ornate trays, accompanied by sweets. For closer
-      friends, raki\u2014the anise-flavored spirit\u2014flowed freely. Conversations
+    m_Localized: "The ritual of guest reception followed precise codes: Albanian
+      coffee was served in small cups on ornate trays, accompanied by sweets. For
+      closer friends, raki\u2014the anise-flavored spirit\u2014flowed freely. Conversations
       in this room ranged from business negotiations to marriage arrangements to
       political discussions. The decorative niches in the walls held precious objects\u2014copper
       coffeepots, silver trays, fine glassware\u2014that were brought out only for
@@ -558,9 +558,8 @@ MonoBehaviour:
     m_Localized: Coffee Pot
     m_Metadata:
       m_Items: []
-  - m_Id: 44830698614784
-    m_Localized: A small metal pot with a long handle used for preparing Turkish
-      coffee over hot coals or a small fire.
+  - m_Id: 6897579528663040
+    m_Localized: End Session - F10
     m_Metadata:
       m_Items: []
   - m_Id: 47261125816320
@@ -657,11 +656,13 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 274981403340800
-    m_Localized: "<b>Your Mission:</b>\r\nExplore the museum and discover hidden
-      cards that tell the story of Ottoman-era Albanian life.\r\n\r\n<b>Controls:</b>\r\n\u2022
-      Left side of screen - Move\r\n\u2022 Right side of screen - Look around\r\n\u2022
-      TAP button - Interact with objects\r\n\r\n<b>Collect all 18 cards to unlock
-      all badges!</b>"
+    m_Localized: "<b>Your Mission:</b>\nExplore the museum and discover hidden cards
+      that reveal stories from Ottoman-era Albanian life.\n\n<b>Controls:</b>\n(On
+      mobile)\n\u2022 Left side of the screen \u2014 Move\n\u2022 Right side of the
+      screen \u2014 Look around\n\u2022 Tap <b>Interact</b> to use objects\n\n(On
+      desktop web)\n\u2022 Press <b>E</b> to interact with objects\n\u2022 Use <b>WASD</b>
+      or <b>Arrow Keys</b> to move around\n\u2022 Press <b>Space</b> to close this
+      window\n\n<b>Collect all 18 cards to unlock all badges!</b>"
     m_Metadata:
       m_Items: []
   - m_Id: 275774902743040
@@ -780,6 +781,11 @@ MonoBehaviour:
     m_Localized: "\U0001F3C6 You've explored every corner of the museum and experienced
       the complete story of family life in Ottoman-era Berat. You are now a keeper
       of this cultural heritage!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6892036856590336
+    m_Localized: A small metal pot with a long handle used for preparing Albanian
+      coffee over hot coals or a small fire.
     m_Metadata:
       m_Items: []
   references:

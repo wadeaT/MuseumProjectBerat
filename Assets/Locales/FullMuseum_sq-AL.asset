@@ -79,9 +79,10 @@ MonoBehaviour:
       funksionit dhe intimitetit. Dyshek\xEBt - t\xEB mbushur me lesh dhe t\xEB mbuluar
       me tekstile t\xEB endura me dor\xEB - mb\xEBshtilleshin dhe ruheshin n\xEB
       dollap gjat\xEB dit\xEBs, duke e transformuar dhom\xEBn n\xEB nj\xEB hap\xEBsir\xEB
-      \u200B\u200Bshum\xEBfunksionale. Nat\xEBn, ajo b\xEBhej nj\xEB vend i shenjt\xEB
-      ku prind\xEBrit u tregonin histori f\xEBmij\xEBve dhe p\xEBrcillnin tradita
-      gojore n\xEB biseda t\xEB p\xEBshp\xEBritura n\xEBn drit\xEBn e qirinjve."
+      \xE2\u20AC\u2039\xE2\u20AC\u2039shum\xEBfunksionale. Nat\xEBn, ajo b\xEBhej
+      nj\xEB vend i shenjt\xEB ku prind\xEBrit u tregonin histori f\xEBmij\xEBve
+      dhe p\xEBrcillnin tradita gojore n\xEB biseda t\xEB p\xEBshp\xEBritura n\xEBn
+      drit\xEBn e qirinjve."
     m_Metadata:
       m_Items: []
   - m_Id: 260746392743936
@@ -299,10 +300,10 @@ MonoBehaviour:
       atyre ndikim mbi vendimet e familjes. Nj\xEB end\xEBse e aft\xEB mund t\xEB
       fitonte mjaftuesh\xEBm p\xEBr t\xEB kontribuar ndjesh\xEBm n\xEB shpenzimet
       familjare ose p\xEBr t\xEB kursyer p\xEBr paj\xEBn e vajz\xEBs s\xEB saj. Punishtja
-      ishte nj\xEB hap\xEBsir\xEB \u200B\u200Bku puna e grave p\xEBrkthehej drejtp\xEBrdrejt
-      n\xEB vler\xEB ekonomike, duke sfiduar iden\xEB se grat\xEB osmane ishin thjesht
-      t\xEB kufizuara n\xEB padukshm\xEBrin\xEB sht\xEBpiake. Duart e tyre mbanin
-      fije, por edhe fuqi negociuese."
+      ishte nj\xEB hap\xEBsir\xEB \xE2\u20AC\u2039\xE2\u20AC\u2039ku puna e grave
+      p\xEBrkthehej drejtp\xEBrdrejt n\xEB vler\xEB ekonomike, duke sfiduar iden\xEB
+      se grat\xEB osmane ishin thjesht t\xEB kufizuara n\xEB padukshm\xEBrin\xEB
+      sht\xEBpiake. Duart e tyre mbanin fije, por edhe fuqi negociuese."
     m_Metadata:
       m_Items: []
   - m_Id: 16720441344
@@ -310,7 +311,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 578513907712
-    m_Localized: "Djep.Periudha e socializmit. Objekt i jet\xEBs s\xEB p\xEBrditshme."
+    m_Localized: "Djep. Periudha e socializmit. Objekt i jet\xEBs s\xEB p\xEBrditshme."
     m_Metadata:
       m_Items: []
   - m_Id: 8718882025472
@@ -324,7 +325,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 9872655364096
-    m_Localized: Lavatrice dhe lavaman
+    m_Localized: "Lavatri\xE7e dhe lavaman"
     m_Metadata:
       m_Items: []
   - m_Id: 10123298582528
@@ -357,7 +358,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 26591553761280
-    m_Localized: "Foto e vitit 1930. I p\xEBrket aristokracis\xEB beratase,ku veshja
+    m_Localized: "Foto e vitit 1930. I p\xEBrket aristokracis\xEB beratase, ku veshja
       tradicionale nd\xEBrthuret me elemente t\xEB influenc\xEBs per\xEBndimore."
     m_Metadata:
       m_Items: []
@@ -374,8 +375,9 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 29676351107072
-    m_Localized: Tezgjah.I perket Mesjetes se vone.Vegel pune per prodhimin e qilimave
-      te leshit,rrugicave,flokjeve etj.Perdorej me krehera e lisa deri ne 50 cm gjeresi.
+    m_Localized: "Tezgjah. I p\xEBrket Mesjetes s\xEB von\xEB. Veg\xEBl pune p\xEBr
+      prodhimin e qilimave t\xEB leshit, rrugicave, flokjeve etj. P\xEBrdorej me
+      krehera e lisa deri n\xEB 50 cm gjer\xEBsi."
     m_Metadata:
       m_Items: []
   - m_Id: 31282555629568
@@ -384,13 +386,13 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 33262044819456
-    m_Localized: Cikrik
+    m_Localized: "\xC7ikrik"
     m_Metadata:
       m_Items: []
   - m_Id: 33425756893184
-    m_Localized: "Cikrik.I p\xEBrket periudh\xEBs s\xEB Pavar\xEBsis\xEB,veg\xEBl
-      pun\xEB n\xEB kushtet e artizanatit sht\xEBpiak p\xEBr procesin e mbledhjes
-      s\xEB leshit. "
+    m_Localized: "\xC7ikrik. I p\xEBrket periudh\xEBs s\xEB Pavar\xEBsis\xEB. Veg\xEBl
+      pune n\xEB kushtet artizanale sht\xEBpiake p\xEBr pro\xE7esin e mbledhjes s\xEB
+      leshit. "
     m_Metadata:
       m_Items: []
   - m_Id: 33498762948608
@@ -398,8 +400,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 33890204758016
-    m_Localized: Mangall bakri.I perket periudhes se Rilindjes.Objekt i jetes se
-      perditshme.
+    m_Localized: "Mangall bakri. I p\xEBrket periudh\xEBs s\xEB Rilindjes. Objekt
+      i jet\xEBs s\xEB p\xEBrditshme."
     m_Metadata:
       m_Items: []
   - m_Id: 33982248759296
@@ -407,8 +409,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 34567626797056
-    m_Localized: "Hekur me prush. I p\xEBrket periudh\xEBs s\xEB Mesjet\xEBs s\xEB
-      von\xEB. Mjet pune."
+    m_Localized: "Hekur me prush. Mjet pune. I p\xEBrket periudh\xEBs s\xEB Mesjet\xEBs
+      s\xEB von\xEB."
     m_Metadata:
       m_Items: []
   - m_Id: 34776998064128
@@ -417,16 +419,16 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 35109287604224
     m_Localized: "Nj\xEB ark\xEB druri q\xEB p\xEBrdorej p\xEBr t\xEB ruajtur miellin,
-      drith\xEBrat dhe furnizimet e kuzhin\xEBs. Ajo e mbante ushqimin t\xEB that\xEB,
-      t\xEB mbrojtur dhe gati p\xEBr gatim t\xEB p\xEBrditsh\xEBm."
+      drith\xEBrat dhe furnizimet e kuzhin\xEBs. Mbante ushqimin e that\xEB dhe e
+      ruante at\xEB p\xEBr gatim t\xEB p\xEBrditsh\xEBm."
     m_Metadata:
       m_Items: []
   - m_Id: 35341484273664
-    m_Localized: "Lla\xE7 guri dhe murtaj\xEB"
+    m_Localized: "En\xEB guri dhe shtyp\xEBse"
     m_Metadata:
       m_Items: []
   - m_Id: 36060685774848
-    m_Localized: "Nj\xEB lla\xE7 i r\xEBnd\xEB guri q\xEB p\xEBrdoret me nj\xEB guask\xEB
+    m_Localized: "Nj\xEB en\xEB e r\xEBnd\xEB guri q\xEB p\xEBrdoret me nj\xEB shkop
       druri p\xEBr t\xEB bluar drith\xEBrat, bim\xEBt dhe er\xEBzat n\xEB kuzhin\xEBn
       tradicionale osmane."
     m_Metadata:
@@ -437,8 +439,8 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 36482620174336
     m_Localized: "Nj\xEB en\xEB balte e punuar me dor\xEB q\xEB p\xEBrdoret p\xEBr
-      ruajtjen dhe mbajtjen e ujit. Dorezat e saj t\xEB shumta e lejojn\xEB ngritjen
-      dhe derdhjen m\xEB t\xEB leht\xEB."
+      ruajtjen dhe mbajtjen e ujit. Dorezat e saj t\xEB shumta lejojn\xEB kapjen
+      e en\xEBs m\xEB leht\xEB."
     m_Metadata:
       m_Items: []
   - m_Id: 36614455537664
@@ -454,8 +456,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 37552465489920
-    m_Localized: "\xC7engel mishi prej hekuri. I p\xEBrket  periudh\xEBs se  Rilindjes,
-      mjet pune."
+    m_Localized: "\xC7engel mishi prej hekuri. Mjet pune. I p\xEBrket  periudh\xEBs
+      se  Rilindjes."
     m_Metadata:
       m_Items: []
   - m_Id: 37616252465152
@@ -465,7 +467,7 @@ MonoBehaviour:
   - m_Id: 38082080256000
     m_Localized: "Nj\xEB tav\xEB metalike e rrumbullak\xEBt q\xEB p\xEBrdorej p\xEBr
       t\xEB pjekur buk\xEB dhe \xEBmb\xEBlsira mbi qymyr t\xEB nxeht\xEB. Vendosej
-      n\xEBn nj\xEB kapak gatimi n\xEB form\xEB sa\xE7 p\xEBr t\xEB ngrohur brumin
+      n\xEBn nj\xEB kapak gatimi n\xEB form\xEB sa\xE7i p\xEBr t\xEB ngrohur brumin
       n\xEB m\xEBnyr\xEB t\xEB barabart\xEB."
     m_Metadata:
       m_Items: []
@@ -474,8 +476,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 38549053091840
-    m_Localized: Shtembe balte .I perket periudhes se Mesjetes se Vone.Ene e perdorimit
-      te perditshem.
+    m_Localized: "Shtamb\xEB balte. I p\xEBrket periudh\xEBs s\xEB Mesjet\xEBs s\xEB
+      Von\xEB. En\xEB e p\xEBrdorimit t\xEB p\xEBrditshem."
     m_Metadata:
       m_Items: []
   - m_Id: 38711347490816
@@ -483,13 +485,13 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 38987332694016
-    m_Localized: "Nj\xEB llamb\xEB tradicionale metalike me vajguri q\xEB p\xEBrdoret
-      p\xEBr ndri\xE7im para energjis\xEB elektrike. Doreza e vog\xEBl rregullon
-      fitilin dhe llamba normalisht do t\xEB mbante nj\xEB oxhak qelqi sip\xEBr."
+    m_Localized: "Nj\xEB llamb\xEB tradicionale metalike me vajguri q\xEB p\xEBrdorej
+      p\xEBr ndri\xE7im p\xEBrpara energjis\xEB elektrike. Doreza e vog\xEBl rregullon
+      fitilin dhe llamba ka nj\xEB pjes\xEB prej qelqi sip\xEBr."
     m_Metadata:
       m_Items: []
   - m_Id: 39546643132416
-    m_Localized: Vatra e Mangalit
+    m_Localized: Vatra e Mangallit
     m_Metadata:
       m_Items: []
   - m_Id: 39600909037568
@@ -499,7 +501,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 40761372291072
-    m_Localized: "Sa\xE7 Lid\r"
+    m_Localized: "Sa\xE7 me kapak "
     m_Metadata:
       m_Items: []
   - m_Id: 40820679749632
@@ -524,8 +526,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 41618205683712
-    m_Localized: "Nj\xEB kall\xEBp metalik q\xEB p\xEBrdoret p\xEBr t\xEB pjekur
-      pasta t\xEB vogla t\xEB rrumbullak\xEBta. \xC7do filxhan mban nj\xEB porcion
+    m_Localized: "Nj\xEB kall\xEBp metalik q\xEB p\xEBrdoret p\xEBr t\xEB gatuar
+      ushqime t\xEB vogla t\xEB rrumbullak\xEBta. \xC7do filxhan mban nj\xEB porcion
       brumi p\xEBr t'u gatuar nj\xEBtrajt\xEBsisht mbi zjarr."
     m_Metadata:
       m_Items: []
@@ -542,10 +544,8 @@ MonoBehaviour:
     m_Localized: Kafeja
     m_Metadata:
       m_Items: []
-  - m_Id: 44830698614784
-    m_Localized: "Nj\xEB tenxhere e vog\xEBl metalike me dorez\xEB t\xEB gjat\xEB
-      q\xEB p\xEBrdoret p\xEBr t\xEB p\xEBrgatitur kafe turke mbi qymyr t\xEB nxeht\xEB
-      ose n\xEB nj\xEB zjarr t\xEB vog\xEBl."
+  - m_Id: 6897579528663040
+    m_Localized: Mbyll Sesionin - F10
     m_Metadata:
       m_Items: []
   - m_Id: 47261125816320
@@ -626,14 +626,14 @@ MonoBehaviour:
   - m_Id: 274981403340800
     m_Localized: "<b>Misioni Juaj:</b>\r\nEksploroni muzeun dhe zbuloni karta t\xEB
       fshehura q\xEB tregojn\xEB historin\xEB e jet\xEBs s\xEB shqiptar\xEBve t\xEB
-      epok\xEBs osmane.\r\n\r\n<b>Kontrollet:</b>\r\n\u2022 Ana e majt\xEB e ekranit
+      epok\xEBs osmane.<b>Kontrollet:</b>\r\n\r\n\u2022 Ana e majt\xEB e ekranit
       - L\xEBvizni\r\n\u2022 Ana e djatht\xEB e ekranit - Shikoni p\xEBrreth\r\n\u2022
       Butoni PREKNI - Nd\xEBrveproni me objektet\r\n\r\n<b>Mblidhni t\xEB 18 kartat
       p\xEBr t\xEB zhbllokuar t\xEB gjitha distinktiv\xEBt!</b>"
     m_Metadata:
       m_Items: []
   - m_Id: 275774902743040
-    m_Localized: "ARRITJE E \xC7LUKSUAR"
+    m_Localized: "URIME P\xCBR ARRITJEN TUAJ"
     m_Metadata:
       m_Items: []
   - m_Id: 300671565672448
@@ -693,8 +693,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 303874063577088
-    m_Localized: "Keni zbuluar sekretet e \xE7ardakut\u2014qendra shoq\xEBrore ku
-      familjet mblidheshin, endnin dhe mir\xEBprisnin mysafir\xEB."
+    m_Localized: "Keni zbuluar sekretet e \xE7ardakut, qendra shoq\xEBrore ku familjet
+      mblidheshin, endnin dhe mir\xEBprisnin mysafir\xEB."
     m_Metadata:
       m_Items: []
   - m_Id: 303953818267648
@@ -711,8 +711,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 304111893196800
-    m_Localized: "Keni kuptuar artin e shenjt\xEB t\xEB mikpritjes osmane\u2014ku
-      arkitektura, dekorimi dhe rituali bashkoheshin p\xEBr t\xEB nderuar mysafir\xEBt."
+    m_Localized: "Keni kuptuar artin e shenjt\xEB t\xEB mikpritjes osmane, ku arkitektura,
+      dekorimi dhe rituali bashkoheshin p\xEBr t\xEB nderuar mysafir\xEBt."
     m_Metadata:
       m_Items: []
   - m_Id: 304152695386112
@@ -720,8 +720,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 304189001281536
-    m_Localized: "Keni zbuluar mjetet dhe traditat e gatimit osman\u2014ku zjarri,
-      bakri dhe durimi e shnd\xEBrronin p\xEBrb\xEBr\xEBsit n\xEB shprehje kulturore."
+    m_Localized: "Keni zbuluar mjetet dhe traditat e gatimit osman, ku zjarri, bakri
+      dhe durimi e shnd\xEBrronin p\xEBrb\xEBr\xEBsit n\xEB shprehje kulturore."
     m_Metadata:
       m_Items: []
   - m_Id: 304256777039872
@@ -729,7 +729,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 304300330692608
-    m_Localized: "Keni m\xEBsuar artin e endjes tradicionale\u2014zanati q\xEB mbajti
+    m_Localized: "Keni m\xEBsuar artin e endjes tradicionale, zanati q\xEB mbajti
       familjet, ruajti identitetin dhe u dha grave fuqi ekonomike."
     m_Metadata:
       m_Items: []
@@ -738,8 +738,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 304387945508864
-    m_Localized: "Keni d\xEBshmuar momentet e ngrira t\xEB historis\xEB shqiptare\u2014fotografi
-      q\xEB ruajn\xEB zakone, ceremoni dhe komunitete tashm\xEB t\xEB transformuara
+    m_Localized: "Keni d\xEBshmuar momentet e ngrira t\xEB historis\xEB shqiptare,
+      fotografi q\xEB ruajn\xEB zakone, ceremoni dhe komunitete tashm\xEB t\xEB transformuara
       nga koha."
     m_Metadata:
       m_Items: []
@@ -748,9 +748,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 304488273260544
-    m_Localized: "\U0001F3C6 Keni eksploruar \xE7do cep t\xEB muzeut dhe keni p\xEBrjetuar
-      rr\xEBfimin e plot\xEB t\xEB jet\xEBs familjare n\xEB Beratin e epok\xEBs osmane.
-      Tani jeni nj\xEB ruajt\xEBs i k\xEBsaj trash\xEBgimie kulturore!"
+    m_Localized: "Keni eksploruar \xE7do cep t\xEB muzeut dhe keni p\xEBrjetuar rr\xEBfimin
+      e plot\xEB t\xEB jet\xEBs familjare n\xEB Beratin e epok\xEBs osmane. Tani
+      jeni nj\xEB ruajt\xEBs i k\xEBsaj trash\xEBgimie kulturore!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6892036856590336
+    m_Localized: "Nj\xEB tenxhere e vog\xEBl metalike me nj\xEB dorez\xEB t\xEB gjat\xEB
+      q\xEB p\xEBrdoret p\xEBr t\xEB p\xEBrgatitur kafen\xEB shqiptare mbi qymyr
+      t\xEB nxeht\xEB ose n\xEB nj\xEB zjarr t\xEB vog\xEBl."
     m_Metadata:
       m_Items: []
   references:

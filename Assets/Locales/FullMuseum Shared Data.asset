@@ -215,10 +215,6 @@ MonoBehaviour:
     m_Key: FullM.CoffeePot
     m_Metadata:
       m_Items: []
-  - m_Id: 44830698614784
-    m_Key: FullM.CoffeePotDesc
-    m_Metadata:
-      m_Items: []
   - m_Id: 47261125816320
     m_Key: FullM.WeaponsTitle
     m_Metadata:
@@ -537,6 +533,14 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 304488273260544
     m_Key: museum_master_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6892036856590336
+    m_Key: CoffeePot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6897579528663040
+    m_Key: EndSession
     m_Metadata:
       m_Items: []
   m_Metadata:

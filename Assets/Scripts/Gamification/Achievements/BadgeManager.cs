@@ -7,6 +7,7 @@ using System.Collections.Generic;
 
 /// <summary>
 /// BadgeManager - WebGL-safe version using coroutines instead of async/await
+/// FIXED: Properly handles multi-user scenarios by clearing/restoring state on login
 /// </summary>
 public class BadgeManager : MonoBehaviour
 {
@@ -89,6 +90,83 @@ public class BadgeManager : MonoBehaviour
     }
 
     // ============================================================================
+    // USER SESSION MANAGEMENT - Critical for multi-user support
+    // ============================================================================
+
+    /// <summary>
+    /// Clears all in-memory state for new user session.
+    /// Call this BEFORE loading a new user's data from Firebase.
+    /// Does NOT clear PlayerPrefs (LoginUI handles that separately).
+    /// </summary>
+    public void ClearForNewUser()
+    {
+        totalCardsCollected = 0;
+        unlockedBadges.Clear();
+        cardsByRoom.Clear();
+        _isInitialized = false;
+
+        Debug.Log("[BadgeManager] In-memory state cleared for new user session");
+    }
+
+    /// <summary>
+    /// Extracts the room ID from a card ID.
+    /// Assumes format like "balcony_card_01" where room is everything before "_card_"
+    /// Also handles simpler formats like "balcony_01" where room is the first part
+    /// </summary>
+    private string ExtractRoomIdFromCardId(string cardId)
+    {
+        if (string.IsNullOrEmpty(cardId))
+            return "unknown";
+
+        // Try to find "_card_" pattern first (e.g., "balcony_card_01")
+        int cardIndex = cardId.IndexOf("_card_");
+        if (cardIndex > 0)
+        {
+            return cardId.Substring(0, cardIndex);
+        }
+
+        // Fallback: take everything before the last underscore (e.g., "balcony_01" → "balcony")
+        int lastUnderscore = cardId.LastIndexOf('_');
+        if (lastUnderscore > 0)
+        {
+            return cardId.Substring(0, lastUnderscore);
+        }
+
+        // Can't determine room, return unknown
+        return "unknown";
+    }
+
+    /// <summary>
+    /// Restores cardsByRoom dictionary from a list of collected card IDs.
+    /// This is needed when loading a returning user's progress.
+    /// </summary>
+    private void RestoreCardsByRoomFromCardList(List<string> cardIds)
+    {
+        cardsByRoom.Clear();
+
+        foreach (string cardId in cardIds)
+        {
+            string roomId = ExtractRoomIdFromCardId(cardId);
+
+            if (!cardsByRoom.ContainsKey(roomId))
+            {
+                cardsByRoom[roomId] = new HashSet<string>();
+            }
+
+            cardsByRoom[roomId].Add(cardId);
+        }
+
+        if (showDebugMessages)
+        {
+            Debug.Log($"[BadgeManager] Restored cardsByRoom from {cardIds.Count} cards:");
+            foreach (var kvp in cardsByRoom)
+            {
+                Debug.Log($"  Room '{kvp.Key}': {kvp.Value.Count} cards");
+            }
+        }
+    }
+
+    // ============================================================================
     // LOCALIZATION HELPERS
     // ============================================================================
 
@@ -163,6 +241,9 @@ public class BadgeManager : MonoBehaviour
             yield break;
         }
 
+        // CRITICAL: Clear existing state before loading new user's data
+        ClearForNewUser();
+
         bool completed = false;
 
         // Load from PlayerManager (which loads from Firebase)
@@ -186,7 +267,7 @@ public class BadgeManager : MonoBehaviour
             yield break;
         }
 
-        // Sync local data
+        // Sync local data from PlayerManager
         totalCardsCollected = PlayerManager.Instance.totalCardsCollected;
 
         unlockedBadges.Clear();
@@ -194,6 +275,11 @@ public class BadgeManager : MonoBehaviour
         {
             unlockedBadges.Add(badgeId);
         }
+
+        // CRITICAL FIX: Restore cardsByRoom from the list of collected cards
+        RestoreCardsByRoomFromCardList(PlayerManager.Instance.cardsFound);
+
+        _isInitialized = true;
 
         Debug.Log($"[BadgeManager] Loaded from Firebase: {totalCardsCollected} cards, {unlockedBadges.Count} badges");
     }

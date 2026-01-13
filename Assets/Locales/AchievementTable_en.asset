@@ -165,11 +165,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 269509342375936
-    m_Localized: "Collected \u2713"
+    m_Localized: 'Collected '
     m_Metadata:
       m_Items: []
   - m_Id: 269542326382592
-    m_Localized: "Not Found \u2717"
+    m_Localized: 'Not Found '
     m_Metadata:
       m_Items: []
   - m_Id: 269610240552960

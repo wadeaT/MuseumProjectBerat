@@ -22,7 +22,11 @@ public class WebGLManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
 
             // Detect platform once
+#if UNITY_WEBGL && !UNITY_EDITOR
             IsMobile = IsMobileBrowser();
+#else
+            IsMobile = false; // Default to desktop in Editor
+#endif
             Debug.Log($"[WebGLManager] Mobile: {IsMobile}");
         }
         else
@@ -34,14 +38,24 @@ public class WebGLManager : MonoBehaviour
 
     void Start()
     {
-        // Setup cursor based on platform
+        // Setup cursor based on platform AND current scene
+        string currentScene = SceneManager.GetActiveScene().name;
+
         if (IsMobile)
         {
             UnlockCursor();
         }
         else
         {
-            LockCursor();
+            // On desktop: unlock cursor for UI scenes, lock for gameplay
+            if (IsUIScene(currentScene))
+            {
+                UnlockCursor();
+            }
+            else
+            {
+                LockCursor();
+            }
         }
 
         // Find and configure mobile controls in current scene
@@ -61,11 +75,31 @@ public class WebGLManager : MonoBehaviour
         // Configure mobile controls in each new scene
         ConfigureMobileControls();
 
-        // Re-lock cursor on desktop when entering gameplay scenes
-        if (!IsMobile && scene.name != "LoginScene") // Adjust scene name as needed
+        // Handle cursor based on scene type (desktop only)
+        if (!IsMobile)
         {
-            LockCursor();
+            if (IsUIScene(scene.name))
+            {
+                UnlockCursor();
+                Debug.Log($"[WebGLManager] UI scene '{scene.name}' - cursor unlocked");
+            }
+            else
+            {
+                LockCursor();
+                Debug.Log($"[WebGLManager] Gameplay scene '{scene.name}' - cursor locked");
+            }
         }
+    }
+
+    /// <summary>
+    /// Check if the scene is a UI-focused scene where cursor should be unlocked.
+    /// Add any additional UI scene names here.
+    /// </summary>
+    private bool IsUIScene(string sceneName)
+    {
+        return sceneName == "LoginScene" ||
+               sceneName == "AchievementsScene" ||
+               sceneName == "SUSScene"; // Add SUS scene too if needed
     }
 
     void ConfigureMobileControls()
@@ -91,7 +125,16 @@ public class WebGLManager : MonoBehaviour
         // Skip cursor management on mobile
         if (IsMobile) return;
 
-        // ESC toggles cursor
+        // Skip auto-lock behavior in UI scenes
+        string currentScene = SceneManager.GetActiveScene().name;
+        if (IsUIScene(currentScene))
+        {
+            // In UI scenes, only handle ESC to toggle (optional)
+            // But don't auto-lock on click
+            return;
+        }
+
+        // ESC toggles cursor (gameplay scenes only)
         if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             if (IsCursorLocked)
@@ -100,7 +143,7 @@ public class WebGLManager : MonoBehaviour
                 LockCursor();
         }
 
-        // Click to re-lock (only if not clicking UI)
+        // Click to re-lock (only if not clicking UI) - gameplay scenes only
         if (!IsCursorLocked && Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
             if (!IsPointerOverUI())

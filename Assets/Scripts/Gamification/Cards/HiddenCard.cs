@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Localization; 
-using UnityEngine.Localization.Settings; 
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 
 public class HiddenCard : MonoBehaviour
 {
@@ -14,10 +14,10 @@ public class HiddenCard : MonoBehaviour
 
     [Header("Localized Text")]
     [Tooltip("Localized title for this card")]
-    public LocalizedString cardTitle; 
+    public LocalizedString cardTitle;
 
     [Tooltip("Localized description/story for this card")]
-    public LocalizedString cardDescription; 
+    public LocalizedString cardDescription;
 
     [Header("Discovery Settings")]
     [Tooltip("How close must the player be to notice this card? (in meters)")]
@@ -216,26 +216,8 @@ public class HiddenCard : MonoBehaviour
     {
         isDiscovered = true;
 
-        
-        var titleOperation = cardTitle.GetLocalizedStringAsync();
-        var descOperation = cardDescription.GetLocalizedStringAsync();
-
-        titleOperation.Completed += (op) =>
-        {
-            string localizedTitle = op.Result;
-            Debug.Log($"Card Discovered: {localizedTitle}");
-
-            descOperation.Completed += (descOp) =>
-            {
-                string localizedDesc = descOp.Result;
-
-                // Show card discovery UI with localized text
-                if (CardDiscoveryUI.Instance != null)
-                {
-                    CardDiscoveryUI.Instance.ShowCardDiscovery(localizedTitle, localizedDesc);
-                }
-            };
-        };
+        // Start the coroutine to handle localization properly
+        StartCoroutine(CollectCardCoroutine());
 
         if (BadgeManager.instance != null)
         {
@@ -261,6 +243,70 @@ public class HiddenCard : MonoBehaviour
         PlayerPrefs.Save();
 
         ShowInteractionPrompt(false);
+    }
+
+    /// <summary>
+    /// Coroutine to properly wait for both localized strings before showing UI.
+    /// This fixes the race condition where the description callback was nested inside 
+    /// the title callback - if description loaded first, the callback wasn't registered yet.
+    /// </summary>
+    System.Collections.IEnumerator CollectCardCoroutine()
+    {
+        string localizedTitle = null;
+        string localizedDesc = null;
+        bool titleReady = false;
+        bool descReady = false;
+
+        // Start both operations simultaneously
+        var titleOperation = cardTitle.GetLocalizedStringAsync();
+        var descOperation = cardDescription.GetLocalizedStringAsync();
+
+        // Register callbacks for BOTH independently (not nested!)
+        titleOperation.Completed += (op) =>
+        {
+            localizedTitle = op.Result;
+            titleReady = true;
+            Debug.Log($"[HiddenCard] Title loaded: {localizedTitle}");
+        };
+
+        descOperation.Completed += (op) =>
+        {
+            localizedDesc = op.Result;
+            descReady = true;
+            Debug.Log($"[HiddenCard] Description loaded: {(localizedDesc?.Length > 50 ? localizedDesc.Substring(0, 50) + "..." : localizedDesc)}");
+        };
+
+        // Wait for both to complete (with timeout to prevent infinite wait)
+        float timeout = 5f;
+        float elapsed = 0f;
+
+        while ((!titleReady || !descReady) && elapsed < timeout)
+        {
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // Check for timeout or missing data
+        if (!titleReady || !descReady)
+        {
+            Debug.LogWarning($"[HiddenCard] Localization timeout for card {cardID}. Title ready: {titleReady}, Desc ready: {descReady}");
+
+            // Use fallback values if needed
+            if (!titleReady) localizedTitle = cardID;
+            if (!descReady) localizedDesc = "Description unavailable";
+        }
+
+        // Now show the UI with both values guaranteed to be ready
+        Debug.Log($"[HiddenCard] Card Discovered: {localizedTitle}");
+
+        if (CardDiscoveryUI.Instance != null)
+        {
+            CardDiscoveryUI.Instance.ShowCardDiscovery(localizedTitle, localizedDesc);
+        }
+        else
+        {
+            Debug.LogWarning("[HiddenCard] CardDiscoveryUI.Instance is null!");
+        }
     }
 
     void CheckIfAlreadyDiscovered()

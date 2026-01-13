@@ -136,6 +136,70 @@ MonoBehaviour:
       history in a new way.
     m_Metadata:
       m_Items: []
+  - m_Id: 6948865858973696
+    m_Localized: Initializing...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6949133023555584
+    m_Localized: Code must be at least {1} characters.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6949320341172224
+    m_Localized: Please enter your participant code.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6949392793579520
+    m_Localized: Code must be {4} characters or less.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6949641658413056
+    m_Localized: Logging in...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6949721148862464
+    m_Localized: Login successful!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6949840686526464
+    m_Localized: Login failed. Please try again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6949944252280832
+    m_Localized: Login timed out. Please try again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6950016926986240
+    m_Localized: 'Error: System not ready.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6950108367007744
+    m_Localized: Please answer all questions before continuing.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6950213992165376
+    m_Localized: Saving your answers...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6950332770660352
+    m_Localized: Connection not initialized.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6950451050033152
+    m_Localized: User not logged in.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6950525607981056
+    m_Localized: Failed to save data. Please try again.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6950615026348032
+    m_Localized: Data saved! Loading museum...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6950864641961984
+    m_Localized: Connection error. Please refresh the page.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
