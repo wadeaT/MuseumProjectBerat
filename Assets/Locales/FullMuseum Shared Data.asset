@@ -539,6 +539,10 @@ MonoBehaviour:
     m_Key: museum_master_desc
     m_Metadata:
       m_Items: []
+  - m_Id: 12724806865203200
+    m_Key: EndSession
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

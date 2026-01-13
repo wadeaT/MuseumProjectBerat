@@ -139,9 +139,9 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 263721676812288
-    m_Localized: "\U0001F3C6 You've explored every corner of the museum and experienced
-      the complete story of family life in Ottoman-era Berat. You are now a keeper
-      of this cultural heritage!"
+    m_Localized: You've explored every corner of the museum and experienced the complete
+      story of family life in Ottoman-era Berat. You are now a keeper of this cultural
+      heritage!
     m_Metadata:
       m_Items: []
   - m_Id: 269289099472896
@@ -165,11 +165,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 269509342375936
-    m_Localized: "Collected \u2713"
+    m_Localized: Collected
     m_Metadata:
       m_Items: []
   - m_Id: 269542326382592
-    m_Localized: "Not Found \u2717"
+    m_Localized: 'Not Found '
     m_Metadata:
       m_Items: []
   - m_Id: 269610240552960

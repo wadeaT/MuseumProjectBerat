@@ -777,9 +777,13 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 304488273260544
-    m_Localized: "\U0001F3C6 You've explored every corner of the museum and experienced
-      the complete story of family life in Ottoman-era Berat. You are now a keeper
-      of this cultural heritage!"
+    m_Localized: You've explored every corner of the museum and experienced the complete
+      story of family life in Ottoman-era Berat. You are now a keeper of this cultural
+      heritage!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12724806865203200
+    m_Localized: End Session
     m_Metadata:
       m_Items: []
   references:

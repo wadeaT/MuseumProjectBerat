@@ -27,14 +27,6 @@ MonoBehaviour:
     m_Key: login.EmailInput
     m_Metadata:
       m_Items: []
-  - m_Id: 4239742840832
-    m_Key: login.PasswordText
-    m_Metadata:
-      m_Items: []
-  - m_Id: 5027621875712
-    m_Key: login.PasswordTextInput
-    m_Metadata:
-      m_Items: []
   - m_Id: 5141568532480
     m_Key: login.LoginButton
     m_Metadata:
