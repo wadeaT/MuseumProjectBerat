@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 /// <summary>
 /// Bridge between Unity C# and Firebase JavaScript SDK for WebGL builds.
 /// All methods call into JavaScript via DllImport.
+/// FIXED: Added increment operations for room stats and progress.
 /// </summary>
 public class FirebaseBridge : MonoBehaviour
 {
@@ -92,6 +93,33 @@ public class FirebaseBridge : MonoBehaviour
         string objectName, string callbackSuccess, string callbackError);
 
     // ========================================================================
+    // JAVASCRIPT INTEROP - NEW INCREMENT OPERATIONS
+    // ========================================================================
+
+    /// <summary>
+    /// Update room stats with increment operations (accumulates time and visit count)
+    /// </summary>
+    [DllImport("__Internal")]
+    public static extern void UpdateRoomStatsIncrement(string collectionPath, string documentId,
+        float timeToAdd, int visitsToAdd,
+        string objectName, string callbackSuccess, string callbackError);
+
+    /// <summary>
+    /// Update progress summary with increment operations
+    /// </summary>
+    [DllImport("__Internal")]
+    public static extern void UpdateProgressSummaryIncrement(string collectionPath, string documentId,
+        int scoreToAdd, int cardsToAdd, string lastCardId,
+        string objectName, string callbackSuccess, string callbackError);
+
+    /// <summary>
+    /// Batch write multiple documents atomically
+    /// </summary>
+    [DllImport("__Internal")]
+    public static extern void BatchWrite(string operationsJson,
+        string objectName, string callbackSuccess, string callbackError);
+
+    // ========================================================================
     // UTILITY METHODS
     // ========================================================================
 
@@ -118,4 +146,29 @@ public class FirebaseBridge : MonoBehaviour
     {
         Debug.Log("[FirebaseBridge] Running in WebGL build");
     }
+
+#if UNITY_EDITOR
+    // ========================================================================
+    // EDITOR STUBS - For testing in Unity Editor
+    // ========================================================================
+
+    // Note: In the Editor, these methods won't be called because of
+    // the [DllImport("__Internal")] attribute. You need to use
+    // conditional compilation or mock implementations for Editor testing.
+
+    /// <summary>
+    /// Check if running in WebGL
+    /// </summary>
+    public static bool IsWebGL
+    {
+        get
+        {
+#if UNITY_WEBGL && !UNITY_EDITOR
+            return true;
+#else
+            return false;
+#endif
+        }
+    }
+#endif
 }

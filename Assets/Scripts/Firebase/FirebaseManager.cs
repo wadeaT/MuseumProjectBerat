@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// FirebaseManager for WebGL builds.
 /// Uses JavaScript bridge for all Firebase operations.
-/// FIXED: Replaced async/await with coroutine-based callbacks for WebGL compatibility.
+/// FIXED: Added increment-based operations for room stats and progress.
 /// </summary>
 public class FirebaseManager : MonoBehaviour
 {
@@ -24,6 +24,7 @@ public class FirebaseManager : MonoBehaviour
     private Action<List<string>> _loadBadgesCallback;
     private Action<int> _loadCardsCallback;
     private Action<bool> _roomStatsCallback;
+    private Action<bool> _roomStatsIncrementCallback;
     private Action<bool> _scoreCallback;
     private Action<bool> _interactionCallback;
     private Action<bool> _statsCallback;
@@ -32,6 +33,7 @@ public class FirebaseManager : MonoBehaviour
     private Action<List<CardDocumentData>> _loadCardsWithDataCallback;
     private Action<ProgressSummaryData> _loadProgressSummaryCallback;
     private Action<List<RoomStatsDocumentData>> _loadRoomStatsCallback;
+    private Action<bool> _batchWriteCallback;
 
     private void Awake()
     {
@@ -415,7 +417,7 @@ public class FirebaseManager : MonoBehaviour
     }
 
     // ------------------------------------------------------------------------
-    // SAVE ROOM TIME
+    // SAVE ROOM TIME - LEGACY (overwrites, kept for compatibility)
     // ------------------------------------------------------------------------
 
     public void SaveRoomTime(string odId, string roomId, float timeSpent, Action<bool> callback = null)
@@ -456,6 +458,57 @@ public class FirebaseManager : MonoBehaviour
         Debug.LogError($"[FirebaseManager] Room stats error: {error}");
         _roomStatsCallback?.Invoke(false);
         _roomStatsCallback = null;
+    }
+
+    // ------------------------------------------------------------------------
+    // SAVE ROOM TIME - NEW INCREMENT VERSION (accumulates properly)
+    // ------------------------------------------------------------------------
+
+    /// <summary>
+    /// Save room time using increment operations.
+    /// This properly accumulates time and visit counts instead of overwriting.
+    /// </summary>
+    public void SaveRoomTimeIncrement(string odId, string roomId, float timeToAdd, int visitsToAdd, Action<bool> callback = null)
+    {
+        if (!IsReady)
+        {
+            Debug.LogError("[FirebaseManager] Firestore not ready.");
+            callback?.Invoke(false);
+            return;
+        }
+
+        if (string.IsNullOrEmpty(odId) || string.IsNullOrEmpty(roomId))
+        {
+            Debug.LogError("[FirebaseManager] Invalid odId or roomId for room stats.");
+            callback?.Invoke(false);
+            return;
+        }
+
+        _roomStatsIncrementCallback = callback;
+
+        FirebaseBridge.UpdateRoomStatsIncrement(
+            $"users/{odId}/roomStats",
+            roomId,
+            timeToAdd,
+            visitsToAdd,
+            gameObject.name,
+            "OnRoomStatsIncrementSaved",
+            "OnRoomStatsIncrementError"
+        );
+    }
+
+    public void OnRoomStatsIncrementSaved(string result)
+    {
+        Debug.Log("[FirebaseManager] Room stats saved (increment)!");
+        _roomStatsIncrementCallback?.Invoke(true);
+        _roomStatsIncrementCallback = null;
+    }
+
+    public void OnRoomStatsIncrementError(string error)
+    {
+        Debug.LogError($"[FirebaseManager] Room stats increment error: {error}");
+        _roomStatsIncrementCallback?.Invoke(false);
+        _roomStatsIncrementCallback = null;
     }
 
     // ------------------------------------------------------------------------
@@ -860,6 +913,62 @@ public class FirebaseManager : MonoBehaviour
         _loadRoomStatsCallback?.Invoke(new List<RoomStatsDocumentData>());
         _loadRoomStatsCallback = null;
     }
+
+    // ------------------------------------------------------------------------
+    // BATCH WRITE (for efficient multiple document updates)
+    // ------------------------------------------------------------------------
+
+    /// <summary>
+    /// Execute multiple document operations atomically
+    /// </summary>
+    public void BatchWrite(List<BatchOperation> operations, Action<bool> callback = null)
+    {
+        if (!IsReady)
+        {
+            Debug.LogError("[FirebaseManager] Firestore not ready.");
+            callback?.Invoke(false);
+            return;
+        }
+
+        if (operations == null || operations.Count == 0)
+        {
+            Debug.LogWarning("[FirebaseManager] BatchWrite called with no operations.");
+            callback?.Invoke(true);
+            return;
+        }
+
+        if (operations.Count > 500)
+        {
+            Debug.LogError("[FirebaseManager] BatchWrite limited to 500 operations.");
+            callback?.Invoke(false);
+            return;
+        }
+
+        _batchWriteCallback = callback;
+
+        string json = JsonUtility.ToJson(new BatchOperationWrapper { operations = operations.ToArray() });
+
+        FirebaseBridge.BatchWrite(
+            json,
+            gameObject.name,
+            "OnBatchWriteSuccess",
+            "OnBatchWriteError"
+        );
+    }
+
+    public void OnBatchWriteSuccess(string result)
+    {
+        Debug.Log("[FirebaseManager] Batch write completed!");
+        _batchWriteCallback?.Invoke(true);
+        _batchWriteCallback = null;
+    }
+
+    public void OnBatchWriteError(string error)
+    {
+        Debug.LogError($"[FirebaseManager] Batch write error: {error}");
+        _batchWriteCallback?.Invoke(false);
+        _batchWriteCallback = null;
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -1040,4 +1149,24 @@ public class RoomStatsDataWrapper
 public class RoomStatsDocumentArrayWrapper
 {
     public RoomStatsDocumentWrapper[] documents;
+}
+
+// ------------------------------------------------------------------------
+// BATCH OPERATION CLASSES
+// ------------------------------------------------------------------------
+
+[Serializable]
+public class BatchOperation
+{
+    public string type; // "set", "update", or "delete"
+    public string collection;
+    public string documentId;
+    public string data; // JSON string
+    public bool merge; // For "set" operations
+}
+
+[Serializable]
+public class BatchOperationWrapper
+{
+    public BatchOperation[] operations;
 }
