@@ -3,7 +3,6 @@ using UnityEngine;
 public class RoomTimerManager : MonoBehaviour
 {
     public static RoomTimerManager Instance;
-    private string userId;
 
     private void Awake()
     {
@@ -15,20 +14,6 @@ public class RoomTimerManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
-        }
-    }
-
-    private void Start()
-    {
-        // Wait until PlayerManager is initialized
-        if (PlayerManager.Instance != null)
-        {
-            userId = PlayerManager.Instance.userId;
-            Debug.Log("RoomTimerManager: Loaded userId = " + userId);
-        }
-        else
-        {
-            Debug.LogWarning("RoomTimerManager: PlayerManager not found in scene!");
         }
     }
 

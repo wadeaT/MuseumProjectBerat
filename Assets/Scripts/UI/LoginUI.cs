@@ -16,10 +16,8 @@ public class LoginUI : MonoBehaviour
     public GameObject questionsPanel;
 
     [Header("Login UI Elements")]
-    
-    public TMP_InputField participantCodeInput;  
+    public TMP_InputField participantCodeInput;
     public Button loginButton;
-   
     public TMP_Text messageText;
 
     [Header("Questions UI Elements")]
@@ -40,6 +38,10 @@ public class LoginUI : MonoBehaviour
     public int minCodeLength = 2;
     public int maxCodeLength = 20;
 
+    // VR Keyboard support
+    private TouchScreenKeyboard keyboard;
+    private TMP_InputField activeInputField;
+
     private async void Start()
     {
         // Start with login panel visible
@@ -51,8 +53,10 @@ public class LoginUI : MonoBehaviour
 
         // Add button listeners
         loginButton.onClick.AddListener(OnLoginClicked);
-        // REMOVED: registerButton listener
         startButton.onClick.AddListener(OnStartClicked);
+
+        // Setup VR keyboard for input fields
+        SetupVRKeyboard();
 
         CheckToggleGroups();
 
@@ -60,6 +64,72 @@ public class LoginUI : MonoBehaviour
         await WaitForFirebase();
 
         messageText.text = "";
+    }
+
+    /// <summary>
+    /// Setup VR keyboard triggers for all input fields
+    /// </summary>
+    private void SetupVRKeyboard()
+    {
+        if (participantCodeInput != null)
+        {
+            participantCodeInput.onSelect.AddListener((text) => OpenKeyboard(participantCodeInput));
+            Debug.Log("[LoginUI] VR Keyboard setup for participantCodeInput");
+        }
+
+        if (nationalityInput != null)
+        {
+            nationalityInput.onSelect.AddListener((text) => OpenKeyboard(nationalityInput));
+            Debug.Log("[LoginUI] VR Keyboard setup for nationalityInput");
+        }
+    }
+
+    /// <summary>
+    /// Open the VR keyboard for the specified input field
+    /// </summary>
+    public void OpenKeyboard(TMP_InputField inputField)
+    {
+        if (inputField == null) return;
+
+        activeInputField = inputField;
+
+        if (TouchScreenKeyboard.isSupported)
+        {
+            Debug.Log($"[LoginUI] Opening keyboard for {inputField.name}...");
+            keyboard = TouchScreenKeyboard.Open(
+                inputField.text,
+                TouchScreenKeyboardType.Default,
+                false,  // autocorrect
+                false,  // multiline
+                false   // secure
+            );
+        }
+        else
+        {
+            Debug.LogWarning("[LoginUI] TouchScreenKeyboard not supported on this platform");
+        }
+    }
+
+    /// <summary>
+    /// Update loop - handles keyboard input
+    /// </summary>
+    void Update()
+    {
+        // Handle VR keyboard input
+        if (keyboard != null && activeInputField != null)
+        {
+            // Update input field with keyboard text
+            activeInputField.text = keyboard.text;
+
+            // Check if keyboard is done
+            if (keyboard.status == TouchScreenKeyboard.Status.Done ||
+                keyboard.status == TouchScreenKeyboard.Status.Canceled)
+            {
+                Debug.Log($"[LoginUI] Keyboard closed. Final text: {activeInputField.text}");
+                keyboard = null;
+                activeInputField = null;
+            }
+        }
     }
 
     /// <summary>
@@ -106,7 +176,7 @@ public class LoginUI : MonoBehaviour
     }
 
     // ------------------------------------------------------------------------
-    // LOGIN BUTTON (CHANGED: Now uses participant code)
+    // LOGIN BUTTON
     // ------------------------------------------------------------------------
 
     private async void OnLoginClicked()
@@ -135,7 +205,7 @@ public class LoginUI : MonoBehaviour
 
         await ShowLocalizedMessage("Logging in...", Color.white);
 
-        // CHANGED: Call PlayerManager with participant code
+        // Call PlayerManager with participant code
         bool success = await PlayerManager.Instance.LoginWithParticipantCode(code);
 
         if (success)
@@ -143,9 +213,9 @@ public class LoginUI : MonoBehaviour
             await ShowLocalizedMessage("Login successful!", Color.green);
 
             // Load user's badge and card progress
-            if (BadgeManager.instance != null)
+            if (BadgeManager.Instance != null)
             {
-                await BadgeManager.instance.LoadProgressFromFirebase();
+                await BadgeManager.Instance.LoadProgressFromFirebase();
             }
 
             await Task.Delay(400);
@@ -153,7 +223,7 @@ public class LoginUI : MonoBehaviour
             // Check if user already has demographics
             string odId = PlayerManager.Instance.userId;
             bool hasDemographics = await FirebaseManager.Instance.UserHasDemographicsAsync(odId);
-            
+
             if (hasDemographics)
             {
                 Debug.Log("[LoginUI] Existing user with demographics → go to museum.");
@@ -171,10 +241,8 @@ public class LoginUI : MonoBehaviour
         }
     }
 
-    // REMOVED: OnRegisterClicked() - not needed for anonymous auth
-
     // ------------------------------------------------------------------------
-    // QUESTIONS PANEL (unchanged)
+    // QUESTIONS PANEL
     // ------------------------------------------------------------------------
 
     private async void OnStartClicked()
@@ -305,7 +373,7 @@ public class LoginUI : MonoBehaviour
         catch (System.Exception ex)
         {
             Debug.LogWarning($"Failed to get localized string for key '{tableKey}': {ex.Message}");
-            messageText.text = tableKey; 
+            messageText.text = tableKey;
             messageText.color = color;
         }
     }
