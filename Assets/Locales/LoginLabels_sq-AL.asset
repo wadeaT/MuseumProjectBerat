@@ -1,0 +1,142 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: LoginLabels_sq-AL
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: sq-AL
+  m_SharedData: {fileID: 11400000, guid: 1b963e1c647d08f499398537f889726d, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 280022069248
+    m_Localized: "Mir\xEB se vini"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4099917328384
+    m_Localized: "Fut kodin e pjes\xEBmarr\xEBsit"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4206851108864
+    m_Localized: "Fut kodin e pjes\xEBmarr\xEBsit"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5141568532480
+    m_Localized: "Ky\xE7u"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5355553533952
+    m_Localized: Regjistrohu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5490635288576
+    m_Localized: "Pyet\xEBsor demografik"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5707795378176
+    m_Localized: "Ju lutemi p\xEBrgjigjuni disa pyetjeve t\xEB shkurtra p\xEBrpara
+      se t\xEB filloni turneun"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5871377428480
+    m_Localized: "Zgjidhni mosh\xEBn tuaj"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6032665194496
+    m_Localized: "Zgjidhni gjinin\xEB tuaj"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6350153035776
+    m_Localized: Mashkull
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6453567795200
+    m_Localized: "Fem\xEBr"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6544034738176
+    m_Localized: "Preferoj t\xEB mos them"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6693150633984
+    m_Localized: "Komb\xEBsia juaj:"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6852324470784
+    m_Localized: "Jepni komb\xEBsin\xEB..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7070625411072
+    m_Localized: "Sa t\xEB leht\xEB e keni t\xEB p\xEBrdorni kompjuter\xEBt ose teknologjin\xEB?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7245146206208
+    m_Localized: "Shum\xEB t\xEB v\xEBshtir\xEB"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7414596087808
+    m_Localized: "T\xEB v\xEBshtir\xEB"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7521890578432
+    m_Localized: Mesatarisht
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7634172096512
+    m_Localized: "T\xEB leht\xEB"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7718930591744
+    m_Localized: "Shum\xEB t\xEB leht\xEB"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7777235611648
+    m_Localized: "Sa t\xEB interesuar ishit n\xEB p\xEBrvojat e realitetit virtual
+      ose dixhital para k\xEBsaj vizite?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8155830267904
+    m_Localized: "Shum\xEB pak"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8276299067392
+    m_Localized: Pak
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8338672562176
+    m_Localized: Mesatar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8440812253184
+    m_Localized: "Shum\xEB"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8554096209920
+    m_Localized: "Shum\xEB t\xEB interesuar"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8691925233664
+    m_Localized: "D\xEBrgo dhe fillo turin"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12396712013824
+    m_Localized: "Zgjidh Gjuh\xEBn"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 48111780999168
+    m_Localized: "Eksploro dhomat virtuale, zbulo objektet e fshehura dhe p\xEBrjeto
+      historin\xEB n\xEB nj\xEB m\xEBnyr\xEB t\xEB re."
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

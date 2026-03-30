@@ -1,0 +1,141 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: LoginLabels_en
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 1b963e1c647d08f499398537f889726d, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 280022069248
+    m_Localized: Welcome
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4099917328384
+    m_Localized: Enter participant code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4206851108864
+    m_Localized: Enter participant code
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5141568532480
+    m_Localized: Log In
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5355553533952
+    m_Localized: Sign Up
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5490635288576
+    m_Localized: demographic questionnaire
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5707795378176
+    m_Localized: Please answer a few short questions before starting the tour
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5871377428480
+    m_Localized: Select your age
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6032665194496
+    m_Localized: Select your gender
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6350153035776
+    m_Localized: Male
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6453567795200
+    m_Localized: Female
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6544034738176
+    m_Localized: Prefer not to say
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6693150633984
+    m_Localized: 'Your Nationality:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6852324470784
+    m_Localized: Enter nationality...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7070625411072
+    m_Localized: How easy is it for you to use computers or technology?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7245146206208
+    m_Localized: Very difficult
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7414596087808
+    m_Localized: Difficult
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7521890578432
+    m_Localized: Average
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7634172096512
+    m_Localized: Easy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7718930591744
+    m_Localized: Very easy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7777235611648
+    m_Localized: How interested were you in virtual or digital reality experiences
+      before this visit?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8155830267904
+    m_Localized: Very low
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8276299067392
+    m_Localized: Low
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8338672562176
+    m_Localized: Medium
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8440812253184
+    m_Localized: High
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8554096209920
+    m_Localized: Very high
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8691925233664
+    m_Localized: Submit & Start tour
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12396712013824
+    m_Localized: Choose Language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 48111780999168
+    m_Localized: Explore virtual rooms, discover hidden artifacts, and experience
+      history in a new way.
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: c994fe1db0aaae5439dc202e3e019fb2
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 154517
+  packageName: Mesh Optimizer
+  packageVersion: 1.1
+  assetPath: Assets/Mesh Optimizer/Editor/Whinarn.IndMeshSimplifier.Editor.asmdef
+  uploadId: 773945

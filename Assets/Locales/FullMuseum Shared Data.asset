@@ -1,0 +1,556 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: FullMuseum Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: FullMuseum
+  m_TableCollectionNameGuidString: a4fc55730df6d414d9c34a16f3bbcc4e
+  m_Entries:
+  - m_Id: 16720441344
+    m_Key: FullM.CradleTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 578513907712
+    m_Key: FullM.CradleDesc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8718882025472
+    m_Key: FullM.OttmanBrassDescription
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9606057013248
+    m_Key: FullM.OttmanBrassTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9872655364096
+    m_Key: FullM.WashingEwerTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10123298582528
+    m_Key: FullM.WashingEwerDescription
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10298989588480
+    m_Key: FullM.CarvedWoodenTrayTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 25273757970432
+    m_Key: FullM.CarvedWoodenTrayDesc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 25898767986688
+    m_Key: FullM.PhotoTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 25984432451584
+    m_Key: FullM.Photo1Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26432887435264
+    m_Key: FullM.Photo2Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26591553761280
+    m_Key: FullM.Photo2Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27004982112256
+    m_Key: FullM.Photo3Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27334780235776
+    m_Key: FullM.Photo4Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29183172259840
+    m_Key: FullM.Loom1Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29676351107072
+    m_Key: FullM.Loom1Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31282555629568
+    m_Key: FullM.Loom2Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33262044819456
+    m_Key: FullM.CraftToolTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33425756893184
+    m_Key: FullM.CraftToolDesc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33498762948608
+    m_Key: FullM.CopperBrazierTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33890204758016
+    m_Key: FullM.CopperBrazierDesc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33982248759296
+    m_Key: FullM.IronTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34567626797056
+    m_Key: FullM.IronDesc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34776998064128
+    m_Key: FullM.ChestTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35109287604224
+    m_Key: FullM.ChestDesc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35341484273664
+    m_Key: FullM.StoneMortarTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36060685774848
+    m_Key: FullM.StoneMortarDesc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36191208321024
+    m_Key: FullM.WaterJugTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36482620174336
+    m_Key: FullM.WaterJugDesc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36614455537664
+    m_Key: FullM.WeigherTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36987601793024
+    m_Key: FullM.WeigherDesc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37383548284928
+    m_Key: FullM.IronMeatHookTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37552465489920
+    m_Key: FullM.IronMeatHookDesc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37616252465152
+    m_Key: FullM.BakingPanTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38082080256000
+    m_Key: FullM.BakingPanDesc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38464286208000
+    m_Key: FullM.ClayPotsTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38549053091840
+    m_Key: FullM.ClayPotsDesc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38711347490816
+    m_Key: FullM.LampTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38987332694016
+    m_Key: FullM.LampDesc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 39546643132416
+    m_Key: "FullM.MangalHearthTitle\r"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 39600909037568
+    m_Key: FullM.MangalHearthDesc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40761372291072
+    m_Key: FullM.LidTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40820679749632
+    m_Key: FullM.LidDesc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 41145998356480
+    m_Key: FullM.LargeTrayTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 41273232568320
+    m_Key: FullM.LargeTrayDesc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 41521468256256
+    m_Key: FullM.CopperSkilletTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 41618205683712
+    m_Key: FullM.CopperSkilletDesc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 43882131599360
+    m_Key: FullM.smallServingTrayTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 44093264474112
+    m_Key: FullM.smallServingTrayDesc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 44738067410944
+    m_Key: FullM.CoffeePot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 44830698614784
+    m_Key: FullM.CoffeePotDesc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 47261125816320
+    m_Key: FullM.WeaponsTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 47298476093440
+    m_Key: FullM.WeaponsDesc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 50541000241152
+    m_Key: FullM.candlestickTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 50603289849856
+    m_Key: FullM.candlestickDesc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 50794571083776
+    m_Key: FullM.KnittedFlagTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 52099528110080
+    m_Key: FullM.KnittedFlagDesc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 52433923190784
+    m_Key: FullM.RoomBrazierTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 52575820689408
+    m_Key: FullM.RoomBrazierDesc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 52853647192064
+    m_Key: FullM.WaterHeaterTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 52934786002944
+    m_Key: FullM.WaterHeaterDesc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 53116915265536
+    m_Key: FullM.CopperBrazier2Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 53431655837696
+    m_Key: FullM.CopperBrazier2Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 53769943232512
+    m_Key: FullM.CopperBrazier3Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 54808318685184
+    m_Key: FullM.CopperBrazier3Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259275819429888
+    m_Key: FullM.CardArch1Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259510255857664
+    m_Key: FullM.CardArch1Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259602136281088
+    m_Key: FullM.CardArch2Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259693827960832
+    m_Key: FullM.CardArch2Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259885524430848
+    m_Key: FullM.CardArch3Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259999815020544
+    m_Key: FullM.CardArch3Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 260540431446016
+    m_Key: FullM.CardBed1Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 260650561286144
+    m_Key: FullM.CardBed1Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 260746392743936
+    m_Key: FullM.CardBed2Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 260790382604288
+    m_Key: FullM.CardBed2Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 260914294927360
+    m_Key: FullM.CardBed3Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261021471977472
+    m_Key: FullM.CardBed3Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261510016118784
+    m_Key: FullM.CardBalcony1Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261636788957184
+    m_Key: FullM.CardBalcony1Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261713188204544
+    m_Key: FullM.CardBalcony2Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261734897922048
+    m_Key: FullM.CardBalcony2Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261901822832640
+    m_Key: FullM.CardBalcony3Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261929446518784
+    m_Key: FullM.CardBalcony3Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262525062852608
+    m_Key: FullM.CardGust1Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262642209763328
+    m_Key: FullM.CardGust1Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262741925146624
+    m_Key: FullM.CardGust2Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262820434128896
+    m_Key: FullM.CardGust2Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262880530116608
+    m_Key: FullM.CardGust3Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262985052172288
+    m_Key: FullM.CardGust3Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263369485299712
+    m_Key: FullM.cardKitchen1Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263473533399040
+    m_Key: FullM.cardKitchen1Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263548162650112
+    m_Key: FullM.cardKitchen2Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263592278339584
+    m_Key: FullM.cardKitchen2Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263740152721408
+    m_Key: FullM.cardKitchen3Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263765717004288
+    m_Key: FullM.cardKitchen3Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263861116448768
+    m_Key: FullM.cardWork1Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 264192395161600
+    m_Key: FullM.cardWork1Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 264251396435968
+    m_Key: FullM.cardWork2Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 264307759493120
+    m_Key: FullM.cardWork2Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 264450390994944
+    m_Key: FullM.cardWork3Title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 264558000058368
+    m_Key: FullM.cardWork3Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 274161106530304
+    m_Key: FullM.welcome
+    m_Metadata:
+      m_Items: []
+  - m_Id: 274468733562880
+    m_Key: FullM.startExploringButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 274981403340800
+    m_Key: FullM.welcomeInstructions
+    m_Metadata:
+      m_Items: []
+  - m_Id: 275774902743040
+    m_Key: FullM.achievementUnlocked
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300671565672448
+    m_Key: first_discovery_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303145332617216
+    m_Key: first_discovery_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303195899146240
+    m_Key: curious_explorer_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303287133646848
+    m_Key: curious_explorer_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303335519137792
+    m_Key: dedicated_seeker_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303382591811584
+    m_Key: dedicated_seeker_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303436819968000
+    m_Key: persistent_scholar_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303495569584128
+    m_Key: persistent_scholar_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303549931958272
+    m_Key: heritage_guardian_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303648246444032
+    m_Key: heritage_guardian_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303716219334656
+    m_Key: complete_collection_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303766928470016
+    m_Key: complete_collection_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303815649505280
+    m_Key: balcony_master_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303874063577088
+    m_Key: balcony_master_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303953818267648
+    m_Key: bedroom_master_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304021229121536
+    m_Key: bedroom_master_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304054745804800
+    m_Key: guest_room_master_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304111893196800
+    m_Key: guest_room_master_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304152695386112
+    m_Key: kitchen_master_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304189001281536
+    m_Key: kitchen_master_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304256777039872
+    m_Key: workshop_master_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304300330692608
+    m_Key: workshop_master_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304337949405184
+    m_Key: archive_master_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304387945508864
+    m_Key: archive_master_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304401602162688
+    m_Key: museum_master_name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304488273260544
+    m_Key: museum_master_desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12724806865203200
+    m_Key: EndSession
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 2154252458276684020
+  references:
+    version: 2
+    RefIds:
+    - rid: 2154252458276684020
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1765303885475

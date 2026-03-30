@@ -1,0 +1,797 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: FullMuseum_en
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: a4fc55730df6d414d9c34a16f3bbcc4e, type: 2}
+  m_Metadata:
+    m_Items:
+    - rid: 5969788933591269466
+  m_TableData:
+  - m_Id: 259275819429888
+    m_Localized: Frozen Moments
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259510255857664
+    m_Localized: "These photographs capture Albanian life in the late 19th and early
+      20th centuries\u2014weddings in traditional dress, village gatherings, family
+      portraits. Before photography, such memories lived only in oral tradition,
+      subject to the distortions of time and retelling. These images are windows
+      into a world where every garment, gesture, and gathering carried deep cultural
+      meaning. The faces staring back at us are your ancestors, their formal poses
+      concealing vibrant personalities, their traditional costumes representing thousands
+      of hours of skilled handwork now mostly\_vanished."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259602136281088
+    m_Localized: Wedding as Theater
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259693827960832
+    m_Localized: "The wedding photographs reveal elaborate multi-day celebrations
+      that united not just two people, but two families and their broader communities.
+      Notice the intricate embroidery on the bride's costume\u2014months of work
+      by female relatives, each stitch a prayer for her future. The guests' formal
+      poses reflect the solemnity of the occasion. These weren't merely parties;
+      they were cultural performances where every detail\u2014from the dowry display
+      to the ritual dances\u2014reinforced social bonds and transmitted tradition
+      to the next generation. Weddings were living\_textbooks."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259885524430848
+    m_Localized: Community Memory
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259999815020544
+    m_Localized: "Photos of village gatherings show the \xE7arshia (marketplace)
+      and public squares where men conducted business and discussed politics, while
+      women's gatherings happened in courtyards and homes. These images capture the
+      parallel social worlds of Ottoman Albanian life\u2014men in the public sphere,
+      women in the domestic\u2014yet both equally vital to community survival. The
+      traditional clothing, architecture, and body language in these photos tell
+      stories that words cannot. They remind us that before globalization homogenized
+      the world, every village had its distinct visual\_identity."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 260540431446016
+    m_Localized: The Family Sanctuary
+    m_Metadata:
+      m_Items: []
+  - m_Id: 260650561286144
+    m_Localized: "This modest room with its two mattresses and simple furnishings
+      was the private heart of family life. Unlike the guest room with its elaborate
+      decoration, the bedroom prioritized function and intimacy. The mattresses\u2014stuffed
+      with wool and covered in hand-woven textiles\u2014were rolled and stored in
+      the closet during the day, transforming the room into a multipurpose space.
+      At night, it became a sanctuary where parents told stories to children and
+      passed down oral traditions in whispered conversations\_by\_candlelight."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 260746392743936
+    m_Localized: 'The Hearth''s Warmth
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 260790382604288
+    m_Localized: "The chimney you see was essential for survival during Berat's cold
+      winters. Families would huddle around the mangal\u2014a metal brazier filled
+      with hot coals\u2014placed safely beneath the chimney hood. The rising smoke
+      carried not just warmth, but also the scent of burning wood and the comfort
+      of home. Winter evenings in this room meant the family gathered close, repairing
+      tools, telling stories, and maintaining the bonds that held households together
+      through harsh mountain\_winters."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 260914294927360
+    m_Localized: The Dowry Closet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261021471977472
+    m_Localized: "This wooden closet held far more than clothes\u2014it was the repository
+      of family heritage. A bride's dowry would be carefully stored here: hand-embroidered
+      linens, copper cookware, jewelry, and textiles that represented years of preparation.
+      The closet's contents told the story of a family's social standing and a woman's
+      industriousness. Mothers would open these doors with their daughters, teaching
+      them which items to treasure, which to use daily, and which to pass to the
+      next\_generation."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261510016118784
+    m_Localized: 'The Heart of the Home
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261636788957184
+    m_Localized: "This balcony, called a '\xE7ardak' in Albanian, was the social
+      center of traditional Berat homes. Families gathered here for meals, women
+      wove textiles, and honored guests were welcomed with coffee and raki. The wooden
+      railings allowed residents to observe street life below while maintaining privacy\u2014a
+      clever feature of Ottoman-era\_architecture."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261713188204544
+    m_Localized: 'Threads of Tradition
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261734897922048
+    m_Localized: "The carpets and rugs you see here were not mere decoration\u2014they
+      represented a family's wealth and a woman's skill. Berat was famous for its
+      textile crafts, with patterns passed down through generations. Each geometric
+      motif held meaning: diamonds symbolized protection, while birds represented
+      freedom and messengers\_between\_worlds."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261901822832640
+    m_Localized: 'Between Worlds
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261929446518784
+    m_Localized: "Notice how this balcony connects every room? Traditional Berat
+      homes were designed with the \xE7ardak as the axis\u2014symbolically linking
+      private family life with community obligations. From this very spot, you could
+      reach the kitchen, the guest room (oda e mikut), and the women's quarters.
+      The house itself was a miniature model of\_social\_harmony."
+    m_Metadata:
+      m_Items:
+      - rid: 5969788933591269466
+  - m_Id: 262525062852608
+    m_Localized: The Theater of Hospitality
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262642209763328
+    m_Localized: "This guest room, the most elaborately decorated space in the house,
+      was a stage for performing social status and cultural values. Every element\u2014from
+      the painted ceiling to the built-in divans\u2014announced to visitors that
+      they had entered a home of refinement and honor. In Ottoman Albanian culture,
+      hospitality was not merely kindness; it was a sacred duty. A family's reputation
+      rested on their treatment of guests, making this room far more than mere decoration\u2014it
+      was an investment in social\_survival."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262741925146624
+    m_Localized: The Mahfil's Secret
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262820434128896
+    m_Localized: "Notice the elevated platform\u2014the mahfil\u2014attached to the
+      wall? This architectural feature allowed women to observe guest receptions
+      while remaining separated by a decorative screen or curtain. Ottoman society
+      prescribed separate spheres for men and women in formal settings, yet the mahfil
+      reveals how architecture created spaces for women's presence and agency. From
+      this elevated position, the lady of the house could ensure proper hospitality
+      was extended while maintaining the appearance of seclusion expected\_by\_tradition."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262880530116608
+    m_Localized: Coffee, Raki, and Conversation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262985052172288
+    m_Localized: "The ritual of guest reception followed precise codes: Turkish coffee
+      was served in small cups on ornate trays, accompanied by sweets. For closer
+      friends, raki\u2014the anise-flavored spirit\u2014flowed freely. Conversations
+      in this room ranged from business negotiations to marriage arrangements to
+      political discussions. The decorative niches in the walls held precious objects\u2014copper
+      coffeepots, silver trays, fine glassware\u2014that were brought out only for
+      honored guests, transforming hospitality into an art form that bound communities\_together."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263369485299712
+    m_Localized: The Copper Treasury
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263473533399040
+    m_Localized: "The gleaming copper vessels displayed here were a family's pride
+      and a woman's tools of mastery. Each pot, pan, and kettle had a specific purpose
+      passed down through generations: the long-handled cezve for brewing coffee,
+      the wide tava for baking, the rounded kazan for cooking pilaf. Copper's excellent
+      heat distribution made it ideal for Albanian cuisine, while its beauty elevated
+      cooking from mere necessity to craft. These vessels were polished religiously,
+      their shine reflecting not just light but a family's\_self-respect."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263548162650112
+    m_Localized: Fire and Patience
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263592278339584
+    m_Localized: "The traditional hearth in this kitchen required constant attention
+      and skill. Women tended fires from dawn until evening, managing different zones
+      of heat for various cooking tasks. There were no thermometers or timers\u2014just
+      experience passed from mother to daughter about when coals glowed at the perfect
+      temperature for bread, when flames should leap for quick frying, when embers
+      should smolder for slow stews. The kitchen was a woman's laboratory where science
+      met tradition, and meals became expressions of love\_and\_expertise."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263740152721408
+    m_Localized: 'Preservation and Seasons
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263765717004288
+    m_Localized: "Notice the ceramic jars and wooden barrels? Before refrigeration,
+      families relied on ancient preservation methods. Summer's abundance\u2014peppers,
+      tomatoes, cucumbers\u2014was pickled in brine or vinegar to sustain the household
+      through winter. Fruit was dried in the sun, meats were cured with salt, cheese
+      was stored in oil. The kitchen was not just where meals were prepared, but
+      where families literally captured summer's bounty to survive mountain winters.
+      This room held the knowledge that separated survival from\_starvation."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263861116448768
+    m_Localized: 'The Loom''s Song
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 264192395161600
+    m_Localized: "The wooden loom standing before you was the economic engine of
+      many Berat households. Women spent countless hours at this machine, transforming
+      raw wool or cotton into fabric that clothed the family, furnished the home,
+      and could be sold for income. The rhythmic clack-clack-clack of the shuttle
+      passing through threads created a soundtrack to domestic life. Young girls
+      learned at their mothers' sides, their small hands gradually mastering the
+      coordination required to create tight, even weaves. The loom was both tool\_and\_teacher."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 264251396435968
+    m_Localized: 'Patterns of Identity
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 264307759493120
+    m_Localized: "The geometric patterns woven into Albanian textiles were far more
+      than decoration\u2014they were a visual language. Each region, even each family,
+      had distinctive motifs. A woman could identify a textile's origin by examining
+      its borders and central medallions. These patterns connected weavers to their
+      ancestors, as daughters recreated designs their great-grandmothers had invented.
+      In a world where few could read or write, these visual vocabularies preserved
+      cultural memory and announced identity. A rug was a signature, a declaration:
+      \"This\_is\_who\_we\_are.\""
+    m_Metadata:
+      m_Items: []
+  - m_Id: 264450390994944
+    m_Localized: 'The Economics of Thread
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 264558000058368
+    m_Localized: "his workshop represents women's economic power in a society that
+      restricted their public roles. The textiles produced here generated income
+      that women controlled, giving them influence over household decisions. A skilled
+      weaver could earn enough to contribute significantly to family expenses or
+      save for her daughter's dowry. The workshop was a space where women's labor
+      translated directly into economic value, challenging the notion that Ottoman
+      women were merely confined to domestic invisibility. Their hands held threads,
+      but also negotiating\_power."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16720441344
+    m_Localized: Cradle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 578513907712
+    m_Localized: Cradle,  object of daily life. Period  of  Socialism
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8718882025472
+    m_Localized: "A traditional Ottoman household brazier \r\nused for burning incense
+      or charcoal. Its \r\nperforated dome allows scented smoke \r\nto spread gently
+      throughout the room. "
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9606057013248
+    m_Localized: Ottoman Brass Incense Brazier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9872655364096
+    m_Localized: Washing Ewer and Basin
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10123298582528
+    m_Localized: A brass ewer with a matching basin used for washing hands before
+      meals or welcoming guests. Water was poured from the jug while the basin collected
+      the runoff. Also found in other rooms due to multipurpose household use.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10298989588480
+    m_Localized: Carved wooden tray
+    m_Metadata:
+      m_Items: []
+  - m_Id: 25273757970432
+    m_Localized: 'Carved wooden tray. It belongs to the
+
+      period of democracy.
+      Worked with the
+
+      beat technique'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 25898767986688
+    m_Localized: Photo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 25984432451584
+    m_Localized: Photo of the years before World War II.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26432887435264
+    m_Localized: Picture of an aristocratic family
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26591553761280
+    m_Localized: Picture of an aristocratic family from Berat city,  dating back
+      to 1930. In this photo, traditional clothing is interwoven with elements of
+      Western influence.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27004982112256
+    m_Localized: Photo of the year 1955
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27334780235776
+    m_Localized: 'Photo of the year 1928
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29183172259840
+    m_Localized: loom
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29676351107072
+    m_Localized: 'The loom It belongs to the Late Middle Ages. Working tools for
+      the production of woolen carpets. '
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31282555629568
+    m_Localized: The  loom. It belongs to the postwar period. Working tools for the
+      production of woolen carpets .
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33262044819456
+    m_Localized: Craft tool
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33425756893184
+    m_Localized: Craft tool for collect wool . It belongs to the period of independence
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33498762948608
+    m_Localized: Copper brazier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33890204758016
+    m_Localized: Cooper  braizer. It belongs to the Renaissance period.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33982248759296
+    m_Localized: Iron , work with cobbles
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34567626797056
+    m_Localized: Iron , work with cobbles. It belongs to the Late Middle Ages. Working
+      tool.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34776998064128
+    m_Localized: "Kitchen Storage\r\nChest\r"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35109287604224
+    m_Localized: "A wooden chest used to store flour,\r\ngrains, and kitchen supplies.
+      It kept food\r\ndry, protected, and ready for daily\r\ncooking.\r"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35341484273664
+    m_Localized: Stone Mortar and Pestle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36060685774848
+    m_Localized: 'A heavy stone mortar used with a
+
+      wooden pestle for grinding
+      grains, herbs,
+
+      and spices in the traditional Ottoman
+
+      kitchen.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36191208321024
+    m_Localized: "Clay Water Jug\r"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36482620174336
+    m_Localized: 'A handmade clay jug used for storing
+
+      and carrying water.
+      Its multiple handles
+
+      allow easier lifting and pouring.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36614455537664
+    m_Localized: Weigher
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36987601793024
+    m_Localized: 'Weigher, made with iron material. It
+
+      belongs to the Late
+      Middle Ages'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37383548284928
+    m_Localized: Iron meat hooks
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37552465489920
+    m_Localized: Iron meat hooks. It belongs to the Renaissance period, a working
+      tool.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37616252465152
+    m_Localized: Baking Pan
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38082080256000
+    m_Localized: "A round metal pan used for baking bread\r\nand pastries over hot
+      coals. It was\r\nplaced under a sa\xE7 cooking lid to heat\r\nthe dough evenly.\r"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38464286208000
+    m_Localized: Clay pot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38549053091840
+    m_Localized: 'Clay pots. It belongs to the Late Middle
+
+      Ages.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38711347490816
+    m_Localized: Oil Lamp Base
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38987332694016
+    m_Localized: 'A traditional metal kerosene lamp used
+
+      for lighting before
+      electricity. The small
+
+      knob adjusts the wick, and the lamp
+
+      would
+      normally hold a glass chimney on
+
+      top.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 39546643132416
+    m_Localized: Mangal Hearth
+    m_Metadata:
+      m_Items: []
+  - m_Id: 39600909037568
+    m_Localized: 'A low metal hearth used for heating and
+
+      cooking with charcoal.
+      Pots or trays were
+
+      placed over the bowl to keep food warm.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40761372291072
+    m_Localized: Lid
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40820679749632
+    m_Localized: 'A heavy metal dome used for baking
+
+      bread and pastries. Hot
+      embers were
+
+      placed on top to cook the food evenly
+
+      from above.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 41145998356480
+    m_Localized: Large Serving Tray
+    m_Metadata:
+      m_Items: []
+  - m_Id: 41273232568320
+    m_Localized: 'A wide metal tray used to serve food to
+
+      guests or to carry
+      dishes between
+
+      rooms. Often placed on a low table
+
+      during meals.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 41521468256256
+    m_Localized: Copper skillet
+    m_Metadata:
+      m_Items: []
+  - m_Id: 41618205683712
+    m_Localized: 'A metal Mold used to bake small round
+
+      pastries. Each cup
+      holds a portion of
+
+      dough for even cooking over the fire.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 43882131599360
+    m_Localized: Small Serving Tray
+    m_Metadata:
+      m_Items: []
+  - m_Id: 44093264474112
+    m_Localized: "A hand-hammered copper tray used for\r\nserving tea, bread, or
+      small dishes\r\nduring meals.\r"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 44738067410944
+    m_Localized: Coffee Pot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 44830698614784
+    m_Localized: A small metal pot with a long handle used for preparing Turkish
+      coffee over hot coals or a small fire.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 47261125816320
+    m_Localized: Weapons
+    m_Metadata:
+      m_Items: []
+  - m_Id: 47298476093440
+    m_Localized: The sword belongs to the late Middle Ages.The sword belongs to the
+      late Middle Ages, the rifles belong to the period of democracy.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 50541000241152
+    m_Localized: Copper Bronze candlestick
+    m_Metadata:
+      m_Items: []
+  - m_Id: 50603289849856
+    m_Localized: 'worked with moulding technique. It
+
+      belongs to the Renaissance
+      period.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 50794571083776
+    m_Localized: Knitted flag
+    m_Metadata:
+      m_Items: []
+  - m_Id: 52099528110080
+    m_Localized: 'Decorative object, belongs to the Independence period.
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 52433923190784
+    m_Localized: Room Brazier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 52575820689408
+    m_Localized: 'An ornate brass brazier used for heating
+
+      living spaces.
+      Charcoal was placed
+
+      inside the chamber while the wide tray
+
+      below
+      protected the carpet from falling
+
+      embers.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 52853647192064
+    m_Localized: Water Heater
+    m_Metadata:
+      m_Items: []
+  - m_Id: 52934786002944
+    m_Localized: 'A metal charcoal heater used to boil
+
+      water for tea and household
+      needs. Hot
+
+      coals were placed inside the chamber to
+
+      keep water
+      warm for hours.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 53116915265536
+    m_Localized: Copper brazier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 53431655837696
+    m_Localized: "Copper brazier with bird cover. It belongs\r\nto the Renaissance
+      period. Serving for\r\nwarmth in the colder months in wealthy\r\nfamilies in
+      the city.\r"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 53769943232512
+    m_Localized: Copper brazier
+    m_Metadata:
+      m_Items: []
+  - m_Id: 54808318685184
+    m_Localized: "It belongs to the Renaissance period.\r\nAlso found in other rooms
+      due to multipurpose household use.\r"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 274161106530304
+    m_Localized: 'Welcome to Berat Museum
+
+'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 274468733562880
+    m_Localized: Start Exploring!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 274981403340800
+    m_Localized: "<b>Your Mission:</b>\r\nExplore the museum and discover hidden
+      cards that tell the story of Ottoman-era Albanian life.\r\n\r\n<b>Controls:</b>\r\n\u2022
+      Left side of screen - Move\r\n\u2022 Right side of screen - Look around\r\n\u2022
+      TAP button - Interact with objects\r\n\r\n<b>Collect all 18 cards to unlock
+      all badges!</b>"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 275774902743040
+    m_Localized: ACHIEVEMENT UNLOCKED
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300671565672448
+    m_Localized: First Discovery
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303145332617216
+    m_Localized: You found your first hidden card! The museum's secrets await.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303195899146240
+    m_Localized: Curious Explorer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303287133646848
+    m_Localized: Three cards discovered! Your curiosity is leading you deeper into
+      Berat's history.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303335519137792
+    m_Localized: Dedicated Seeker
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303382591811584
+    m_Localized: Six cards found! You're uncovering the layers of Ottoman family
+      life.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303436819968000
+    m_Localized: Persistent Scholar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303495569584128
+    m_Localized: Nine cards! You're halfway through the museum's story.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303549931958272
+    m_Localized: Heritage Guardian
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303648246444032
+    m_Localized: Fifteen cards! You're now a guardian of Berat's cultural memory.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303716219334656
+    m_Localized: Complete Collection
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303766928470016
+    m_Localized: All 18 cards discovered! Every hidden story revealed.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303815649505280
+    m_Localized: Heart of the Home
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303874063577088
+    m_Localized: "You've discovered the secrets of the \xE7ardak\u2014the social
+      center where families gathered, wove, and welcomed guests."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303953818267648
+    m_Localized: Family Sanctuary
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304021229121536
+    m_Localized: You've explored the private space where families found warmth, rest,
+      and passed down oral traditions through generations.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304054745804800
+    m_Localized: Hospitality Master
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304111893196800
+    m_Localized: "You've understood the sacred art of Ottoman hospitality\u2014where
+      architecture, decoration, and ritual combined to honor guests."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304152695386112
+    m_Localized: Culinary Heritage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304189001281536
+    m_Localized: "You've discovered the tools and traditions of Ottoman cooking\u2014where
+      fire, copper, and patience transformed ingredients into cultural expressions."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304256777039872
+    m_Localized: Weaver's Legacy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304300330692608
+    m_Localized: "You've learned the art of traditional weaving\u2014the craft that
+      sustained families, preserved identity, and gave women economic power."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304337949405184
+    m_Localized: Memory Keeper
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304387945508864
+    m_Localized: "You've witnessed the frozen moments of Albanian history\u2014photographs
+      that preserve customs, ceremonies, and communities now transformed by time."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304401602162688
+    m_Localized: Ottoman Life Scholar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304488273260544
+    m_Localized: You've explored every corner of the museum and experienced the complete
+      story of family life in Ottoman-era Berat. You are now a keeper of this cultural
+      heritage!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12724806865203200
+    m_Localized: End Session
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 5969788933591269466
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 
+        m_SharedEntries:
+        - id: 261929446518784

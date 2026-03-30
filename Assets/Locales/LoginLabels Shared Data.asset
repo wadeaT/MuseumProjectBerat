@@ -1,0 +1,144 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: LoginLabels Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: LoginLabels
+  m_TableCollectionNameGuidString: 1b963e1c647d08f499398537f889726d
+  m_Entries:
+  - m_Id: 280022069248
+    m_Key: login.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4099917328384
+    m_Key: login.EmailText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4206851108864
+    m_Key: login.EmailInput
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5141568532480
+    m_Key: login.LoginButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5355553533952
+    m_Key: login.SignUpButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5490635288576
+    m_Key: demog.title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5707795378176
+    m_Key: demog.subTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5871377428480
+    m_Key: demog.ageSelectQues
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6032665194496
+    m_Key: demog.genderSelectQues
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6350153035776
+    m_Key: demog.genderMale
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6453567795200
+    m_Key: demog.genderFemale
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6544034738176
+    m_Key: demog.genderPreferNot2Say
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6693150633984
+    m_Key: demog.nationalityText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6852324470784
+    m_Key: demog.nationallityInput
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7070625411072
+    m_Key: demog.computerSkillsQuesText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7245146206208
+    m_Key: demog.VeryDiffText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7414596087808
+    m_Key: demog.DiffText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7521890578432
+    m_Key: demog.AvarageText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7634172096512
+    m_Key: demog.EasyText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7718930591744
+    m_Key: demog.veryEasyText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7777235611648
+    m_Key: demog.VRInterestTextQues
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8155830267904
+    m_Key: demog.VeryLow
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8276299067392
+    m_Key: demog.Low
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8338672562176
+    m_Key: demog.Medium
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8440812253184
+    m_Key: demog.High
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8554096209920
+    m_Key: demog.veryHigh
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8691925233664
+    m_Key: demog.submitButton
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12396712013824
+    m_Key: login.ChooseLangText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 48111780999168
+    m_Key: login.SubTitle
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 2154252458276684009
+  references:
+    version: 2
+    RefIds:
+    - rid: 2154252458276684009
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1765287916566

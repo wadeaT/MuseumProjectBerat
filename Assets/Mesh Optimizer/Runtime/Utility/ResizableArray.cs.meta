@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 06f6ab8c644714048add2deb870cde6d
+timeCreated: 1516802341
+licenseType: Store
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 154517
+  packageName: Mesh Optimizer
+  packageVersion: 1.1
+  assetPath: Assets/Mesh Optimizer/Runtime/Utility/ResizableArray.cs
+  uploadId: 773945

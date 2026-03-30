@@ -62,3 +62,11 @@ crashlytics-build.properties
 
 # TestRunner generated files
 InitTestScene*.unity*
+
+# Firebase large plugin binaries
+Assets/Firebase/Plugins/x86_64/FirebaseCppApp-*.so
+Assets/Firebase/Plugins/x86_64/FirebaseCppApp-*.bundle
+Assets/Firebase/Plugins/arm64/FirebaseCppApp-*.so
+Assets/Firebase/Plugins/arm64/FirebaseCppApp-*.bundle
+
+.plastic/

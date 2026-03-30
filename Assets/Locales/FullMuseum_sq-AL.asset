@@ -1,0 +1,764 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: FullMuseum_sq-AL
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: sq-AL
+  m_SharedData: {fileID: 11400000, guid: a4fc55730df6d414d9c34a16f3bbcc4e, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 259275819429888
+    m_Localized: "Momente t\xEB Ngrira"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259510255857664
+    m_Localized: "K\xEBto fotografi kapin jet\xEBn shqiptare n\xEB fund t\xEB shekullit
+      t\xEB 19-t\xEB dhe fillim t\xEB shekullit t\xEB 20-t\xEB - dasma me veshje
+      tradicionale, mbledhje fshatare, portrete familjare. P\xEBrpara fotografis\xEB,
+      kujtime t\xEB tilla jetonin vet\xEBm n\xEB tradit\xEBn gojore, t\xEB n\xEBnshtruara
+      ndaj shtremb\xEBrimeve t\xEB koh\xEBs dhe ritregimit. K\xEBto imazhe jan\xEB
+      dritare n\xEB nj\xEB bot\xEB ku \xE7do veshje, gjest dhe mbledhje mbartte kuptim
+      t\xEB thell\xEB kulturor. Fytyrat q\xEB na shikojn\xEB jan\xEB paraardh\xEBsit
+      tuaj, pozat e tyre formale fshihnin personalitete t\xEB gjalla, kostumet e
+      tyre tradicionale q\xEB p\xEBrfaq\xEBsojn\xEB mij\xEBra or\xEB pune t\xEB aft\xEB
+      dore, t\xEB cilat tani jan\xEB zhdukur kryesisht."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259602136281088
+    m_Localized: "Dasma si Teat\xEBr"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259693827960832
+    m_Localized: "Fotografit\xEB e dasm\xEBs zbulojn\xEB festime t\xEB holl\xEBsishme
+      shum\xEBditore q\xEB bashkuan jo vet\xEBm dy njer\xEBz, por dy familje dhe
+      komunitetet e tyre m\xEB t\xEB gjera. Vini re q\xEBndisjen e nd\xEBrlikuar
+      n\xEB kostumin e nuses - muaj pune nga t\xEB af\xEBrmet femra, secila duke
+      q\xEBndisur nj\xEB lutje p\xEBr t\xEB ardhmen e saj. Pozat formale t\xEB t\xEB
+      ftuarve pasqyrojn\xEB solemnitetin e rastit. K\xEBto nuk ishin thjesht festa;
+      ato ishin shfaqje kulturore ku \xE7do detaj - nga shfaqja e prik\xEBs te vallet
+      rituale - p\xEBrforconte lidhjet shoq\xEBrore dhe transmetonte tradit\xEBn
+      te brezi i ardhsh\xEBm. Dasmat ishin tekste shkollore t\xEB gjalla."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259885524430848
+    m_Localized: Kujtesa e Komunitetit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 259999815020544
+    m_Localized: "Fotot e tubimeve n\xEB fshat tregojn\xEB \xE7arshit\xEB dhe sheshet
+      publike ku burrat zhvillonin pun\xEB dhe diskutonin politik\xEB, nd\xEBrsa
+      tubimet e grave zhvilloheshin n\xEB oborre dhe sht\xEBpi. K\xEBto imazhe kapin
+      bot\xEBt paralele shoq\xEBrore t\xEB jet\xEBs s\xEB shqiptar\xEBve osman\xEB
+      - burrat n\xEB sfer\xEBn publike, grat\xEB n\xEB pun\xEBt e sht\xEBpis\xEB
+      - por t\xEB dyja po aq jet\xEBsore p\xEBr mbijetes\xEBn e komunitetit. Veshjet,
+      arkitektura dhe gjuha e trupit tradicionale n\xEB k\xEBto foto tregojn\xEB
+      histori q\xEB fjal\xEBt nuk mund t'i shprehin. Ato na kujtojn\xEB se p\xEBrpara
+      se globalizimi t\xEB homogjenizonte bot\xEBn, \xE7do fshat kishte identitetin
+      e tij t\xEB dalluesh\xEBm vizual."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 260540431446016
+    m_Localized: Streha e Familjes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 260650561286144
+    m_Localized: "Kjo dhom\xEB modeste me dy dyshek\xEBt dhe orendit\xEB e thjeshta
+      ishte zemra private e jet\xEBs familjare. Ndryshe nga dhoma e mysafir\xEBve
+      me dekorimin e saj t\xEB holl\xEBsish\xEBm, dhoma e gjumit i jepte p\xEBrpar\xEBsi
+      funksionit dhe intimitetit. Dyshek\xEBt - t\xEB mbushur me lesh dhe t\xEB mbuluar
+      me tekstile t\xEB endura me dor\xEB - mb\xEBshtilleshin dhe ruheshin n\xEB
+      dollap gjat\xEB dit\xEBs, duke e transformuar dhom\xEBn n\xEB nj\xEB hap\xEBsir\xEB
+      \xE2\u20AC\u2039\xE2\u20AC\u2039shum\xEBfunksionale. Nat\xEBn, ajo b\xEBhej
+      nj\xEB vend i shenjt\xEB ku prind\xEBrit u tregonin histori f\xEBmij\xEBve
+      dhe p\xEBrcillnin tradita gojore n\xEB biseda t\xEB p\xEBshp\xEBritura n\xEBn
+      drit\xEBn e qirinjve."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 260746392743936
+    m_Localized: "Ngroht\xEBsia e vatr\xEBs"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 260790382604288
+    m_Localized: "Oxhaku q\xEB shihni ishte thelb\xEBsor p\xEBr mbijetes\xEB gjat\xEB
+      dimrave t\xEB ftoht\xEB t\xEB Beratit. Familjet mblidheshin rreth mangalit
+      - nj\xEB mangall metalik i mbushur me qymyr t\xEB nxeht\xEB - i vendosur n\xEB
+      m\xEBnyr\xEB t\xEB sigurt n\xEBn oxhakun e oxhakut. Tymi q\xEB ngrihej sillte
+      jo vet\xEBm ngroht\xEBsi, por edhe arom\xEBn e drurit q\xEB digjej dhe rehatin\xEB
+      e sht\xEBpis\xEB. Mbr\xEBmjet e dimrit n\xEB k\xEBt\xEB dhom\xEB n\xEBnkuptonin
+      q\xEB familja mblidhej af\xEBr, duke riparuar vegla, duke treguar histori dhe
+      duke ruajtur lidhjet q\xEB i mbanin familjet s\xEB bashku gjat\xEB dimrave
+      t\xEB ashp\xEBr malor\xEB."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 260914294927360
+    m_Localized: "Dollapi i Prik\xEBs"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261021471977472
+    m_Localized: "Ky dollap prej druri mbante shum\xEB m\xEB tep\xEBr sesa rroba
+      - ishte depoja e trash\xEBgimis\xEB familjare. Prika e nuses ruhej me kujdes
+      k\xEBtu: liri t\xEB q\xEBndisur me dor\xEB, en\xEB gatimi prej bakri, bizhuteri
+      dhe tekstile q\xEB p\xEBrfaq\xEBsonin vite p\xEBrgatitjeje. P\xEBrmbajtja e
+      dollapit tregonte historin\xEB e statusit shoq\xEBror t\xEB nj\xEB familjeje
+      dhe t\xEB pun\xEBs s\xEB palodhur t\xEB nj\xEB gruaje. N\xEBnat i hapnin k\xEBto
+      dyer me vajzat e tyre, duke u m\xEBsuar atyre se cilat sende duhet t'i ruanin
+      si thesar, cilat t\xEB p\xEBrdornin \xE7do dit\xEB dhe cilat t'ia kalonin brezit
+      t\xEB ardhsh\xEBm."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261510016118784
+    m_Localized: "Zemra e Sht\xEBpis\xEB"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261636788957184
+    m_Localized: "Ky ballkon, i quajtur '\xE7ardak' n\xEB shqip, ishte qendra shoq\xEBrore
+      e sht\xEBpive tradicionale beratase. Familjet mblidheshin k\xEBtu p\xEBr t\xEB
+      ngr\xEBn\xEB, grat\xEB endnin tekstile dhe mysafir\xEBt e nderuar priteshin
+      me kafe dhe raki. Kangjellat prej druri u lejonin banor\xEBve t\xEB v\xEBzhgonin
+      jet\xEBn n\xEB rrug\xEB posht\xEB, duke ruajtur privat\xEBsin\xEB - nj\xEB
+      tipar i zgjuar i arkitektur\xEBs s\xEB epok\xEBs osmane."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261713188204544
+    m_Localized: "Fijet e Tradit\xEBs"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261734897922048
+    m_Localized: "Qilimat dhe tapet\xEBt q\xEB shihni k\xEBtu nuk ishin thjesht zbukurime
+      - ato p\xEBrfaq\xEBsonin pasurin\xEB e nj\xEB familjeje dhe aft\xEBsin\xEB
+      e nj\xEB gruaje. Berati ishte i famsh\xEBm p\xEBr zanatet e tij t\xEB tekstilit,
+      me modele t\xEB transmetuara brez pas brezi. \xC7do motiv gjeometrik kishte
+      kuptim: diamantet simbolizonin mbrojtjen, nd\xEBrsa zogjt\xEB p\xEBrfaq\xEBsonin
+      lirin\xEB dhe lajm\xEBtar\xEBt midis bot\xEBve."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261901822832640
+    m_Localized: "Midis Bot\xEBve"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 261929446518784
+    m_Localized: "Vini re se si ky ballkon lidh \xE7do dhom\xEB? Sht\xEBpit\xEB tradicionale
+      beratase u projektuan me \xE7ardakun si bosht, duke lidhur simbolikisht jet\xEBn
+      private familjare me detyrimet e komunitetit. Nga ky vend, mund t\xEB arrije
+      n\xEB kuzhin\xEB, dhom\xEBn e mysafir\xEBve (oda e mikut) dhe n\xEB dhom\xEBn
+      e grave. Vet\xEB sht\xEBpia ishte nj\xEB model n\xEB miniatur\xEB i harmonis\xEB
+      shoq\xEBrore."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262525062852608
+    m_Localized: Teatri i Mikpritjes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262642209763328
+    m_Localized: "Kjo dhom\xEB mysafir\xEBsh, hap\xEBsira m\xEB e dekoruar me holl\xEBsi
+      n\xEB sht\xEBpi, ishte nj\xEB sken\xEB p\xEBr shfaqjen e statusit shoq\xEBror
+      dhe vlerave kulturore. \xC7do element - nga tavani i pikturuar te divan\xEBt
+      e integruar - u njoftonte vizitor\xEBve se kishin hyr\xEB n\xEB nj\xEB sht\xEBpi
+      me rafinim dhe nder. N\xEB kultur\xEBn osmane shqiptare, mikpritja nuk ishte
+      thjesht mir\xEBsi; ishte nj\xEB detyr\xEB e shenjt\xEB. Reputacioni i nj\xEB
+      familjeje mb\xEBshtetej n\xEB trajtimin e tyre ndaj mysafir\xEBve, duke e b\xEBr\xEB
+      k\xEBt\xEB dhom\xEB shum\xEB m\xEB tep\xEBr sesa thjesht dekorim - ishte nj\xEB
+      investim n\xEB mbijetes\xEBn shoq\xEBrore."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262741925146624
+    m_Localized: Sekreti i Mahfilit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262820434128896
+    m_Localized: "E vini re platform\xEBn e ngritur - mahfilin - t\xEB bashkangjitur
+      n\xEB mur? Ky tipar arkitektonik u lejonte grave t\xEB v\xEBzhgonin pritjet
+      e mysafir\xEBve, nd\xEBrkoh\xEB q\xEB mbeteshin t\xEB ndara nga nj\xEB ekran
+      ose perde dekorative. Shoq\xEBria osmane p\xEBrcaktonte sfera t\xEB ndara p\xEBr
+      burrat dhe grat\xEB n\xEB mjedise formale, megjithat\xEB mahfili zbulon se
+      si arkitektura krijonte hap\xEBsira p\xEBr pranin\xEB dhe veprimin e grave.
+      Nga ky pozicion i ngritur, zonja e sht\xEBpis\xEB mund t\xEB siguronte q\xEB
+      mikpritja e duhur t\xEB ofrohej, duke ruajtur pamjen e izolimit q\xEB pritej
+      nga tradita."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262880530116608
+    m_Localized: "Kafe, Raki dhe Bised\xEB"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 262985052172288
+    m_Localized: "Rituali i pritjes s\xEB mysafir\xEBve ndiqte kode t\xEB sakta:
+      kafeja turke sh\xEBrbehej n\xEB filxhan\xEB t\xEB vegj\xEBl mbi tabaka t\xEB
+      zbukuruara, e shoq\xEBruar me \xEBmb\xEBlsira. P\xEBr miqt\xEB m\xEB t\xEB
+      ngusht\xEB, rakia - pije alkoolike me arom\xEB anasoni - rridhte lirsh\xEBm.
+      Bisedat n\xEB k\xEBt\xEB dhom\xEB varionin nga negociatat e biznesit te marr\xEBveshjet
+      martesore e deri te diskutimet politike. Ngrohtoret dekorative n\xEB mure mbanin
+      objekte t\xEB \xE7muara - kafene prej bakri, tabaka argjendi, en\xEB qelqi
+      t\xEB holla - q\xEB nxirreshin vet\xEBm p\xEBr mysafir\xEBt e nderuar, duke
+      e transformuar mikpritjen n\xEB nj\xEB form\xEB arti q\xEB i bashkonte komunitetet
+      s\xEB bashku."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263369485299712
+    m_Localized: Thesari i Bakrit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263473533399040
+    m_Localized: "En\xEBt vezulluese prej bakri t\xEB ekspozuara k\xEBtu ishin krenaria
+      e nj\xEB familjeje dhe mjetet e mjesht\xEBris\xEB s\xEB nj\xEB gruaje. \xC7do
+      tenxhere, tigan dhe kazan kishte nj\xEB q\xEBllim specifik t\xEB transmetuar
+      brez pas brezi: xhezveja me dorez\xEB t\xEB gjat\xEB p\xEBr p\xEBrgatitjen
+      e kafes\xEB, tava e gjer\xEB p\xEBr pjekje, kazani i rrumbullakosur p\xEBr
+      gatimin e pilafit. Shp\xEBrndarja e shk\xEBlqyer e nxeht\xEBsis\xEB s\xEB bakrit
+      e b\xEBnte at\xEB ideal p\xEBr kuzhin\xEBn shqiptare, nd\xEBrsa bukuria e tij
+      e ngriti gatimin nga nj\xEB domosdoshm\xEBri e thjesht\xEB n\xEB nj\xEB artizanat.
+      K\xEBto en\xEB u l\xEBmuan me p\xEBrkushtim fetar, shk\xEBlqimi i tyre pasqyronte
+      jo vet\xEBm drit\xEBn, por edhe vet\xEBrespektin e nj\xEB familjeje."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263548162650112
+    m_Localized: Zjarri dhe Durimi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263592278339584
+    m_Localized: "Vatra tradicionale n\xEB k\xEBt\xEB kuzhin\xEB k\xEBrkonte v\xEBmendje
+      dhe aft\xEBsi t\xEB vazhdueshme. Grat\xEB kujdeseshin p\xEBr zjarret nga agimi
+      deri n\xEB mbr\xEBmje, duke menaxhuar zona t\xEB ndryshme t\xEB nxeht\xEBsis\xEB
+      p\xEBr detyra t\xEB ndryshme gatimi. Nuk kishte termometra ose koh\xEBmat\xEBs
+      - vet\xEBm p\xEBrvoj\xEB q\xEB kalonte nga n\xEBna te vajza rreth asaj se kur
+      qymyri shk\xEBlqente n\xEB temperatur\xEBn e p\xEBrsosur p\xEBr buk\xEB, kur
+      flak\xEBt duhet t\xEB hidheshin p\xEBr skuqje t\xEB shpejt\xEB, kur prushi
+      duhet t\xEB digjej p\xEBr gjell\xEB t\xEB ngadalta. Kuzhina ishte nj\xEB laborator
+      gruaje ku shkenca takohej me tradit\xEBn dhe vaktet u b\xEBn\xEB shprehje e
+      dashuris\xEB dhe ekspertiz\xEBs."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263740152721408
+    m_Localized: "Ruajtja dhe stin\xEBt"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263765717004288
+    m_Localized: "I vini re kavanoz\xEBt qeramik\xEB dhe fu\xE7it\xEB prej druri?
+      P\xEBrpara frigoriferimit, familjet mb\xEBshteteshin n\xEB metodat e lashta
+      t\xEB ruajtjes. Boll\xEBku i ver\xEBs - speca, domate, kastraveca - turshitej
+      n\xEB sh\xEBllir\xEB ose uthull p\xEBr t\xEB mb\xEBshtetur familjen gjat\xEB
+      dimrit. Frutat thaheshin n\xEB diell, mishrat kuroheshin me krip\xEB, djathi
+      ruhej n\xEB vaj. Kuzhina nuk ishte vet\xEBm vendi ku p\xEBrgatiteshin vaktet,
+      por edhe vendi ku familjet kapnin fjal\xEB p\xEBr fjal\xEB begatin\xEB e ver\xEBs
+      p\xEBr t\xEB mbijetuar dimrat malor\xEB. Kjo dhom\xEB mbante njohurin\xEB q\xEB
+      ndante mbijetes\xEBn nga uria."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 263861116448768
+    m_Localized: "K\xEBnga e tezgjahut"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 264192395161600
+    m_Localized: "Tezgjahu prej druri q\xEB q\xEBndronte p\xEBrpara teje ishte motori
+      ekonomik i shum\xEB familjeve beratase. Grat\xEB kalonin or\xEB t\xEB panum\xEBrta
+      te kjo makin\xEB, duke transformuar leshin ose pambukun e pap\xEBrpunuar n\xEB
+      p\xEBlhur\xEB q\xEB vishte familjen, mobilonte sht\xEBpin\xEB dhe mund t\xEB
+      shitej p\xEBr t\xEB fituar t\xEB ardhura. K\xEBrcitja ritmike e shufr\xEBs
+      q\xEB kalonte n\xEBp\xEBr fije krijonte nj\xEB kolon\xEB zanore p\xEBr jet\xEBn
+      familjare. Vajzat e reja m\xEBsonin pran\xEB n\xEBnave t\xEB tyre, me duart
+      e tyre t\xEB vogla q\xEB gradualisht zot\xEBronin koordinimin e nevojsh\xEBm
+      p\xEBr t\xEB krijuar endje t\xEB ngushta dhe t\xEB nj\xEBtrajtshme. Tezgjahu
+      ishte si mjet ashtu edhe m\xEBsues."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 264251396435968
+    m_Localized: Modelet e Identitetit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 264307759493120
+    m_Localized: "Modelet gjeometrike t\xEB endura n\xEB tekstilet shqiptare ishin
+      shum\xEB m\xEB tep\xEBr sesa thjesht dekorim - ato ishin nj\xEB gjuh\xEB vizuale.
+      \xC7do rajon, madje \xE7do familje, kishte motive dalluese. Nj\xEB grua mund
+      t\xEB identifikonte origjin\xEBn e nj\xEB tekstili duke shqyrtuar kufijt\xEB
+      dhe medaljonet qendrore t\xEB tij. K\xEBto modele i lidhnin end\xEBsit me paraardh\xEBsit
+      e tyre, nd\xEBrsa vajzat rikrijonin dizajne q\xEB kishin shpikur st\xEBrgjyshet
+      e tyre. N\xEB nj\xEB bot\xEB ku pak veta dinin t\xEB lexonin ose t\xEB shkruanin,
+      k\xEBta fjalor\xEB vizual\xEB ruanin kujtes\xEBn kulturore dhe shpallnin identitetin.
+      Nj\xEB qilim ishte nj\xEB n\xEBnshkrim, nj\xEB deklarat\xEB: \"K\xEBtu jemi
+      ne\"."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 264450390994944
+    m_Localized: Ekonomia e Fijes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 264558000058368
+    m_Localized: "Kjo punishte p\xEBrfaq\xEBson fuqin\xEB ekonomike t\xEB grave n\xEB
+      nj\xEB shoq\xEBri q\xEB kufizonte rolet e tyre publike. Tekstilet e prodhuara
+      k\xEBtu gjeneronin t\xEB ardhura q\xEB grat\xEB i kontrollonin, duke u dh\xEBn\xEB
+      atyre ndikim mbi vendimet e familjes. Nj\xEB end\xEBse e aft\xEB mund t\xEB
+      fitonte mjaftuesh\xEBm p\xEBr t\xEB kontribuar ndjesh\xEBm n\xEB shpenzimet
+      familjare ose p\xEBr t\xEB kursyer p\xEBr paj\xEBn e vajz\xEBs s\xEB saj. Punishtja
+      ishte nj\xEB hap\xEBsir\xEB \xE2\u20AC\u2039\xE2\u20AC\u2039ku puna e grave
+      p\xEBrkthehej drejtp\xEBrdrejt n\xEB vler\xEB ekonomike, duke sfiduar iden\xEB
+      se grat\xEB osmane ishin thjesht t\xEB kufizuara n\xEB padukshm\xEBrin\xEB
+      sht\xEBpiake. Duart e tyre mbanin fije, por edhe fuqi negociuese."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16720441344
+    m_Localized: Djep
+    m_Metadata:
+      m_Items: []
+  - m_Id: 578513907712
+    m_Localized: "Djep. Periudha e socializmit. Objekt i jet\xEBs s\xEB p\xEBrditshme."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8718882025472
+    m_Localized: "Nj\xEB mangall tradicional osman sht\xEBpiak q\xEB p\xEBrdorej
+      p\xEBr t\xEB djegur temjan ose qymyr druri. Kupola e saj e shpuar lejon q\xEB
+      tymi i aromatizuar t\xEB p\xEBrhapet but\xEBsisht n\xEB t\xEB gjith\xEB dhom\xEBn."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9606057013248
+    m_Localized: Temjan prej bronzi osman
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9872655364096
+    m_Localized: "Lavatri\xE7e dhe lavaman"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10123298582528
+    m_Localized: "Nj\xEB en\xEB prej bronzi me nj\xEB legen t\xEB p\xEBrshtatsh\xEBm
+      q\xEB p\xEBrdorej p\xEBr t\xEB lar\xEB duart para ngr\xEBnies ose p\xEBr t\xEB
+      mir\xEBpritur mysafir\xEBt. Uji hidhej nga ena nd\xEBrsa legeni mblidhte uj\xEBrat
+      e zeza. U gjet edhe n\xEB dhoma t\xEB tjera p\xEBr shkak t\xEB p\xEBrdorimit
+      shum\xEBq\xEBllimor n\xEB sht\xEBpi."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10298989588480
+    m_Localized: "Tabaka prej druri t\xEB gdhendur"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 25273757970432
+    m_Localized: "Tabaka prej druri t\xEB gdhendur. I p\xEBrket periudh\xEBs s\xEB
+      demokracis\xEB. Punuar me teknik\xEBn e ritmit."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 25898767986688
+    m_Localized: Foto
+    m_Metadata:
+      m_Items: []
+  - m_Id: 25984432451584
+    m_Localized: "Foto e viteve para Luft\xEBs s\xEB Dyt\xEB Bot\xEBrore."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26432887435264
+    m_Localized: "Foto e nj\xEB familjeje aristokratike"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 26591553761280
+    m_Localized: "Foto e vitit 1930. I p\xEBrket aristokracis\xEB beratase, ku veshja
+      tradicionale nd\xEBrthuret me elemente t\xEB influenc\xEBs per\xEBndimore."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27004982112256
+    m_Localized: Foto e vitit 1955
+    m_Metadata:
+      m_Items: []
+  - m_Id: 27334780235776
+    m_Localized: Foto e vitit 1928
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29183172259840
+    m_Localized: Tezgjah
+    m_Metadata:
+      m_Items: []
+  - m_Id: 29676351107072
+    m_Localized: "Keni eksploruar \xE7do cep t\xEB muzeut dhe keni p\xEBrjetuar rr\xEBfimin
+      e plot\xEB t\xEB jet\xEBs familjare n\xEB Beratin e epok\xEBs osmane. Tani
+      jeni nj\xEB ruajt\xEBs i k\xEBsaj trash\xEBgimie kulturore!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31282555629568
+    m_Localized: "Tezgjahu. I p\xEBrket periudh\xEBs s\xEB pasluft\xEBs. Mjete pune
+      p\xEBr prodhimin e qilimave prej leshi."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33262044819456
+    m_Localized: "\xC7ikrik"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33425756893184
+    m_Localized: "\xC7ikrik. I p\xEBrket periudh\xEBs s\xEB Pavar\xEBsis\xEB. Veg\xEBl
+      pune n\xEB kushtet artizanale sht\xEBpiake p\xEBr pro\xE7esin e mbledhjes s\xEB
+      leshit. "
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33498762948608
+    m_Localized: Mangall bakri
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33890204758016
+    m_Localized: "Mangall bakri. I p\xEBrket periudh\xEBs s\xEB Rilindjes. Objekt
+      i jet\xEBs s\xEB p\xEBrditshme."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 33982248759296
+    m_Localized: Hekur me prush
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34567626797056
+    m_Localized: "Hekur me prush. Mjet pune. I p\xEBrket periudh\xEBs s\xEB Mesjet\xEBs
+      s\xEB von\xEB."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 34776998064128
+    m_Localized: "Kutia e magazinimit n\xEB kuzhin\xEB"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35109287604224
+    m_Localized: "Nj\xEB ark\xEB druri q\xEB p\xEBrdorej p\xEBr t\xEB ruajtur miellin,
+      drith\xEBrat dhe furnizimet e kuzhin\xEBs. Mbante ushqimin e that\xEB dhe e
+      ruante at\xEB p\xEBr gatim t\xEB p\xEBrditsh\xEBm."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 35341484273664
+    m_Localized: "En\xEB guri dhe shtyp\xEBse"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36060685774848
+    m_Localized: "Nj\xEB en\xEB e r\xEBnd\xEB guri q\xEB p\xEBrdoret me nj\xEB shkop
+      druri p\xEBr t\xEB bluar drith\xEBrat, bim\xEBt dhe er\xEBzat n\xEB kuzhin\xEBn
+      tradicionale osmane."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36191208321024
+    m_Localized: Kana e ujit prej balte
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36482620174336
+    m_Localized: "Nj\xEB en\xEB balte e punuar me dor\xEB q\xEB p\xEBrdoret p\xEBr
+      ruajtjen dhe mbajtjen e ujit. Dorezat e saj t\xEB shumta lejojn\xEB kapjen
+      e en\xEBs m\xEB leht\xEB."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36614455537664
+    m_Localized: Kandar hekuri
+    m_Metadata:
+      m_Items: []
+  - m_Id: 36987601793024
+    m_Localized: "Kandar hekuri.I p\xEBrket  periudh\xEBs se LANC. Kulture e huaj."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37383548284928
+    m_Localized: "\xC7engel mishi prej hekuri"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37552465489920
+    m_Localized: "\xC7engel mishi prej hekuri. Mjet pune. I p\xEBrket  periudh\xEBs
+      se  Rilindjes."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 37616252465152
+    m_Localized: "Tav\xEB pjekjeje"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38082080256000
+    m_Localized: "Nj\xEB tav\xEB metalike e rrumbullak\xEBt q\xEB p\xEBrdorej p\xEBr
+      t\xEB pjekur buk\xEB dhe \xEBmb\xEBlsira mbi qymyr t\xEB nxeht\xEB. Vendosej
+      n\xEBn nj\xEB kapak gatimi n\xEB form\xEB sa\xE7i p\xEBr t\xEB ngrohur brumin
+      n\xEB m\xEBnyr\xEB t\xEB barabart\xEB."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38464286208000
+    m_Localized: "En\xEB balte"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38549053091840
+    m_Localized: "Shtamb\xEB balte. I p\xEBrket periudh\xEBs s\xEB Mesjet\xEBs s\xEB
+      Von\xEB. En\xEB e p\xEBrdorimit t\xEB p\xEBrditshem."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38711347490816
+    m_Localized: "Baza e llamb\xEBs me vaj"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 38987332694016
+    m_Localized: "Nj\xEB llamb\xEB tradicionale metalike me vajguri q\xEB p\xEBrdorej
+      p\xEBr ndri\xE7im p\xEBrpara energjis\xEB elektrike. Doreza e vog\xEBl rregullon
+      fitilin dhe llamba ka nj\xEB pjes\xEB prej qelqi sip\xEBr."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 39546643132416
+    m_Localized: Vatra e Mangalit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 39600909037568
+    m_Localized: "Nj\xEB vat\xEBr e ul\xEBt metalike q\xEB p\xEBrdorej p\xEBr ngrohje
+      dhe gatim me qymyr druri. Tenxhere ose tabaka vendoseshin mbi tas p\xEBr ta
+      mbajtur ushqimin ngroht\xEB."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40761372291072
+    m_Localized: "Sa\xE7 me kapak "
+    m_Metadata:
+      m_Items: []
+  - m_Id: 40820679749632
+    m_Localized: "Nj\xEB kupol\xEB metalike e r\xEBnd\xEB q\xEB p\xEBrdorej p\xEBr
+      pjekjen e buk\xEBs dhe \xEBmb\xEBlsirave. Prush t\xEB nxeht\xEB vendoseshin
+      sip\xEBr p\xEBr t\xEB gatuar ushqimin n\xEB m\xEBnyr\xEB t\xEB barabart\xEB
+      nga lart."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 41145998356480
+    m_Localized: "Tabaka e madhe p\xEBr servirje"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 41273232568320
+    m_Localized: "Nj\xEB tabaka e gjer\xEB metalike q\xEB p\xEBrdoret p\xEBr t'u
+      sh\xEBrbyer ushqim mysafir\xEBve ose p\xEBr t\xEB mbajtur en\xEBt midis dhomave.
+      Shpesh vendoset n\xEB nj\xEB tavolin\xEB t\xEB ul\xEBt gjat\xEB vakteve."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 41521468256256
+    m_Localized: Tigan bakri
+    m_Metadata:
+      m_Items: []
+  - m_Id: 41618205683712
+    m_Localized: "Nj\xEB kall\xEBp metalik q\xEB p\xEBrdoret p\xEBr t\xEB gatuar
+      ushqime t\xEB vogla t\xEB rrumbullak\xEBta. \xC7do filxhan mban nj\xEB porcion
+      brumi p\xEBr t'u gatuar nj\xEBtrajt\xEBsisht mbi zjarr."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 43882131599360
+    m_Localized: "Tabaka e vog\xEBl p\xEBr servirje"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 44093264474112
+    m_Localized: "Nj\xEB tabaka bakri e punuar me dor\xEB q\xEB p\xEBrdoret p\xEBr
+      t\xEB servirur \xE7aj, buk\xEB ose pjata t\xEB vogla gjat\xEB vakteve."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 44738067410944
+    m_Localized: Kafeja
+    m_Metadata:
+      m_Items: []
+  - m_Id: 44830698614784
+    m_Localized: "Nj\xEB tenxhere e vog\xEBl metalike me dorez\xEB t\xEB gjat\xEB
+      q\xEB p\xEBrdoret p\xEBr t\xEB p\xEBrgatitur kafe turke mbi qymyr t\xEB nxeht\xEB
+      ose n\xEB nj\xEB zjarr t\xEB vog\xEBl."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 47261125816320
+    m_Localized: "Arm\xEBt "
+    m_Metadata:
+      m_Items: []
+  - m_Id: 47298476093440
+    m_Localized: "Shpata i p\xEBrket Mesjet\xEBs s\xEB von\xEB, pushk\xEBt i p\xEBrkasin
+      periudh\xEBs s\xEB demokracis\xEB."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 50541000241152
+    m_Localized: Shandani prej bakri prej bronzi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 50603289849856
+    m_Localized: "i punuar me teknik\xEBn e derdhjes. I p\xEBrket periudh\xEBs s\xEB
+      Rilindjes."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 50794571083776
+    m_Localized: Flamuri i thurur
+    m_Metadata:
+      m_Items: []
+  - m_Id: 52099528110080
+    m_Localized: "Objekt dekorativ, i p\xEBrket periudh\xEBs s\xEB Pavar\xEBsis\xEB."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 52433923190784
+    m_Localized: Mangall dhome
+    m_Metadata:
+      m_Items: []
+  - m_Id: 52575820689408
+    m_Localized: "Nj\xEB mangall prej bronzi i zbukuruar q\xEB p\xEBrdorej p\xEBr
+      ngrohjen e hap\xEBsirave t\xEB jetes\xEBs. Brenda dhom\xEBs vendosej qymyr
+      druri, nd\xEBrsa tabaka e gjer\xEB posht\xEB mbronte qilimin nga r\xEBnia e
+      prushit."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 52853647192064
+    m_Localized: "Ngroh\xEBs uji"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 52934786002944
+    m_Localized: "Nj\xEB ngroh\xEBs metalik me qymyr q\xEB p\xEBrdorej p\xEBr t\xEB
+      zier ujin p\xEBr \xE7aj dhe p\xEBr nevojat sht\xEBpiake. Brenda dhom\xEBs vendoseshin
+      qymyr t\xEB nxeht\xEB p\xEBr ta mbajtur ujin t\xEB ngroht\xEB p\xEBr or\xEB
+      t\xEB t\xEBra."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 53116915265536
+    m_Localized: "Mangall\xEB bakri"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 53431655837696
+    m_Localized: "Mangall bakri me mbules\xEB zogjsh. I p\xEBrket periudh\xEBs s\xEB
+      Rilindjes. Sh\xEBrben p\xEBr ngroht\xEBsi n\xEB muajt e ftoht\xEB p\xEBr familjet
+      e pasura n\xEB qytet."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 53769943232512
+    m_Localized: "Mangall\xEB bakri"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 54808318685184
+    m_Localized: "I p\xEBrket periudh\xEBs s\xEB Rilindjes. Gjendet edhe n\xEB dhoma
+      t\xEB tjera p\xEBr shkak t\xEB p\xEBrdorimit shum\xEBq\xEBllimor n\xEB sht\xEBpi."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 274161106530304
+    m_Localized: "Mir\xEB se vini n\xEB Muzeun e Beratit"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 274468733562880
+    m_Localized: "Filloni t\xEB eksploroni!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 274981403340800
+    m_Localized: "<b>Misioni Juaj:</b>\r\nEksploroni muzeun dhe zbuloni karta t\xEB
+      fshehura q\xEB tregojn\xEB historin\xEB e jet\xEBs s\xEB shqiptar\xEBve t\xEB
+      epok\xEBs osmane.<b>Kontrollet:</b>\r\n\n\u2022 Ana e majt\xEB e ekranit -
+      L\xEBvizni\r\n\u2022 Ana e djatht\xEB e ekranit - Shikoni p\xEBrreth\r\n\u2022
+      Butoni PREKNI - Nd\xEBrveproni me objektet\r\n\r\n<b>Mblidhni t\xEB 18 kartat
+      p\xEBr t\xEB zhbllokuar t\xEB gjitha distinktiv\xEBt!</b>"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 275774902743040
+    m_Localized: "URIME P\xCBR ARRITJEN TUAJ"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 300671565672448
+    m_Localized: "Zbulimi i Par\xEB"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303145332617216
+    m_Localized: "Gjet\xEBt kart\xEBn tuaj t\xEB par\xEB t\xEB fshehur! Sekretet
+      e muzeut ju presin."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303195899146240
+    m_Localized: Eksplorues Kureshtar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303287133646848
+    m_Localized: "Tre karta t\xEB zbuluara! Kureshtja juaj po ju \xE7on m\xEB thell\xEB
+      n\xEB historin\xEB e Beratit."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303335519137792
+    m_Localized: "K\xEBrkues i P\xEBrkushtuar"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303382591811584
+    m_Localized: "Gjasht\xEB karta t\xEB gjetura! Po zbuloni shtresat e jet\xEBs
+      familjare osmane."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303436819968000
+    m_Localized: "Studiues K\xEBmb\xEBngul\xEBs"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303495569584128
+    m_Localized: "N\xEBnt\xEB karta! Jeni n\xEB gjysm\xEBn e rr\xEBfimit t\xEB muzeut."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303549931958272
+    m_Localized: "Kujdestar i Trash\xEBgimis\xEB"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303648246444032
+    m_Localized: "Pes\xEBmb\xEBdhjet\xEB karta! Tani jeni nj\xEB kujdestar i kujtes\xEBs
+      kulturore t\xEB Beratit."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303716219334656
+    m_Localized: "Koleksioni i Plot\xEB"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303766928470016
+    m_Localized: "T\xEB gjitha 18 kartat u zbuluan! \xC7do histori e fshehur u zbulua."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303815649505280
+    m_Localized: "Zemra e Sht\xEBpis\xEB"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303874063577088
+    m_Localized: "Keni zbuluar sekretet e \xE7ardakut, qendra shoq\xEBrore ku familjet
+      mblidheshin, endnin dhe mir\xEBprisnin mysafir\xEB."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 303953818267648
+    m_Localized: Streha e Familjes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304021229121536
+    m_Localized: "Keni eksploruar hap\xEBsir\xEBn private ku familjet gjenin ngroht\xEBsi
+      e pushim dhe p\xEBrcillnin traditat gojore brez pas brezi."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304054745804800
+    m_Localized: "Mjesht\xEBr i Mikpritjes"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304111893196800
+    m_Localized: "Keni kuptuar artin e shenjt\xEB t\xEB mikpritjes osmane, ku arkitektura,
+      dekorimi dhe rituali bashkoheshin p\xEBr t\xEB nderuar mysafir\xEBt."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304152695386112
+    m_Localized: "Trash\xEBgimi Kulinarie"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304189001281536
+    m_Localized: "Keni zbuluar mjetet dhe traditat e gatimit osman, ku zjarri, bakri
+      dhe durimi e shnd\xEBrronin p\xEBrb\xEBr\xEBsit n\xEB shprehje kulturore."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304256777039872
+    m_Localized: "Trash\xEBgimia e Endjes"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304300330692608
+    m_Localized: "Keni m\xEBsuar artin e endjes tradicionale, zanati q\xEB mbajti
+      familjet, ruajti identitetin dhe u dha grave fuqi ekonomike."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304337949405184
+    m_Localized: "Ruajt\xEBs i Kujtes\xEBs"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304387945508864
+    m_Localized: "Keni d\xEBshmuar momentet e ngrira t\xEB historis\xEB shqiptare,
+      fotografi q\xEB ruajn\xEB zakone, ceremoni dhe komunitete tashm\xEB t\xEB transformuara
+      nga koha."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304401602162688
+    m_Localized: "Studiues i Jet\xEBs Osmane"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 304488273260544
+    m_Localized: "Keni eksploruar \xE7do cep t\xEB muzeut dhe keni p\xEBrjetuar rr\xEBfimin
+      e plot\xEB t\xEB jet\xEBs familjare n\xEB Beratin e epok\xEBs osmane. Tani
+      jeni nj\xEB ruajt\xEBs i k\xEBsaj trash\xEBgimie kulturore!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12724806865203200
+    m_Localized: "P\xEBrfundo sesionin"
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

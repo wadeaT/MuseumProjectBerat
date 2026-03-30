@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: f60ceb34fe6101b4ebfad397d4dc939b
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 154517
+  packageName: Mesh Optimizer
+  packageVersion: 1.1
+  assetPath: Assets/Mesh Optimizer/Licenses/Third Party Notices.md
+  uploadId: 773945
