@@ -49,35 +49,38 @@ public class EngagementClassifier : MonoBehaviour
     // -----------------------------------------------------------------------
     // THRESHOLD MAPPING (used in DetermineEngagementLevelDirect):
     //
-    //   score >= 0.68  → HighlyEngaged
-    //   score >= 0.48  → Engaged
-    //   score >= 0.30  → Neutral
-    //   score >= 0.22  → Disengaged
-    //   score <  0.22  → HighlyDisengaged
+    //   score >= 0.75  → HighlyEngaged
+    //   score >= 0.55  → Engaged
+    //   score >= 0.35  → Neutral
+    //   score >= 0.20  → Disengaged
+    //   score <  0.20  → HighlyDisengaged
     //
-    // NOTE: The effective Disengaged/HighlyDisengaged boundary is
-    // disengagedThreshold (0.22). The highlyDisengagedThreshold field
-    // below is NOT used in classification — it exists only for legacy
-    // compatibility with LLMAdaptiveContentManager score interpolation
-    // (where the HighlyDisengaged case early-returns 0, making it inert).
+    // v2: Spread out to make all 5 levels realistically reachable.
+    // With rebalanced weights + reading baseline fix, the effective
+    // score floor drops from ~0.45 to ~0.15, opening the full range.
+    //
+    // NOTE: The highlyDisengagedThreshold field is NOT used in
+    // classification — it exists only for legacy compatibility with
+    // LLMAdaptiveContentManager score interpolation (where the
+    // HighlyDisengaged case early-returns 0, making it inert).
     // -----------------------------------------------------------------------
 
-    [Header("Level Thresholds (0-1 scale) - FIXED FOR VR")]
+    [Header("Level Thresholds (0-1 scale) - RETUNED v2")]
     [Tooltip("Score above this = Highly Engaged")]
     [Range(0.6f, 0.95f)]
-    public float highlyEngagedThreshold = 0.68f;
+    public float highlyEngagedThreshold = 0.75f;
 
     [Tooltip("Score above this = Engaged")]
     [Range(0.4f, 0.8f)]
-    public float engagedThreshold = 0.48f;
+    public float engagedThreshold = 0.55f;
 
     [Tooltip("Score above this = Neutral")]
     [Range(0.25f, 0.5f)]
-    public float neutralThreshold = 0.30f;
+    public float neutralThreshold = 0.35f;
 
     [Tooltip("Score above this = Disengaged; below this = HighlyDisengaged")]
     [Range(0.1f, 0.35f)]
-    public float disengagedThreshold = 0.22f;
+    public float disengagedThreshold = 0.20f;
 
     [Tooltip("UNUSED in classification (see threshold mapping comment above). Kept for serialization compatibility.")]
     [Range(0.05f, 0.2f)]
@@ -95,32 +98,32 @@ public class EngagementClassifier : MonoBehaviour
     [Tooltip("Head rotation variance (°/s) for stable head criterion")]
     public float headStableThreshold = 30f;
 
-    [Tooltip("Movement speed (m/s) for slow movement criterion")]
-    public float slowMovementThreshold = 1.2f;
+    [Tooltip("Movement speed (m/s) for slow movement criterion — lowered for VR")]
+    public float slowMovementThreshold = 0.8f;
 
-    [Header("Criterion Weights - REBALANCED")]
-    [Tooltip("Weight for controller gaze")]
+    [Header("Criterion Weights - REBALANCED v2 (active-signal priority)")]
+    [Tooltip("Weight for controller gaze (primary active signal)")]
     [Range(0f, 1f)]
-    public float gazeWeight = 0.30f;
+    public float gazeWeight = 0.40f;
 
-    [Tooltip("Weight for head stability")]
+    [Tooltip("Weight for head stability (passive — reduced)")]
     [Range(0f, 1f)]
-    public float headStabilityWeight = 0.35f;
+    public float headStabilityWeight = 0.25f;
 
-    [Tooltip("Weight for slow movement")]
+    [Tooltip("Weight for slow movement (passive — reduced)")]
     [Range(0f, 1f)]
-    public float movementWeight = 0.30f;
+    public float movementWeight = 0.25f;
 
     [Tooltip("Weight for hand proximity")]
     [Range(0f, 1f)]
-    public float handProximityWeight = 0.05f;
+    public float handProximityWeight = 0.10f;
 
     [Header("Behavioral Gating Settings")]
     [Tooltip("Seconds of sustained reading required for HighlyEngaged")]
     public float requiredReadingDuration = 2f;
 
     [Tooltip("Movement speed (m/s) above which user is considered 'very fast' - caps at Disengaged")]
-    public float veryFastMovementThreshold = 2f;
+    public float veryFastMovementThreshold = 1.5f;
 
     [Tooltip("Enable very fast movement gating (optional stricter rule)")]
     public bool enableVeryFastGating = true;
@@ -141,6 +144,9 @@ public class EngagementClassifier : MonoBehaviour
     private float currentEngagementScore = 0.5f;
     private float rawEngagementScore = 0.5f;
     private float lastUpdateTime = 0f;
+
+    // Sensor validation
+    private bool sensorDataSuspect = false;
 
     // Physical criteria (4 criteria)
     private bool handProximityEngaged = false;
@@ -280,6 +286,7 @@ public class EngagementClassifier : MonoBehaviour
     {
         physicalCriteriaMetCount = 0;
         uiOcclusionCompensationApplied = false;  // Reset each frame
+        sensorDataSuspect = false;                // Reset each frame
 
         // =====================================================================
         // Criterion 1: CONTROLLER GAZE
@@ -352,6 +359,37 @@ public class EngagementClassifier : MonoBehaviour
             handProximityEngaged = false;
             handScore = 0f;
         }
+
+        // =====================================================================
+        // SENSOR VALIDATION
+        // Detect cases where tracking hardware is not reporting data.
+        // When movementSpeed is exactly 0 AND head variance is exactly 0,
+        // the headScore and movementScore will be 1.0 (perfect) by default,
+        // creating fake high engagement from missing data.
+        // Fix: Clamp both to neutral (0.5) when data is suspect.
+        // =====================================================================
+        bool zeroMovement = currentMovementSpeed == 0f;
+        bool zeroHeadVariance = HeadTrackingAnalyzer.Instance != null
+            && HeadTrackingAnalyzer.Instance.GetRotationVariance() == 0f;
+
+        if (zeroMovement && zeroHeadVariance)
+        {
+            sensorDataSuspect = true;
+
+            // Clamp to neutral — don't reward missing data
+            headScore = Mathf.Min(headScore, 0.5f);
+            movementScore = Mathf.Min(movementScore, 0.5f);
+            headStable = false;
+            movementSlow = false;
+
+            // Recount physical criteria without head/movement
+            physicalCriteriaMetCount = (gazeFocused ? 1 : 0) + (handProximityEngaged ? 1 : 0);
+
+            if (showDetailedLogs)
+            {
+                Debug.LogWarning("[EngagementClassifier] SENSOR SUSPECT: movement=0 + headVariance=0 — clamping head/movement to 0.5");
+            }
+        }
     }
 
     void EvaluateReadingCriterion()
@@ -362,11 +400,9 @@ public class EngagementClassifier : MonoBehaviour
             readingEngaged = ReadingBehaviorTracker.Instance.IsReadingEngaged();
             readingConfidence = ReadingBehaviorTracker.Instance.GetConfidence();
 
-            // Boost reading score when actually reading
-            if (readingEngaged && readingScore < 0.6f)
-            {
-                readingScore = Mathf.Max(readingScore, 0.6f);
-            }
+            // Note: Removed the old readingScore floor boost (0.6).
+            // The ReadingBehaviorTracker's EMA output is used as-is.
+            // Artificially flooring the score inflated engagement.
 
             // Track sustained reading duration
             if (readingEngaged)
@@ -456,11 +492,13 @@ public class EngagementClassifier : MonoBehaviour
             uiOcclusionCompensationApplied = true;
         }
 
-        // Boost gazeScore to allow total score to reach HighlyEngaged threshold
-        // Reading = user is clearly engaged with visual content
-        if (gazeScore < 1.0f)
+        // Boost gazeScore to credit reading as partial gaze evidence.
+        // Capped at 0.7 (not 1.0) — reading is a proxy, not proof of
+        // focused gaze. This prevents automatic HighlyEngaged from
+        // reading alone when combined with high head/movement scores.
+        if (gazeScore < 0.7f)
         {
-            gazeScore = 1.0f;
+            gazeScore = 0.7f;
             uiOcclusionCompensationApplied = true;
         }
 
@@ -499,7 +537,16 @@ public class EngagementClassifier : MonoBehaviour
 
     void ApplySmoothing()
     {
-        currentEngagementScore = Mathf.Lerp(currentEngagementScore, rawEngagementScore, levelTransitionSpeed);
+        // Asymmetric smoothing: drops propagate 50% faster than rises.
+        // This prevents the smoothed score from "rescuing" genuine
+        // disengagement dips — a known problem from the data audit
+        // where 92-100% of raw scores below 0.30 were smoothed back up.
+        float speed = rawEngagementScore < currentEngagementScore
+            ? levelTransitionSpeed * 1.5f   // Faster descent
+            : levelTransitionSpeed;          // Normal ascent
+        speed = Mathf.Clamp01(speed);
+
+        currentEngagementScore = Mathf.Lerp(currentEngagementScore, rawEngagementScore, speed);
         currentEngagementScore = Mathf.Clamp01(currentEngagementScore);
     }
 
@@ -528,16 +575,18 @@ public class EngagementClassifier : MonoBehaviour
             }
         }
 
-        // GATING RULE 2: Fast movement + not reading = cap at Neutral
+        // GATING RULE 2: Fast movement + not reading = cap at Disengaged
+        // v2: Changed from Neutral cap to Disengaged cap. Walking around
+        // without reading or gazing is disengagement, not neutral browsing.
         bool movingFastWithoutReading = !movementSlow && !recentlyReading;
 
-        if (movingFastWithoutReading && maxAllowedLevel > EngagementLevel.Neutral)
+        if (movingFastWithoutReading && maxAllowedLevel > EngagementLevel.Disengaged)
         {
-            maxAllowedLevel = EngagementLevel.Neutral;
+            maxAllowedLevel = EngagementLevel.Disengaged;
 
             if (showDetailedLogs)
             {
-                Debug.Log("[EngagementClassifier] GATE: Fast + not reading → capped at Neutral");
+                Debug.Log("[EngagementClassifier] GATE: Fast + not reading → capped at Disengaged");
             }
         }
 
@@ -628,6 +677,7 @@ public class EngagementClassifier : MonoBehaviour
                 { "gazeFocused", gazeFocused },
                 { "gazeScore", gazeScore },
                 { "uiOcclusionFix", uiOcclusionCompensationApplied },
+                { "sensorDataSuspect", sensorDataSuspect },
                 { "headStable", headStable },
                 { "headScore", headScore },
                 { "movementSlow", movementSlow },
@@ -765,6 +815,7 @@ public class EngagementClassifier : MonoBehaviour
                 { "handScore", handScore },
                 { "gazeFocused", gazeFocused },
                 { "uiOcclusionFix", uiOcclusionCompensationApplied },
+                { "sensorDataSuspect", sensorDataSuspect },
                 { "headStable", headStable },
                 { "movementSlow", movementSlow },
                 { "handProximity", handProximityEngaged },

@@ -26,12 +26,12 @@ public class ReadingBehaviorTracker : MonoBehaviour
     public float smoothingFactor = 0.3f;
 
     [Tooltip("How quickly reading engagement decays without new events (per second)")]
-    [Range(0.001f, 0.05f)]
-    public float decayRate = 0.01f;
+    [Range(0.001f, 0.1f)]
+    public float decayRate = 0.03f;
 
-    [Tooltip("Reading engagement decays toward this neutral value")]
+    [Tooltip("Reading engagement decays toward this neutral value — low so non-reading defaults to low engagement")]
     [Range(0f, 1f)]
-    public float neutralBaseline = 0.5f;
+    public float neutralBaseline = 0.2f;
 
     [Header("Reading Evaluation Thresholds")]
     [Tooltip("Reading engagement ratio above this = engaged reading")]
@@ -71,7 +71,8 @@ public class ReadingBehaviorTracker : MonoBehaviour
     // ============================================================================
 
     // Current smoothed reading engagement (0 = completely disengaged, 1 = highly engaged)
-    private float currentReadingEngagement = 0.5f;
+    // Initialized to neutralBaseline so score starts low, not mid-scale.
+    private float currentReadingEngagement = 0.2f;
 
     // History of reading events for analysis
     private List<ReadingEvent> readingHistory = new List<ReadingEvent>();
@@ -523,8 +524,9 @@ public class ReadingBehaviorTracker : MonoBehaviour
 
     /// <summary>
     /// Reset tracker state (for testing or new session)
+    /// Uses neutralBaseline (0.2) so non-reading starts low.
     /// </summary>
-    public void Reset()
+    public new void Reset()
     {
         currentReadingEngagement = neutralBaseline;
         readingHistory.Clear();
