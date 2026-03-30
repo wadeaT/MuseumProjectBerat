@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public class BadgeManager : MonoBehaviour
 {
     // Singleton pattern - only one BadgeManager exists
-    public static BadgeManager instance;
+    public static BadgeManager Instance;
 
     [Header("Badge Tracking")]
     private int totalCardsCollected = 0;
@@ -39,9 +39,9 @@ public class BadgeManager : MonoBehaviour
     void Awake()
     {
         // Singleton setup
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject); // Persists between scenes
         }
         else

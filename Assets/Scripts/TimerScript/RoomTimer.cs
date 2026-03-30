@@ -17,6 +17,9 @@ public class RoomTimer : MonoBehaviour
 
         if (timerUI) timerUI.StartTimer();
 
+        // ✅ NEW: Notify all trackers of room change
+        NotifyTrackersOfRoomChange();
+
         Debug.Log($"Entered {roomId}");
     }
 
@@ -30,5 +33,29 @@ public class RoomTimer : MonoBehaviour
 
         Debug.Log($"Exited {roomId} after {timeSpent:F2}s");
         RoomTimerManager.Instance.ReportRoomTime(roomId, timeSpent);
+    }
+
+    // ✅ NEW METHOD: Notify all trackers when room changes
+    void NotifyTrackersOfRoomChange()
+    {
+        // Notify HandProximityTracker
+        if (HandProximityTracker.Instance != null)
+        {
+            HandProximityTracker.Instance.SetCurrentRoom(roomId);
+        }
+
+        // Notify HeadTrackingAnalyzer
+        if (HeadTrackingAnalyzer.Instance != null)
+        {
+            HeadTrackingAnalyzer.Instance.SetCurrentRoom(roomId);
+        }
+
+        // Notify CuriosityTracker
+        if (CuriosityTracker.Instance != null)
+        {
+            CuriosityTracker.Instance.OnRoomEntered(roomId);
+        }
+
+        Debug.Log($"🏛️ [RoomTimer] Notified trackers: Now in {roomId}");
     }
 }

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Localization;
 
-
-
+/// <summary>
+/// Interactive Object - Examinable objects in the museum
+/// Updated to use event-based tracking with ObjectInfoUI for closed-loop reading adaptation
+/// </summary>
 public class InteractiveObject : MonoBehaviour
 {
     [Header("Object Information")]
@@ -17,9 +17,6 @@ public class InteractiveObject : MonoBehaviour
 
     [Tooltip("Localized description of this object")]
     public LocalizedString objectDescription;
-
-
-
 
     [Tooltip("Optional image of this object")]
     public Sprite objectImage;
@@ -34,18 +31,16 @@ public class InteractiveObject : MonoBehaviour
     [Tooltip("Key to press to examine the object")]
     public KeyCode interactionKey = KeyCode.E;
 
-    
-
     [Tooltip("Auto-examine after looking for this many seconds (0 = disabled)")]
     [Range(0f, 3f)]
     public float autoExamineDelay = 0f;
 
     [Header("Visual Feedback")]
     [Tooltip("Color when player is too far away")]
-    public Color idleColor = new Color(1f, 1f, 1f, 1f); 
+    public Color idleColor = new Color(1f, 1f, 1f, 1f);
 
     [Tooltip("Color when player can interact")]
-    public Color highlightColor = new Color(1f, 0.9f, 0.6f, 1f); 
+    public Color highlightColor = new Color(1f, 0.9f, 0.6f, 1f);
 
     [Tooltip("How bright should the highlight glow be?")]
     [Range(0f, 2f)]
@@ -64,6 +59,10 @@ public class InteractiveObject : MonoBehaviour
 
     public LayerMask interactableMask;
 
+    [Header("Quest 3 VR")]
+    [Tooltip("Use controller-based highlighting instead of head-based (for Quest 3)")]
+    public bool useControllerHighlighting = true;
+
     // Internal variables
     private Transform playerTransform;
     private Camera playerCamera;
@@ -76,7 +75,10 @@ public class InteractiveObject : MonoBehaviour
     private int totalInteractions = 0;
     private float totalTimeSpent = 0f;
     private bool currentlyExamining = false;
-    private float lookTimer = 0f; 
+    private float lookTimer = 0f;
+    private string currentLocalizedTitle = "";
+    private float lastExaminationTime = -10f;
+    private float examinationCooldown = 2.0f;
 
     void Start()
     {
@@ -104,8 +106,6 @@ public class InteractiveObject : MonoBehaviour
 
         // Get renderer and store original material
         objectRenderer = GetComponent<Renderer>();
-
-        // If no renderer on this object, try to find one in children
         if (objectRenderer == null)
         {
             objectRenderer = GetComponentInChildren<Renderer>();
@@ -118,17 +118,14 @@ public class InteractiveObject : MonoBehaviour
 
         if (objectRenderer != null)
         {
-            // Create a copy of the material so we don't affect other objects
             objectMaterial = new Material(objectRenderer.material);
             objectRenderer.material = objectMaterial;
             originalColor = objectMaterial.color;
-
-            // Enable emission for glow effect
             objectMaterial.EnableKeyword("_EMISSION");
         }
         else
         {
-            Debug.LogWarning($"{objectTitle}: No Renderer found on this object or its children. Highlight won't work.");
+            Debug.LogWarning($"{objectTitle}: No Renderer found. Highlight won't work.");
         }
 
         // Setup audio
@@ -144,6 +141,27 @@ public class InteractiveObject : MonoBehaviour
         {
             highlightEffect.SetActive(false);
         }
+
+        // Subscribe to panel closed event for tracking
+        if (ObjectInfoUI.Instance != null)
+        {
+            ObjectInfoUI.Instance.OnPanelClosed += HandlePanelClosed;
+        }
+    }
+
+    void OnDestroy()
+    {
+        // Unsubscribe from event
+        if (ObjectInfoUI.Instance != null)
+        {
+            ObjectInfoUI.Instance.OnPanelClosed -= HandlePanelClosed;
+        }
+
+        // Clean up instantiated material to prevent memory leak
+        if (objectMaterial != null)
+        {
+            Destroy(objectMaterial);
+        }
     }
 
     void Awake()
@@ -152,9 +170,21 @@ public class InteractiveObject : MonoBehaviour
             interactableMask = LayerMask.GetMask("Interactable");
     }
 
-
     void Update()
     {
+        // If using controller highlighting, MinimalInteractionManager handles it
+        if (useControllerHighlighting)
+        {
+            // Just show hint effect when player is near (optional)
+            if (playerTransform != null && highlightEffect != null)
+            {
+                float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+                highlightEffect.SetActive(distanceToPlayer <= interactionRadius);
+            }
+            return;
+        }
+
+        // OLD SYSTEM: Head-based highlighting (backward compatibility)
         if (playerTransform == null) return;
 
         if (playerCamera != null)
@@ -163,7 +193,6 @@ public class InteractiveObject : MonoBehaviour
             Debug.DrawRay(ray.origin, ray.direction * (interactionRadius + 1f), Color.yellow);
         }
 
-        // Check if looking at object (if required)
         if (requiresDirectLook)
         {
             if (IsPlayerLookingAtObject())
@@ -171,7 +200,6 @@ public class InteractiveObject : MonoBehaviour
                 HighlightObject(true);
                 ShowInteractionPrompt(true);
 
-                // Auto-examine after looking for X seconds
                 if (autoExamineDelay > 0)
                 {
                     lookTimer += Time.deltaTime;
@@ -181,19 +209,16 @@ public class InteractiveObject : MonoBehaviour
                         lookTimer = 0f;
                     }
                 }
-
-                
             }
             else
             {
-                lookTimer = 0f; // Reset timer when not looking
+                lookTimer = 0f;
                 HighlightObject(false);
                 ShowInteractionPrompt(false);
             }
         }
         else
         {
-            // Auto-highlight if in range (no look requirement)
             float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
             if (distanceToPlayer <= interactionRadius)
             {
@@ -220,28 +245,18 @@ public class InteractiveObject : MonoBehaviour
 
         if (Physics.Raycast(ray, out var hit, dist, interactableMask, QueryTriggerInteraction.Ignore))
         {
-            // Find the InteractiveObject that the ray actually hit
             var io = hit.collider.GetComponentInParent<InteractiveObject>();
-
             if (io == null) return false;
-
-            if (io == this)
-            {
-                return true;
-            }
-
+            if (io == this) return true;
             return false;
         }
 
         return false;
     }
 
-    /// <summary>
-    /// Highlight or unhighlight the object
-    /// </summary>
     void HighlightObject(bool highlight)
     {
-        if (isHighlighted == highlight) return; 
+        if (isHighlighted == highlight) return;
 
         isHighlighted = highlight;
 
@@ -249,28 +264,36 @@ public class InteractiveObject : MonoBehaviour
         {
             if (highlight)
             {
-                // Apply highlight
                 objectMaterial.color = highlightColor;
                 objectMaterial.SetColor("_EmissionColor", highlightColor * glowIntensity);
             }
             else
             {
-                // Return to original
                 objectMaterial.color = originalColor;
                 objectMaterial.SetColor("_EmissionColor", Color.black);
             }
         }
 
-        // Toggle highlight effect
         if (highlightEffect != null)
         {
             highlightEffect.SetActive(highlight);
         }
     }
 
+    public void SetHighlight(bool highlight)
+    {
+        HighlightObject(highlight);
+        ShowInteractionPrompt(highlight);
+    }
 
     public void TriggerExamination()
     {
+        if (Time.time - lastExaminationTime < examinationCooldown)
+        {
+            Debug.Log($"[InteractiveObject] Debounced: {gameObject.name} (cooldown {examinationCooldown}s)");
+            return;
+        }
+        lastExaminationTime = Time.time;
         ExamineObjectAsync();
     }
 
@@ -279,7 +302,7 @@ public class InteractiveObject : MonoBehaviour
     /// </summary>
     async Task ExamineObjectAsync()
     {
-        Debug.Log($"Examining: {objectTitle.TableReference}/{objectTitle.TableEntryReference}");
+        Debug.Log($"Examining object...");
 
         // Play sound
         if (audioSource != null && examinationSound != null)
@@ -287,138 +310,150 @@ public class InteractiveObject : MonoBehaviour
             audioSource.PlayOneShot(examinationSound);
         }
 
-        //  Start tracking AND wait for panel close
+        // Get localized title
+        var titleTask = objectTitle.GetLocalizedStringAsync();
+        await titleTask.Task;
+        string localizedTitle = titleTask.Result;
+        currentLocalizedTitle = localizedTitle;
+
+        // Start tracking
         if (trackInteractionTime && !currentlyExamining)
         {
-            StartInteractionTracking();
-            StartCoroutine(WaitForPanelClose());
+            StartInteractionTracking(localizedTitle);
         }
 
-        // Get localized strings asynchronously
-        var titleTask = objectTitle.GetLocalizedStringAsync();
-        var descTask = objectDescription.GetLocalizedStringAsync();
-
-        await System.Threading.Tasks.Task.WhenAll(titleTask.Task, descTask.Task);
-
-        string localizedTitle = titleTask.Result;
-        string localizedDescription = descTask.Result;
-        // Show info panel
-        if (ObjectInfoUI.Instance != null)
+        // Track object view for curiosity detection
+        CuriosityIntegration curiosity = GetComponent<CuriosityIntegration>();
+        if (curiosity != null)
         {
-            ObjectInfoUI.Instance.ShowObjectInfo(localizedTitle, localizedDescription, objectImage);
+            curiosity.OnObjectExamined();
+        }
+
+        // Use LLM to generate adaptive content
+        // Content length is now determined by closed-loop engagement (including reading behavior)
+        if (LLMAdaptiveContentManager.Instance != null)
+        {
+            // Show loading panel first - ✅ NOW PASSES objectId
+            if (ObjectInfoUI.Instance != null)
+            {
+                ObjectInfoUI.Instance.ShowObjectInfo(gameObject.name, localizedTitle, "Loading...", objectImage);
+            }
+
+            // Get LLM-generated content with OBJECT type
+            LLMAdaptiveContentManager.Instance.GetAdaptiveContent(
+                gameObject.name,
+                localizedTitle,
+                ContentType.Object,
+                (generatedContent) =>
+                {
+                    // Content generated! Update UI - ✅ PASSES objectId
+                    if (ObjectInfoUI.Instance != null)
+                    {
+                        ObjectInfoUI.Instance.ShowObjectInfo(gameObject.name, localizedTitle, generatedContent, objectImage);
+                    }
+
+                    Debug.Log($"[InteractiveObject] Displayed adaptive content for {localizedTitle}");
+                }
+            );
+        }
+        else
+        {
+            // Fallback to localized description
+            var descTask = objectDescription.GetLocalizedStringAsync();
+            await descTask.Task;
+            string localizedDescription = descTask.Result;
+
+            if (ObjectInfoUI.Instance != null)
+            {
+                // ✅ PASSES objectId for tracking even in fallback
+                ObjectInfoUI.Instance.ShowObjectInfo(gameObject.name, localizedTitle, localizedDescription, objectImage);
+            }
         }
     }
 
-    /// <summary>
-    /// Show/hide interaction prompt (placeholder for now)
-    /// </summary>
     void ShowInteractionPrompt(bool show)
     {
-        // You can implement a UI prompt here later if needed
-        // For now, the highlight is enough visual feedback
+        // Placeholder for UI prompt
     }
 
-    /// <summary>
-    /// Draw gizmo in editor to show interaction radius
-    /// </summary>
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, interactionRadius);
     }
 
+    // ============================================================================
+    // EVENT-BASED TRACKING (replaces polling coroutine)
+    // ============================================================================
 
     /// <summary>
-    /// Start tracking how long player examines this object
+    /// Start tracking when object is examined
     /// </summary>
-    async void StartInteractionTracking()
+    void StartInteractionTracking(string localizedTitle)
     {
         currentlyExamining = true;
-        interactionStartTime = Time.time;
+        interactionStartTime = Time.unscaledTime;
         totalInteractions++;
-        string localizedTitle = await objectTitle.GetLocalizedStringAsync().Task;
-        Debug.Log($" Started tracking: {localizedTitle} (Interaction #{totalInteractions})");
+        Debug.Log($"📊 Started tracking: {localizedTitle} (Interaction #{totalInteractions})");
     }
 
     /// <summary>
-    /// Stop tracking and save to Firebase
+    /// Handle panel closed event from ObjectInfoUI
+    /// This replaces the polling coroutine with event-based tracking
     /// </summary>
-    async  void StopInteractionTracking()
+    void HandlePanelClosed(string objectId, string objectName, float viewDuration, bool wasLikelyRead)
     {
-        if (!currentlyExamining) return;
+        // Only process if this is the object we're tracking
+        if (!currentlyExamining)
+            return;
+
+        // Check if this event is for our object
+        if (objectId != gameObject.name)
+            return;
 
         currentlyExamining = false;
-        float timeSpent = Time.time - interactionStartTime;
-        totalTimeSpent += timeSpent;
-        string localizedTitle = await objectTitle.GetLocalizedStringAsync().Task;
-        Debug.Log($" {localizedTitle}: Examined for {timeSpent:F1} seconds (Total: {totalTimeSpent:F1}s over {totalInteractions} interactions)");
+        totalTimeSpent += viewDuration;
+
+        Debug.Log($"📊 {currentLocalizedTitle}: Examined for {viewDuration:F1}s (wasLikelyRead: {wasLikelyRead})");
+        Debug.Log($"   Total: {totalTimeSpent:F1}s over {totalInteractions} interactions");
 
         // Save to Firebase
-        SaveInteractionToFirebase(timeSpent, localizedTitle);
+        SaveInteractionToFirebase(viewDuration, currentLocalizedTitle, wasLikelyRead);
     }
 
     /// <summary>
-    /// Save interaction data to Firebase
+    /// Save interaction data to Firebase via centralized FirebaseLogger
     /// </summary>
-    async void SaveInteractionToFirebase(float duration, string objectName)
+    async void SaveInteractionToFirebase(float duration, string objectName, bool wasLikelyRead)
     {
-        // Log to console
         Debug.Log($"  INTERACTION DATA:");
         Debug.Log($"   Object: {objectName}");
         Debug.Log($"   Duration: {duration:F1} seconds");
+        Debug.Log($"   Was Likely Read: {wasLikelyRead}");
         Debug.Log($"   Total Interactions: {totalInteractions}");
         Debug.Log($"   Average Time: {(totalTimeSpent / totalInteractions):F1} seconds");
-        Debug.Log($"   Timestamp: {System.DateTime.UtcNow}");
 
-        // Save to Firebase
-        if (FirebaseManager.Instance != null && FirebaseManager.Instance.IsReady)
+        if (!FirebaseLogger.HasSession)
         {
-            // Get current user ID
-            string userId = FirebaseManager.Instance.Auth?.CurrentUser?.UserId;
-
-            if (!string.IsNullOrEmpty(userId))
-            {
-                float avgTime = totalTimeSpent / totalInteractions;
-
-                await FirebaseManager.Instance.SaveObjectInteractionAsync(
-                    userId,
-                    objectName,
-                    duration,
-                    totalInteractions,
-                    avgTime
-                );
-            }
-            else
-            {
-                Debug.LogWarning(" No user logged in - interaction not saved to Firebase");
-            }
-        }
-        else
-        {
-            Debug.LogWarning(" FirebaseManager not ready - interaction only logged locally");
-        }
-    }
-
-    /// <summary>
-    /// Wait for panel to close, then stop tracking
-    /// </summary>
-    System.Collections.IEnumerator WaitForPanelClose()
-    {
-        // Wait until panel is active
-        while (ObjectInfoUI.Instance != null && ObjectInfoUI.Instance.infoPanel != null &&
-               !ObjectInfoUI.Instance.infoPanel.activeSelf)
-        {
-            yield return null;
+            Debug.LogWarning("FirebaseManager not ready - interaction only logged locally");
+            return;
         }
 
-        // Wait until panel closes
-        while (ObjectInfoUI.Instance != null && ObjectInfoUI.Instance.infoPanel != null &&
-               ObjectInfoUI.Instance.infoPanel.activeSelf)
-        {
-            yield return null;
-        }
+        float avgTime = totalTimeSpent / totalInteractions;
 
-        // Panel closed - stop tracking
-        StopInteractionTracking();
+        // Session-scoped write — single source of truth for object viewing data
+        var viewData = new Dictionary<string, object>
+        {
+            { "objectId", gameObject.name },
+            { "objectName", objectName },
+            { "viewDuration", duration },
+            { "wasLikelyRead", wasLikelyRead },
+            { "totalInteractions", totalInteractions },
+            { "totalTimeSpent", totalTimeSpent },
+            { "averageTime", avgTime }
+        };
+
+        string docId = FirebaseLogger.GenerateDocId(gameObject.name);
+        await FirebaseLogger.LogSessionData("objectViewingTime", viewData, docId, "[InteractiveObject]");
     }
 }
