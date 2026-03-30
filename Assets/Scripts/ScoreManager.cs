@@ -2,6 +2,12 @@
 using TMPro;
 using System.Collections;
 
+/// <summary>
+/// ScoreManager - FIXED VERSION
+/// 
+/// ✅ FIX: Now resets score when a different user logs in
+/// Uses user-specific PlayerPrefs keys to prevent cross-user contamination
+/// </summary>
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance { get; private set; }
@@ -17,28 +23,30 @@ public class ScoreManager : MonoBehaviour
     public int objectExaminationPoints = 10;
 
     [Header("Badge Bonus Points")]
-    public int explorerBadgeBonus = 200;      // 3 cards
-    public int curiousMindBonus = 400;        // 6 cards
-    public int enthusiastBonus = 600;         // 9 cards
-    public int scholarBonus = 800;            // 12 cards
-    public int masterCollectorBonus = 1000;   // 15 cards
-    public int museumExpertBonus = 1500;      // 18 cards
+    public int explorerBadgeBonus = 200;
+    public int curiousMindBonus = 400;
+    public int enthusiastBonus = 600;
+    public int scholarBonus = 800;
+    public int masterCollectorBonus = 1000;
+    public int museumExpertBonus = 1500;
 
     [Header("UI References")]
     public TextMeshProUGUI scoreText;
-    public GameObject scorePopupPrefab; 
+    public GameObject scorePopupPrefab;
 
     [Header("Visual Feedback")]
     public AudioClip pointsEarnedSound;
     public Color normalPointsColor = Color.white;
-    public Color bonusPointsColor = Color.gold;
+    public Color bonusPointsColor = Color.yellow;
 
     private int currentScore = 0;
     private AudioSource audioSource;
 
+    // ✅ Track which user's score we're managing
+    private string currentUserId = "";
+
     void Awake()
     {
-        // Singleton pattern
         if (Instance == null)
         {
             Instance = this;
@@ -49,7 +57,6 @@ public class ScoreManager : MonoBehaviour
             return;
         }
 
-        // Setup audio
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
         {
@@ -60,8 +67,76 @@ public class ScoreManager : MonoBehaviour
 
     void Start()
     {
-        LoadScore();
+        // ✅ FIX: Load score for CURRENT user (or start fresh)
+        InitializeForCurrentUser();
         UpdateScoreUI();
+    }
+
+    /// <summary>
+    /// ✅ NEW: Initialize score for the current user
+    /// Called on Start and when user changes
+    /// </summary>
+    public void InitializeForCurrentUser()
+    {
+        string userId = GetCurrentUserId();
+
+        if (string.IsNullOrEmpty(userId))
+        {
+            // No user logged in - start with 0
+            currentScore = 0;
+            currentUserId = "";
+            Debug.Log("[ScoreManager] No user logged in, starting with score 0");
+        }
+        else if (userId != currentUserId)
+        {
+            // Different user - load their score or start fresh
+            currentUserId = userId;
+            LoadScoreForUser(userId);
+            Debug.Log($"[ScoreManager] Initialized for user: {userId}, Score: {currentScore}");
+        }
+
+        UpdateScoreUI();
+    }
+
+    /// <summary>
+    /// Get current user ID from PlayerManager
+    /// </summary>
+    private string GetCurrentUserId()
+    {
+        if (PlayerManager.Instance != null && !string.IsNullOrEmpty(PlayerManager.Instance.userId))
+        {
+            return PlayerManager.Instance.userId;
+        }
+        return "";
+    }
+
+    /// <summary>
+    /// ✅ NEW: Load score for a specific user
+    /// </summary>
+    private void LoadScoreForUser(string userId)
+    {
+        // Use user-specific key
+        string key = $"Score_{userId}";
+        currentScore = PlayerPrefs.GetInt(key, 0);
+        Debug.Log($"[ScoreManager] Loaded score {currentScore} for user {userId}");
+    }
+
+    /// <summary>
+    /// ✅ NEW: Save score for current user
+    /// </summary>
+    private void SaveScoreForUser()
+    {
+        string userId = GetCurrentUserId();
+        if (string.IsNullOrEmpty(userId))
+        {
+            Debug.LogWarning("[ScoreManager] Cannot save score - no user logged in");
+            return;
+        }
+
+        string key = $"Score_{userId}";
+        PlayerPrefs.SetInt(key, currentScore);
+        PlayerPrefs.Save();
+        Debug.Log($"[ScoreManager] Saved score {currentScore} for user {userId}");
     }
 
     /// <summary>
@@ -69,24 +144,28 @@ public class ScoreManager : MonoBehaviour
     /// </summary>
     public void AddPoints(int points, string reason = "", bool isBonus = false)
     {
+        // ✅ Verify we're tracking the right user
+        string currentUser = GetCurrentUserId();
+        if (!string.IsNullOrEmpty(currentUser) && currentUser != currentUserId)
+        {
+            Debug.LogWarning($"[ScoreManager] User changed from {currentUserId} to {currentUser}, reinitializing...");
+            InitializeForCurrentUser();
+        }
+
         currentScore += points;
 
-        Debug.Log($" +{points} points! {reason} | Total: {currentScore}");
+        Debug.Log($"🎯 +{points} points! {reason} | Total: {currentScore}");
 
-        // Visual feedback
         UpdateScoreUI();
         ShowPointsPopup(points, isBonus);
 
-        // Play sound
         if (audioSource != null && pointsEarnedSound != null)
         {
             audioSource.PlayOneShot(pointsEarnedSound);
         }
 
-        // Save to PlayerPrefs
-        SaveScore();
-
-        // Save to Firebase
+        // ✅ Save with user-specific key
+        SaveScoreForUser();
         SaveScoreToFirebase();
     }
 
@@ -97,7 +176,6 @@ public class ScoreManager : MonoBehaviour
     {
         int points = cardCollectionPoints;
 
-        // Bonus for first card in room
         if (isFirstInRoom)
         {
             points += firstCardInRoomBonus;
@@ -152,13 +230,10 @@ public class ScoreManager : MonoBehaviour
 
         if (bonusPoints > 0)
         {
-            AddPoints(bonusPoints, $" {badgeName} Badge!", true);
+            AddPoints(bonusPoints, $"🏅 {badgeName} Badge!", true);
         }
     }
 
-    /// <summary>
-    /// Update the score UI text
-    /// </summary>
     void UpdateScoreUI()
     {
         if (scoreText != null)
@@ -167,14 +242,10 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Show floating points popup (optional)
-    /// </summary>
     void ShowPointsPopup(int points, bool isBonus)
     {
-        if (scorePopupPrefab != null)
+        if (scorePopupPrefab != null && scoreText != null)
         {
-            // Instantiate popup near score text
             GameObject popup = Instantiate(scorePopupPrefab, scoreText.transform.position, Quaternion.identity, scoreText.transform.parent);
 
             TextMeshProUGUI popupText = popup.GetComponent<TextMeshProUGUI>();
@@ -184,26 +255,25 @@ public class ScoreManager : MonoBehaviour
                 popupText.color = isBonus ? bonusPointsColor : normalPointsColor;
             }
 
-            // Auto-destroy after animation
             Destroy(popup, 2f);
         }
     }
 
     /// <summary>
-    /// Save score to PlayerPrefs
-    /// </summary>
-    void SaveScore()
-    {
-        PlayerPrefs.SetInt("TotalScore", currentScore);
-        PlayerPrefs.Save();
-    }
-
-    /// <summary>
-    /// Load score from PlayerPrefs
+    /// ✅ DEPRECATED: Use InitializeForCurrentUser() instead
+    /// Kept for backward compatibility
     /// </summary>
     void LoadScore()
     {
-        currentScore = PlayerPrefs.GetInt("TotalScore", 0);
+        InitializeForCurrentUser();
+    }
+
+    /// <summary>
+    /// ✅ DEPRECATED: Use SaveScoreForUser() instead  
+    /// </summary>
+    void SaveScore()
+    {
+        SaveScoreForUser();
     }
 
     /// <summary>
@@ -212,9 +282,17 @@ public class ScoreManager : MonoBehaviour
     public void ResetScore()
     {
         currentScore = 0;
-        SaveScore();
+        SaveScoreForUser();
         UpdateScoreUI();
-        Debug.Log("Score reset to 0");
+        Debug.Log("[ScoreManager] Score reset to 0");
+    }
+
+    /// <summary>
+    /// ✅ NEW: Called when a new user logs in to start fresh
+    /// </summary>
+    public void OnUserChanged()
+    {
+        InitializeForCurrentUser();
     }
 
     /// <summary>
@@ -232,14 +310,13 @@ public class ScoreManager : MonoBehaviour
     {
         if (FirebaseManager.Instance == null || !FirebaseManager.Instance.IsReady)
         {
-            Debug.LogWarning(" FirebaseManager not ready, score not saved to cloud");
+            Debug.LogWarning("[ScoreManager] FirebaseManager not ready, score not saved to cloud");
             return;
         }
 
-        
         if (PlayerManager.Instance == null || string.IsNullOrEmpty(PlayerManager.Instance.userId))
         {
-            Debug.LogWarning(" User not logged in, score not saved to Firebase");
+            Debug.LogWarning("[ScoreManager] User not logged in, score not saved to Firebase");
             return;
         }
 
@@ -251,7 +328,7 @@ public class ScoreManager : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            Debug.LogError($" Error saving score to Firebase: {e.Message}");
+            Debug.LogError($"[ScoreManager] Error saving score to Firebase: {e.Message}");
         }
     }
 }

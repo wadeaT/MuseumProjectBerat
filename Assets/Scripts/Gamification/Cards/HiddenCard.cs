@@ -1,8 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Localization; 
-using UnityEngine.Localization.Settings; 
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 
+/// <summary>
+/// Hidden Card - Collectible cards in the museum
+/// FIXED: Now uses user-specific PlayerPrefs keys to prevent cross-user contamination
+/// </summary>
 public class HiddenCard : MonoBehaviour
 {
     [Header("Card Identity")]
@@ -14,10 +18,10 @@ public class HiddenCard : MonoBehaviour
 
     [Header("Localized Text")]
     [Tooltip("Localized title for this card")]
-    public LocalizedString cardTitle; 
+    public LocalizedString cardTitle;
 
     [Tooltip("Localized description/story for this card")]
-    public LocalizedString cardDescription; 
+    public LocalizedString cardDescription;
 
     [Header("Discovery Settings")]
     [Tooltip("How close must the player be to notice this card? (in meters)")]
@@ -47,14 +51,21 @@ public class HiddenCard : MonoBehaviour
     [Tooltip("Sound when card is discovered (optional)")]
     public AudioClip discoverySound;
 
+    [Header("Quest 3 VR")]
+    [Tooltip("Use controller-based highlighting instead of head-based (for Quest 3)")]
+    public bool useControllerHighlighting = true;
+
     // Internal variables
     private bool isDiscovered = false;
+    private float lastCollectionTime = -10f;
+    private float collectionCooldown = 2.0f;
     private Transform playerTransform;
     private Camera playerCamera;
     private Renderer cardRenderer;
     private AudioSource audioSource;
     private Material cardMaterial;
     private float lookTimer = 0f;
+    private bool hasCheckedDiscovery = false; // ✅ NEW: Track if we've checked
 
     void Start()
     {
@@ -106,7 +117,7 @@ public class HiddenCard : MonoBehaviour
             hintEffect.SetActive(false);
         }
 
-        // Check if already discovered
+        // ✅ FIXED: Check if already discovered (with user-specific key)
         CheckIfAlreadyDiscovered();
 
         StartCoroutine(ForceColliderRefresh());
@@ -128,6 +139,25 @@ public class HiddenCard : MonoBehaviour
 
     void Update()
     {
+        // ✅ NEW: Retry discovery check if userId wasn't ready at Start
+        if (!hasCheckedDiscovery && PlayerManager.Instance != null && !string.IsNullOrEmpty(PlayerManager.Instance.userId))
+        {
+            CheckIfAlreadyDiscovered();
+        }
+
+        // If using controller highlighting, MinimalInteractionManager handles it
+        if (useControllerHighlighting)
+        {
+            // Just show hint effect when player is near
+            if (playerTransform != null && hintEffect != null && !isDiscovered)
+            {
+                float dist = Vector3.Distance(transform.position, playerTransform.position);
+                hintEffect.SetActive(dist <= detectionRadius);
+            }
+            return;
+        }
+
+        // OLD SYSTEM: Head-based highlighting (backward compatibility)
         if (isDiscovered || playerTransform == null)
             return;
 
@@ -201,6 +231,12 @@ public class HiddenCard : MonoBehaviour
 
     public void TriggerCollection()
     {
+        if (Time.time - lastCollectionTime < collectionCooldown)
+        {
+            Debug.Log($"[HiddenCard] Debounced: {cardID}");
+            return;
+        }
+        lastCollectionTime = Time.time;
         if (!isDiscovered)
         {
             CollectCard();
@@ -212,41 +248,120 @@ public class HiddenCard : MonoBehaviour
         return isDiscovered;
     }
 
+    /// <summary>
+    /// Called by MinimalInteractionManager when controller points at card
+    /// </summary>
+    public void SetHighlight(bool highlight)
+    {
+        if (isDiscovered || cardMaterial == null) return;
+
+        if (highlight)
+        {
+            cardMaterial.color = activeColor;
+            cardMaterial.SetColor("_EmissionColor", activeColor);
+        }
+        else
+        {
+            cardMaterial.color = idleColor;
+            cardMaterial.SetColor("_EmissionColor", idleColor * 0.5f);
+        }
+    }
+
+    // ============================================================================
+    // ✅ FIXED: User-specific PlayerPrefs key generation
+    // ============================================================================
+
+    /// <summary>
+    /// Get user-specific key for this card
+    /// Format: Card_{userId}_{cardID}_Found
+    /// </summary>
+    private string GetUserCardKey()
+    {
+        string userId = "";
+        if (PlayerManager.Instance != null && !string.IsNullOrEmpty(PlayerManager.Instance.userId))
+        {
+            userId = PlayerManager.Instance.userId;
+        }
+
+        // If no user logged in, use empty prefix (shouldn't happen in normal flow)
+        if (string.IsNullOrEmpty(userId))
+        {
+            Debug.LogWarning($"[HiddenCard] No userId available for card {cardID} - using legacy key");
+            return $"Card_{cardID}_Found"; // Legacy fallback
+        }
+
+        return $"Card_{userId}_{cardID}_Found";
+    }
+
     void CollectCard()
     {
         isDiscovered = true;
 
-        
+        // Get localized title
         var titleOperation = cardTitle.GetLocalizedStringAsync();
-        var descOperation = cardDescription.GetLocalizedStringAsync();
 
         titleOperation.Completed += (op) =>
         {
             string localizedTitle = op.Result;
             Debug.Log($"Card Discovered: {localizedTitle}");
 
-            descOperation.Completed += (descOp) =>
+            // Use LLM to generate adaptive content
+            if (LLMAdaptiveContentManager.Instance != null)
             {
-                string localizedDesc = descOp.Result;
-
-                // Show card discovery UI with localized text
+                // Show loading UI - ✅ NOW PASSES cardID for tracking
                 if (CardDiscoveryUI.Instance != null)
                 {
-                    CardDiscoveryUI.Instance.ShowCardDiscovery(localizedTitle, localizedDesc);
+                    CardDiscoveryUI.Instance.ShowCardDiscovery(cardID, localizedTitle, "Generating personalized content...");
                 }
-            };
+
+                // Get LLM-generated content with CARD type
+                // Content length is now determined by closed-loop engagement (including reading behavior)
+                LLMAdaptiveContentManager.Instance.GetAdaptiveContent(
+                    cardID,
+                    localizedTitle,
+                    ContentType.Card,
+                    (generatedContent) =>
+                    {
+                        // Content generated! Update UI - ✅ PASSES cardID
+                        if (CardDiscoveryUI.Instance != null)
+                        {
+                            CardDiscoveryUI.Instance.ShowCardDiscovery(cardID, localizedTitle, generatedContent);
+                        }
+
+                        Debug.Log($"[HiddenCard] Displayed adaptive content for {cardID} (length based on engagement)");
+                    }
+                );
+            }
+            else
+            {
+                // Fallback to localized content if LLM not available
+                var descOperation = cardDescription.GetLocalizedStringAsync();
+                descOperation.Completed += (descOp) =>
+                {
+                    string localizedDesc = descOp.Result;
+
+                    if (CardDiscoveryUI.Instance != null)
+                    {
+                        // ✅ PASSES cardID for tracking even in fallback
+                        CardDiscoveryUI.Instance.ShowCardDiscovery(cardID, localizedTitle, localizedDesc);
+                    }
+                };
+            }
         };
 
-        if (BadgeManager.instance != null)
+        // Register card collection with BadgeManager
+        if (BadgeManager.Instance != null)
         {
-            BadgeManager.instance.OnCardCollected(cardID, roomID);
+            BadgeManager.Instance.OnCardCollected(cardID, roomID);
         }
 
+        // Play collection sound
         if (audioSource != null && discoverySound != null)
         {
             audioSource.PlayOneShot(discoverySound);
         }
 
+        // Hide the card visually
         if (cardRenderer != null)
         {
             cardRenderer.enabled = false;
@@ -257,15 +372,31 @@ public class HiddenCard : MonoBehaviour
             hintEffect.SetActive(false);
         }
 
-        PlayerPrefs.SetInt($"Card_{cardID}_Found", 1);
+        // ✅ FIXED: Save to PlayerPrefs with USER-SPECIFIC key
+        string userCardKey = GetUserCardKey();
+        PlayerPrefs.SetInt(userCardKey, 1);
         PlayerPrefs.Save();
+
+        Debug.Log($"✅ [HiddenCard] Saved card discovery: {userCardKey}");
 
         ShowInteractionPrompt(false);
     }
 
     void CheckIfAlreadyDiscovered()
     {
-        if (PlayerPrefs.GetInt($"Card_{cardID}_Found", 0) == 1)
+        // ✅ FIXED: Need userId to check user-specific key
+        if (PlayerManager.Instance == null || string.IsNullOrEmpty(PlayerManager.Instance.userId))
+        {
+            // User not logged in yet - will retry in Update()
+            Debug.Log($"[HiddenCard] {cardID}: Waiting for user login to check discovery status...");
+            return;
+        }
+
+        hasCheckedDiscovery = true; // Mark that we've done the check
+
+        string userCardKey = GetUserCardKey();
+
+        if (PlayerPrefs.GetInt(userCardKey, 0) == 1)
         {
             isDiscovered = true;
 
@@ -274,7 +405,11 @@ public class HiddenCard : MonoBehaviour
                 cardRenderer.enabled = false;
             }
 
-            Debug.Log($"Card {cardID} was already discovered previously.");
+            Debug.Log($"[HiddenCard] Card {cardID} was already discovered by user {PlayerManager.Instance.userId}");
+        }
+        else
+        {
+            Debug.Log($"[HiddenCard] Card {cardID} is available for user {PlayerManager.Instance.userId}");
         }
     }
 
